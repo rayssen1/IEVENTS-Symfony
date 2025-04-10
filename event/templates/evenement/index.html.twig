@@ -1,0 +1,75 @@
+{% extends 'evenement/base-back.html.twig' %}
+
+{% block title %}Liste des Événements{% endblock %}
+
+{% block body %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Événements /</span> Liste
+  </h4>
+
+  <!-- Bouton Créer un événement -->
+  <div class="mb-3">
+    <a href="{{ path('app_evenement_new') }}" class="btn btn-primary btn-md">
+      <i class="bx bx-plus me-1"></i> Créer un nouvel événement
+    </a>
+  </div>
+
+  <!-- Liste des événements sous forme de cartes -->
+  <div class="row">
+    {% for evenement in evenements %}
+      <div class="col-md-8 mb-2"> <!-- Réduit de mb-3 à mb-2 pour moins d'espacement -->
+        <div class="card shadow-sm">
+          <div class="card-body p-2"> <!-- Réduit le padding de p-3 à p-2 -->
+            <div class="row align-items-center">
+              <!-- Attributs à gauche -->
+              <div class="col-md-8">
+                <h6 class="card-title mb-1">{{ evenement.titre }}</h6> <!-- Réduit la marge -->
+                <p class="card-text small mb-1"><strong>Description :</strong> {{ evenement.description }}</p>
+                <p class="card-text small mb-1"><strong>Date :</strong> {{ evenement.dateEvent ? evenement.dateEvent|date('Y-m-d') : 'Non définie' }}</p>
+                <p class="card-text small mb-1"><strong>Lieu :</strong> {{ evenement.lieu }}</p>
+                <p class="card-text small mb-1"><strong>Nombre de places :</strong> {{ evenement.nbPlace }}</p>
+                <p class="card-text small mb-1"><strong>Prix :</strong> {{ evenement.prix }} TND</p>
+                <p class="card-text small mb-1"><strong>Statut :</strong> 
+                  <span class="badge bg-label-primary small">{{ evenement.status }}</span>
+                </p>
+              </div>
+
+              <!-- Image et boutons à droite -->
+              <div class="col-md-4 d-flex align-items-center">
+                <!-- Boutons à gauche de l'image, alignés verticalement -->
+                <div class="d-flex flex-column me-2 gap-1"> <!-- Alignement vertical avec espacement -->
+                  <a href="{{ path('app_evenement_show', {'id': evenement.id}) }}"
+                     class="btn btn-sm btn-outline-primary py-0 px-1"> <!-- Réduit le padding -->
+                    <i class="bx bx-show"></i>
+                  </a>
+                  <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}"
+                     class="btn btn-sm btn-outline-warning py-0 px-1">
+                    <i class="bx bx-edit-alt"></i>
+                  </a>
+                </div>
+
+                <!-- Image à droite -->
+                <div class="text-center">
+                  {% if evenement.img %}
+                    <img src="{{ asset(evenement.img) }}" alt="Image de l'événement"
+                         class="rounded border shadow-sm" style="max-height: 150px; max-width: 100%; object-fit: cover;"> <!-- Réduit de 120px à 80px -->
+                  {% else %}
+                    <span class="text-muted fst-italic small">Pas d'image</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="col-12">
+        <div class="alert alert-info text-center small py-2" role="alert">
+          Aucun événement trouvé
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

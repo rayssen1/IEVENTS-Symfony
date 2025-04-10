@@ -1,0 +1,98 @@
+{% extends 'evenement/base-front.html.twig' %}
+
+{% block title %}
+  {% if is_single %}
+    {{ evenements[0].titre }}
+  {% else %}
+    Liste des Événements
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Événements /</span>
+    {% if is_single %}
+      Détails
+    {% else %}
+      Liste
+    {% endif %}
+  </h4>
+
+  <div class="card">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Lieu</th>
+            <th>Places</th>
+            <th>Prix</th>
+            <th>Statut</th>
+            <th>Image</th>
+            {% if not is_single %}<th>Actions</th>{% endif %}
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          {% for evenement in evenements %}
+            <tr>
+              <td><strong>{{ evenement.titre }}</strong></td>
+              <td>
+                {% if is_single %}
+                  {{ evenement.description }}
+                {% else %}
+                  {{ evenement.description|slice(0, 50) ~ (evenement.description|length > 50 ? '...' : '') }}
+                {% endif %}
+              </td>
+              <td>{{ evenement.dateEvent ? evenement.dateEvent|date('Y-m-d H:i') : '' }}</td>
+              <td>{{ evenement.lieu }}</td>
+              <td>{{ evenement.nbPlace }}</td>
+              <td>{{ evenement.prix }} TND</td>
+              <td>
+                <span class="badge 
+                  {% if evenement.status == 'Actif' %}bg-label-success
+                  {% elseif evenement.status == 'Annulé' %}bg-label-danger
+                  {% else %}bg-label-primary{% endif %}">
+                  {{ evenement.status }}
+                </span>
+              </td>
+              <td>
+                {% if evenement.img %}
+                  <img src="{{ asset('uploads/' ~ evenement.img) }}" alt="{{ evenement.titre }}"
+                       class="rounded border shadow-sm" style="height: 48px; width: 80px; object-fit: cover;">
+                {% else %}
+                  <span class="text-muted fst-italic">Pas d'image</span>
+                {% endif %}
+              </td>
+              {% if not is_single %}
+                <td>
+                  <a href="{{ path('app_events_show', {'id': evenement.id}) }}"
+                     class="btn btn-sm btn-outline-primary mb-1">
+                    <i class="bx bx-show"></i> Voir
+                  </a>
+                </td>
+              {% endif %}
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="{% if is_single %}8{% else %}9{% endif %}" class="text-center text-muted fst-italic py-4">
+                Aucun événement trouvé
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if is_single %}
+    <div class="mt-3">
+      <a href="{{ path('app_events_index') }}" class="btn btn-secondary">
+        <i class="bx bx-arrow-back me-1"></i> Retour à la liste
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

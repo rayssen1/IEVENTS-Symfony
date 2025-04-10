@@ -1,0 +1,66 @@
+{% extends 'evenement/base-back.html.twig' %}
+
+{% block title %}Liste des Eventspeakers{% endblock %}
+
+{% block body %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Eventspeakers /</span> Liste
+  </h4>
+
+  <!-- Bouton Créer un eventspeaker -->
+  <div class="mb-3">
+    <a href="{{ path('app_eventspeaker_new') }}" class="btn btn-primary btn-md">
+      <i class="bx bx-plus me-1"></i> Créer un nouvel eventspeaker
+    </a>
+  </div>
+
+  <!-- Liste des eventspeakers sous forme de cartes -->
+  <div class="row">
+    {% for eventspeaker in eventspeakers %}
+      <div class="col-md-3 mb-2">
+        <div class="card shadow-sm">
+          <div class="card-body p-2">
+            <div class="row align-items-center">
+              <!-- Attributs à gauche -->
+              <div class="col-md-8">
+                <h6 class="card-title mb-1">{{ eventspeaker.nom }} {{ eventspeaker.prenom }}</h6>
+                <p class="card-text small mb-1"><strong>Description :</strong> {{ eventspeaker.description }}</p>
+                <p class="card-text small mb-1"><strong>Statut :</strong> 
+                  <span class="badge bg-label-primary small">{{ eventspeaker.status }}</span>
+                </p>
+              </div>
+
+              <!-- Boutons à droite -->
+              <div class="col-md-4 d-flex align-items-center">
+                <!-- Boutons à gauche, alignés verticalement -->
+                <div class="d-flex flex-column me-2 gap-1">
+                  <a href="{{ path('app_eventspeaker_show', {'id': eventspeaker.id}) }}"
+                     class="btn btn-sm btn-outline-primary py-0 px-1">
+                    <i class="bx bx-show"></i>
+                  </a>
+                  <a href="{{ path('app_eventspeaker_edit', {'id': eventspeaker.id}) }}"
+                     class="btn btn-sm btn-outline-warning py-0 px-1">
+                    <i class="bx bx-edit-alt"></i>
+                  </a>
+                </div>
+
+                <!--   pour eventspeaker (ou ajouter si nécessaire) -->
+                <div class="text-center">
+                  <span class="text-muted fst-italic small"> </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="col-12">
+        <div class="alert alert-info text-center small py-2" role="alert">
+          Aucun eventspeaker trouvé
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
