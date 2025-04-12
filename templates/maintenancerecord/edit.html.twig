@@ -1,0 +1,67 @@
+{% extends 'evenement/base-back.html.twig' %}
+
+{% block title %}Modifier un Enregistrement de Maintenance{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Maintenance /</span> Modifier
+    </h4>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="row">
+                    <!-- Équipement -->
+                    <div class="mb-3 col-md-6">
+                        {{ form_label(form.equipment, 'Équipement', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.equipment, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.equipment) }}
+                    </div>
+
+                    <!-- Date -->
+                    <div class="mb-3 col-md-6">
+                        {{ form_label(form.date, 'Date', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.date) }}
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3 col-md-12">
+                        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+
+                    <!-- Statut -->
+                    <div class="mb-3 col-md-6">
+                        {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.status) }}
+                    </div>
+                </div>
+
+                <!-- Bouton Submit -->
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bx bx-save me-1"></i> Mettre à jour
+                    </button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a href="{{ path('maintenance_record_index') }}" class="btn btn-outline-secondary">
+            <i class="bx bx-arrow-back me-1"></i> Retour à la liste
+        </a>
+
+        <form method="post" action="{{ path('maintenance_record_delete', {'id': maintenance_record.id}) }}"
+              style="display:inline;"
+              onsubmit="return confirm('Voulez-vous vraiment supprimer cet enregistrement ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ maintenance_record.id) }}">
+            <button class="btn btn-danger"><i class="bx bx-trash me-1"></i> Supprimer</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
