@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 use App\Entity\Eventspeaker;
@@ -16,21 +17,31 @@ class Evenement
     private ?int $id;
 
     #[ORM\Column(type: "string", length: 100)]
+    #[Assert\NotBlank(message: 'Le titre est requis.')]
+    #[Assert\Length(max: 100, maxMessage: 'Le titre ne peut pas dépasser 100 caractères.')]
     private string $titre;
 
     #[ORM\Column(type: "text")]
+    #[Assert\NotBlank(message: 'La description est requise.')]
     private string $description;
 
-    #[ORM\Column(name: "dateEvent", type: "date")]  // <-- Ajoutez name="dateEvent"
+    #[ORM\Column(name: "dateEvent", type: "date")]  
+    #[Assert\NotBlank(message: 'La date de l\'événement est requise.')]
     private \DateTimeInterface $dateEvent;
 
     #[ORM\Column(type: "string", length: 100)]
+    #[Assert\NotBlank(message: 'Le lieu est requis.')]
+    #[Assert\Length(max: 10, maxMessage: 'Le lieu ne peut pas dépasser 10 caractères.')]
     private string $lieu;
 
     #[ORM\Column(name: "nbPlace",type: "integer")]
+    #[Assert\NotBlank(message: 'Le nombre de places est requis.')]
+    #[Assert\GreaterThanOrEqual(value: 0, message: 'Le nombre de places doit être positif ou zéro.')]
     private int $nbPlace;
 
     #[ORM\Column(type: "float")]
+    #[Assert\NotBlank(message: 'Le prix est requis.')]
+    #[Assert\GreaterThanOrEqual(value: 0, message: 'Le prix doit être positif ou zéro.')]
     private float $prix;
 
     #[ORM\Column(type: "string", length: 250)]
@@ -48,6 +59,29 @@ class Evenement
     #[ORM\Column(type: "string", length: 255)]
     private string $img;
 
+    // Validation personnalisée pour dateEvent
+    #[Assert\Callback]
+    public function validateDateEvent(ExecutionContextInterface $context): void
+    {
+        $now = new \DateTime('now');
+        $minDate = (clone $now)->modify('+24 hours');
+
+        if ($this->dateEvent < $minDate) {
+            $context->buildViolation('La date de l\'événement doit être au moins 24 heures après maintenant.')
+                ->atPath('dateEvent')
+                ->addViolation();
+        }
+    }
+    #[Assert\Callback]
+    public function validateTitre(ExecutionContextInterface $context): void
+    {
+        if (!empty($this->titre) && $this->titre[0] !== strtoupper($this->titre[0])) {
+            $context->buildViolation('Le premier caractère du titre doit être en majuscule.')
+                ->atPath('titre')
+                ->addViolation();
+        }
+    }
+
     public function getId()
     {
         return $this->id;
@@ -58,9 +92,9 @@ class Evenement
         return $this->titre;
     }
 
-    public function setTitre($value)
+    public function setTitre($value): void
     {
-        $this->titre = $value;
+        $this->titre = ($value); 
     }
 
     public function getDescription()
@@ -73,14 +107,15 @@ class Evenement
         $this->description = $value;
     }
 
-    public function getDateEvent()
+    public function getDateEvent(): \DateTimeInterface
     {
         return $this->dateEvent;
     }
 
-    public function setDateEvent($value)
+    public function setDateEvent(\DateTimeInterface $value): self
     {
         $this->dateEvent = $value;
+        return $this;
     }
 
     public function getLieu()

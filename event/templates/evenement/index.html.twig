@@ -26,7 +26,7 @@
               <div class="col-md-8">
                 <h6 class="card-title mb-1">{{ evenement.titre }}</h6> <!-- Réduit la marge -->
                 <p class="card-text small mb-1"><strong>Description :</strong> {{ evenement.description }}</p>
-                <p class="card-text small mb-1"><strong>Date :</strong> {{ evenement.dateEvent ? evenement.dateEvent|date('Y-m-d') : 'Non définie' }}</p>
+                <p class="card-text small mb-1"><strong>Date :</strong> {{ evenement.dateEvent ? evenement.dateEvent|date('d/m/Y H:i') : 'Non définie' }}</p>
                 <p class="card-text small mb-1"><strong>Lieu :</strong> {{ evenement.lieu }}</p>
                 <p class="card-text small mb-1"><strong>Nombre de places :</strong> {{ evenement.nbPlace }}</p>
                 <p class="card-text small mb-1"><strong>Prix :</strong> {{ evenement.prix }} TND</p>

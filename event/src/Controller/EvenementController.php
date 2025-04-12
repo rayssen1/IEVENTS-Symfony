@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Evenement;
-use App\Entity\User; // This should point to your User entity
+use App\Entity\User;
 use App\Form\EvenementType;
 use App\Repository\EventspeakerRepository;
 use App\Repository\EvenementRepository;
@@ -50,7 +50,7 @@ final class EvenementController extends AbstractController
         // Set the fetched organisateur as the organisateurId
         $evenement->setOrganisateurId($organisateur);
         // Find the first available Eventspeaker with status "dispo"
-        $availableEventspeaker = $eventspeakerRepository->findOneAvailableEventspeaker(); // Use the correct method
+        $availableEventspeaker = $eventspeakerRepository->findOneAvailableEventspeaker(); 
         if (!$availableEventspeaker) {
             throw $this->createNotFoundException('No available Eventspeaker found');
         }
@@ -62,6 +62,9 @@ final class EvenementController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($evenement);
+            // Update the Eventspeaker's status to "non dispo"
+            $availableEventspeaker->setStatus('non dispo');
+            $em->persist($availableEventspeaker);
             $em->flush();
             return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -133,6 +136,13 @@ final class EvenementController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete'.$id, $request->request->get('_token'))) {
+            // Get the associated Eventspeaker
+            $eventspeaker = $evenement->getEventspeakerId();
+            if ($eventspeaker) {
+                // Set the Eventspeaker's status back to "dispo"
+                $eventspeaker->setStatus('dispo');
+                $em->persist($eventspeaker);
+            }
             $em->remove($evenement);
             $em->flush();
         }
