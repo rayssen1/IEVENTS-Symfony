@@ -1274,7 +1274,7 @@ Preloader ==========*/
   height: 12px;
 
   top: 46%;
-  top: -webkit-calc(50% - 6px);
+  top: -webkit-calc(52% - 6px);
   top: calc(50% - 6px);
   left: 46%;
   left: -webkit-calc(50% - 6px);
