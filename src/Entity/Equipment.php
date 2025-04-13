@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -15,18 +17,39 @@ class Equipment
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Le nom ne doit pas être vide.")]
+    #[Assert\Regex(
+        pattern: "/^[^\d]*$/",
+        message: "Le nom ne doit pas contenir de chiffres."
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank(message: "Le type ne doit pas être vide.")]
     private ?string $type = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Le statut ne doit pas être vide.")]
     private ?string $status = null;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull(message: "La quantité ne doit pas être vide.")]
+    #[Assert\LessThan(
+        value: 1000,
+        message: "La quantité doit être inférieure à 1000."
+    )]
+    #[Assert\GreaterThan(
+        value: 0,
+        message: "La quantité doit être supérieure à 0."
+    )]
     private ?int $quantity = null;
 
     #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank(message: "La description ne doit pas être vide.")]
+    #[Assert\Length(
+        max: 30,
+        maxMessage: "La description ne doit pas dépasser 30 caractères."
+    )]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'equipment', targetEntity: Maintenancerecord::class, cascade: ['remove'])]
@@ -40,8 +63,6 @@ class Equipment
     {
         $this->maintenancerecords = new ArrayCollection();
     }
-
-    // Getters and Setters
 
     public function getId(): ?int
     {
@@ -121,7 +142,6 @@ class Equipment
     public function removeMaintenancerecord(Maintenancerecord $maintenancerecord): self
     {
         if ($this->maintenancerecords->removeElement($maintenancerecord)) {
-            // Set the owning side to null (unless already changed)
             if ($maintenancerecord->getEquipment() === $this) {
                 $maintenancerecord->setEquipment(null);
             }
@@ -130,7 +150,6 @@ class Equipment
         return $this;
     }
 
-    // Status options as constants
     public function getStatusOptions(): array
     {
         return [

@@ -16,37 +16,32 @@ class Maintenancerecord
 
     #[ORM\ManyToOne(targetEntity: Equipment::class, inversedBy: 'maintenancerecords')]
     #[ORM\JoinColumn(name: 'equipmentid', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: true)]
-    #[Assert\NotBlank(message: "Equipment should not be blank.")]
+    #[Assert\NotBlank(message: "L'équipement ne doit pas être vide.")]
     private ?Equipment $equipment = null;
 
     #[ORM\Column(type: 'datetime')]
-    #[Assert\NotBlank(message: "Date should not be blank.")]
+    #[Assert\NotBlank(message: "La date ne doit pas être vide.")]
     #[Assert\Type(
-        type: "\DateTimeInterface",
-        message: "Date must be a valid date."
+        type: \DateTimeInterface::class,
+        message: "La date doit être valide."
     )]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: 'text')]
-    #[Assert\NotBlank(message: "Description should not be blank.")]
+    #[Assert\NotBlank(message: "La description ne doit pas être vide.")]
     #[Assert\Length(
-        max: 30,
-        maxMessage: "Description cannot be longer than {{ limit }} characters."
+        max: 50,
+        maxMessage: "La description ne doit pas dépasser {{ limit }} caractères."
     )]
     private ?string $description = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank(message: "Status should not be blank.")]
-    #[Assert\Type(
-        type: "string",
-        message: "Status should be a valid string."
-    )]
-    #[Assert\Regex(
-        pattern: '/\D/',  // \D matches any non-digit character
-        message: 'Status should not contain any digits.'
+    #[Assert\NotBlank(message: "Le statut ne doit pas être vide.")]
+    #[Assert\Choice(
+        choices: ['Operational', 'Needs Repair', 'Out of Service'],
+        message: "Le statut doit être l'un des suivants : 'Operational', 'Needs Repair', 'Out of Service'."
     )]
     private ?string $status = null;
-    
 
     public function getId(): ?int
     {

@@ -42,6 +42,14 @@ final class MaintenanceRecordController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('/{id}', name: 'maintenance_record_show', methods: ['GET'])]
+public function show(Maintenancerecord $maintenanceRecord): Response
+{
+    return $this->render('maintenancerecord/show.html.twig', [
+        'maintenance_record' => $maintenanceRecord,
+    ]);
+}
+
 
     #[Route('/{id}/edit', name: 'maintenance_record_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Maintenancerecord $maintenanceRecord, EntityManagerInterface $entityManager): Response

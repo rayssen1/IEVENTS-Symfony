@@ -8,17 +8,20 @@
     <span class="text-muted fw-light">Maintenance /</span> Liste
   </h4>
 
+  <!-- Bouton Créer un enregistrement -->
   <div class="mb-3">
     <a href="{{ path('maintenance_record_new') }}" class="btn btn-success">
-      <i class="bx bx-plus me-1"></i> Créer un nouvel enregistrement
+      <i class="bx bx-plus me-1"></i> Ajouter un enregistrement
     </a>
   </div>
 
+  <!-- Tableau -->
   <div class="card">
     <div class="table-responsive text-nowrap">
       <table class="table table-hover">
         <thead class="table-light">
           <tr>
+            <th>ID</th>
             <th>Équipement</th>
             <th>Date</th>
             <th>Description</th>
@@ -29,26 +32,30 @@
         <tbody class="table-border-bottom-0">
           {% for maintenance_record in maintenance_records %}
             <tr>
-              <td><strong>{{ maintenance_record.equipment ? maintenance_record.equipment.name : 'N/A' }}</strong></td>
-              <td>{{ maintenance_record.date|date('Y-m-d H:i') }}</td>
-              <td>{{ maintenance_record.description }}</td>
+              <td>{{ maintenance_record.id }}</td>
               <td>
-                {% if maintenance_record.status == 'Completed' %}
-                  <span class="badge bg-label-success">{{ maintenance_record.status }}</span>
-                {% elseif maintenance_record.status == 'Pending' %}
-                  <span class="badge bg-label-warning">{{ maintenance_record.status }}</span>
+                {% if maintenance_record.equipment %}
+                  {{ maintenance_record.equipment.name }}
                 {% else %}
-                  <span class="badge bg-label-secondary">{{ maintenance_record.status }}</span>
+                  <em class="text-muted">Non défini</em>
                 {% endif %}
               </td>
+              <td>{{ maintenance_record.date ? maintenance_record.date|date('d/m/Y') : 'N/A' }}</td>
+              <td>{{ maintenance_record.description }}</td>
               <td>
+                <span class="badge bg-label-info">{{ maintenance_record.status }}</span>
+              </td>
+              <td>
+                <a href="{{ path('maintenance_record_show', {'id': maintenance_record.id}) }}"
+                   class="btn btn-sm btn-outline-primary mb-1">
+                  <i class="bx bx-show"></i>
+                </a>
                 <a href="{{ path('maintenance_record_edit', {'id': maintenance_record.id}) }}"
                    class="btn btn-sm btn-outline-warning mb-1">
                   <i class="bx bx-edit-alt"></i>
                 </a>
                 <form method="post" action="{{ path('maintenance_record_delete', {'id': maintenance_record.id}) }}"
-                      style="display:inline;"
-                      onsubmit="return confirm('Voulez-vous vraiment supprimer cet enregistrement ?');">
+                      style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet enregistrement ?');">
                   <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ maintenance_record.id) }}">
                   <button type="submit" class="btn btn-sm btn-outline-danger mb-1">
                     <i class="bx bx-trash"></i>
@@ -58,7 +65,7 @@
             </tr>
           {% else %}
             <tr>
-              <td colspan="5" class="text-center text-muted fst-italic py-4">Aucun enregistrement trouvé</td>
+              <td colspan="6" class="text-center text-muted fst-italic py-4">Aucun enregistrement trouvé</td>
             </tr>
           {% endfor %}
         </tbody>

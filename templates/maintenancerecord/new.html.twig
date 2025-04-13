@@ -3,7 +3,6 @@
 {% block title %}Créer un nouvel Enregistrement de Maintenance{% endblock %}
 
 {% block stylesheets %}
-    <!-- Sneat CSS -->
     <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css" />
     <link rel="stylesheet" href="/assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
@@ -23,43 +22,45 @@
                 <small class="text-muted float-end">Remplir les détails</small>
             </div>
             <div class="card-body">
-                {{ form_start(form, {'id': 'maintenanceRecordForm'}) }}
+                {{ form_start(form) }}
                     <div class="mb-3">
-                        <label class="form-label" for="equipment">Équipement</label>
+                        <label class="form-label">Équipement</label>
                         <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class="bx bx-wrench"></i></span>
-                            {{ form_widget(form.equipment, {'attr': {'class': 'form-control', 'id': 'equipmentInput'}}) }}
-                            {{ form_errors(form.equipment) }}
+                            {{ form_widget(form.equipment, {'attr': {'class': 'form-control'}}) }}
                         </div>
+                        {{ form_errors(form.equipment) }}
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label" for="date">Date</label>
+                        <label class="form-label">Date</label>
                         <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class="bx bx-calendar"></i></span>
-                            {{ form_widget(form.date, {'attr': {'class': 'form-control', 'id': 'dateInput'}}) }}
-                            {{ form_errors(form.date) }}
+                            {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
                         </div>
+                        {{ form_errors(form.date) }}
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label" for="description">Description</label>
+                        <label class="form-label">Description</label>
                         <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class="bx bx-detail"></i></span>
-                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3', 'id': 'descriptionInput'}}) }}
-                            {{ form_errors(form.description) }}
-                            <div id="descriptionError" class="text-danger small mt-1" style="display: none;"></div>
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
                         </div>
+                        {{ form_errors(form.description) }}
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label" for="status">Statut</label>
+                        <label class="form-label">Statut</label>
                         <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class="bx bx-check-circle"></i></span>
-                            {{ form_widget(form.status, {'attr': {'class': 'form-control', 'id': 'statusInput'}}) }}
-                            {{ form_errors(form.status) }}
-                            <div id="statusError" class="text-danger small mt-1" style="display: none;"></div>
+                            {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
                         </div>
+                        {{ form_errors(form.status) }}
                     </div>
+
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-primary" id="submitButton">
+                        <button type="submit" class="btn btn-primary">
                             <i class="bx bx-save me-1"></i> Enregistrer
                         </button>
                         <a href="{{ path('maintenance_record_index') }}" class="btn btn-outline-secondary">
@@ -71,72 +72,9 @@
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('maintenanceRecordForm');
-    const submitButton = document.getElementById('submitButton');
-    const inputs = {
-        description: document.getElementById('descriptionInput'),
-        status: document.getElementById('statusInput')
-    };
-    const errors = {
-        description: document.getElementById('descriptionError'),
-        status: document.getElementById('statusError')
-    };
-
-    const specialCharRegex = /[$&",=]/;
-    const maxLength = 20;
-
-    function validateInput(input, errorElement, rules) {
-        let errorMessage = '';
-        const value = input.value;
-
-        if (rules.noSpecialChars && specialCharRegex.test(value)) {
-            errorMessage = 'Ne doit pas contenir de caractères spéciaux ($ & " , =).';
-        }
-        if (rules.maxLength && value.length > maxLength) {
-            errorMessage = `Ne doit pas dépasser ${maxLength} caractères.`;
-        }
-
-        if (errorMessage) {
-            errorElement.textContent = errorMessage;
-            errorElement.style.display = 'block';
-            return false;
-        } else {
-            errorElement.style.display = 'none';
-            errorElement.textContent = '';
-            return true;
-        }
-    }
-
-    function updateSubmitButton() {
-        const isValid = 
-            validateInput(inputs.description, errors.description, { noSpecialChars: true }) &&
-            validateInput(inputs.status, errors.status, { noSpecialChars: true, maxLength: true });
-
-        submitButton.disabled = !isValid;
-    }
-
-    Object.values(inputs).forEach(input => {
-        input.addEventListener('input', function() {
-            updateSubmitButton();
-        });
-    });
-
-    updateSubmitButton();
-
-    form.addEventListener('submit', function(event) {
-        if (submitButton.disabled) {
-            event.preventDefault();
-        }
-    });
-});
-</script>
 {% endblock %}
 
 {% block javascripts %}
-    <!-- Sneat Core JS -->
     <script src="/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="/assets/vendor/libs/popper/popper.js"></script>
     <script src="/assets/vendor/js/bootstrap.js"></script>
