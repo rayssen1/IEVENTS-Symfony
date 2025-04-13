@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\DBAL\Exception as DBALException;
 
 #[Route('/equipment')]
 final class EquipmentController extends AbstractController
@@ -33,18 +34,56 @@ final class EquipmentController extends AbstractController
 
         if ($form->isSubmitted()) {
             $errors = $validator->validate($equipment);
+            $hasCustomErrors = false; // Flag for custom validation errors
 
-            if ($form->isValid() && count($errors) === 0) {
-                $entityManager->persist($equipment);
-                $entityManager->flush();
+            // Validation manuelle côté serveur
+            $name = $equipment->getName();
+            $quantity = $equipment->getQuantity();
 
-                return $this->redirectToRoute('equipment_index', [], Response::HTTP_SEE_OTHER);
+            if (preg_match('/\d/', $name)) {
+                $this->addFlash('error', 'Le nom ne doit pas contenir de chiffres.');
+                $hasCustomErrors = true;
             }
 
-            // Flash error messages
-            foreach ($errors as $error) {
-                $this->addFlash('error', $error->getMessage());
+            if ($quantity === null) {
+                $this->addFlash('error', 'Veuillez entrer une quantité.');
+                $hasCustomErrors = true;
+            } elseif ($quantity <= 0) {
+                $this->addFlash('error', 'La quantité doit être un nombre positif.');
+                $hasCustomErrors = true;
+            } elseif ($quantity >= 1000) {
+                $this->addFlash('error', 'La quantité doit être inférieure à 1000.');
+                $hasCustomErrors = true;
             }
+
+            if ($form->isValid() && count($errors) === 0 && !$hasCustomErrors) {
+                try {
+                    $entityManager->persist($equipment);
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Équipement ajouté avec succès.');
+                    return $this->redirectToRoute('equipment_index', [], Response::HTTP_SEE_OTHER);
+                } catch (DBALException $e) {
+                    if (str_contains($e->getMessage(), 'SQLSTATE[22003]')) {
+                        $this->addFlash('error', 'La quantité est trop grande pour être enregistrée. Veuillez entrer une valeur plus petite.');
+                    } else {
+                        $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'équipement. Veuillez réessayer.');
+                    }
+                }
+            } else {
+                // Add a fallback error message if form is invalid
+                if (count($errors) > 0) {
+                    foreach ($errors as $error) {
+                        $this->addFlash('error', $error->getMessage());
+                    }
+                }
+            }
+
+            // Re-render the form with errors as flash messages
+            return $this->render('equipment/new.html.twig', [
+                'equipment' => $equipment,
+                'form' => $form,
+            ]);
         }
 
         return $this->render('equipment/new.html.twig', [
@@ -69,16 +108,59 @@ final class EquipmentController extends AbstractController
 
         if ($form->isSubmitted()) {
             $errors = $validator->validate($equipment);
+            $hasCustomErrors = false; // Flag for custom validation errors
 
-            if ($form->isValid() && count($errors) === 0) {
-                $entityManager->flush();
+            // Validation manuelle côté serveur
+            $name = $equipment->getName();
+            $quantity = $equipment->getQuantity();
 
-                return $this->redirectToRoute('equipment_index', [], Response::HTTP_SEE_OTHER);
+            if (preg_match('/\d/', $name)) {
+                $this->addFlash('error', 'Le nom ne doit pas contenir de chiffres.');
+                $hasCustomErrors = true;
             }
 
-            foreach ($errors as $error) {
-                $this->addFlash('error', $error->getMessage());
+            if ($quantity === null) {
+                $this->addFlash('error', 'Veuillez entrer une quantité.');
+                $hasCustomErrors = true;
+            } elseif ($quantity <= 0) {
+                $this->addFlash('error', 'La quantité doit être un nombre positif.');
+                $hasCustomErrors = true;
+            } elseif ($quantity >= 1000) {
+                $this->addFlash('error', 'La quantité doit être inférieure à 1000.');
+                $hasCustomErrors = true;
             }
+
+            if ($form->isValid() && count($errors) === 0 && !$hasCustomErrors) {
+                try {
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Équipement modifié avec succès.');
+                    return $this->redirectToRoute('equipment_index', [], Response::HTTP_SEE_OTHER);
+                } catch (DBALException $e) {
+                    if (str_contains($e->getMessage(), 'SQLSTATE[22003]')) {
+                        $this->addFlash('error', 'La quantité est trop grande pour être enregistrée. Veuillez entrer une valeur plus petite.');
+                    } else {
+                        $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'équipement. Veuillez réessayer.');
+                    }
+
+                    return $this->render('equipment/edit.html.twig', [
+                        'equipment' => $equipment,
+                        'form' => $form,
+                    ]);
+                }
+            }
+
+            // Add error messages from validator
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
+
+            return $this->render('equipment/edit.html.twig', [
+                'equipment' => $equipment,
+                'form' => $form,
+            ]);
         }
 
         return $this->render('equipment/edit.html.twig', [
@@ -93,8 +175,9 @@ final class EquipmentController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$equipment->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($equipment);
             $entityManager->flush();
+            $this->addFlash('success', 'Équipement supprimé avec succès.');
         }
 
         return $this->redirectToRoute('equipment_index', [], Response::HTTP_SEE_OTHER);
     }
-}
+}   

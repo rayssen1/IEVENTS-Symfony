@@ -1,4 +1,3 @@
-{# templates/equipment/new.html.twig #}
 {% extends 'evenement/base-back.html.twig' %}
 
 {% block title %}Créer un nouvel Équipement{% endblock %}
@@ -14,45 +13,42 @@
       <div class="card mb-4">
         <h5 class="card-header">Formulaire de création</h5>
         <div class="card-body">
-          {{ form_start(form) }}
+          <!-- Toast container for error and success -->
+          <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;" id="toast-container"></div>
+
+          {{ form_start(form, {'attr': {'id': 'equipmentForm', 'novalidate': 'novalidate'}}) }}
             <div class="row">
-              <!-- Nom -->
               <div class="mb-3 col-md-6">
                 {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control', 'id': 'name'}}) }}
+                <div class="invalid-feedback" id="nameError"></div>
               </div>
 
-              <!-- Type -->
               <div class="mb-3 col-md-6">
                 {{ form_label(form.type, 'Type', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.type) }}
+                {{ form_widget(form.type, {'attr': {'class': 'form-control', 'id': 'type'}}) }}
+                <div class="invalid-feedback" id="typeError"></div>
               </div>
 
-              <!-- Description -->
               <div class="mb-3 col-md-12">
                 {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
-                {{ form_errors(form.description) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3', 'id': 'description'}}) }}
+                <div class="invalid-feedback" id="descriptionError"></div>
               </div>
 
-              <!-- Quantité -->
               <div class="mb-3 col-md-6">
                 {{ form_label(form.quantity, 'Quantité', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.quantity, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.quantity) }}
+                {{ form_widget(form.quantity, {'attr': {'class': 'form-control', 'id': 'quantity'}}) }}
+                <div class="invalid-feedback" id="quantityError"></div>
               </div>
 
-              <!-- Statut -->
               <div class="mb-3 col-md-6">
                 {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.status) }}
+                {{ form_widget(form.status, {'attr': {'class': 'form-control', 'id': 'status'}}) }}
+                <div class="invalid-feedback" id="statusError"></div>
               </div>
             </div>
 
-            <!-- Bouton Submit -->
             <div class="mt-4">
               <button type="submit" class="btn btn-primary">
                 <i class="bx bx-save me-1"></i> Enregistrer
@@ -68,4 +64,91 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('equipmentForm');
+    if (!form) {
+      console.error("Form with ID 'equipmentForm' not found.");
+      return;
+    }
+
+    const toastContainer = document.getElementById('toast-container');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      let valid = true;
+      const formData = new FormData(form);
+
+      document.querySelectorAll('.invalid-feedback').forEach(function (el) {
+        el.innerText = '';
+        el.classList.remove('d-block');
+      });
+
+      if (!formData.get('form[name]')?.trim()) {
+        document.getElementById('nameError').innerText = 'Nom requis';
+        document.getElementById('nameError').classList.add('d-block');
+        valid = false;
+      }
+
+      if (!formData.get('form[type]')?.trim()) {
+        document.getElementById('typeError').innerText = 'Type requis';
+        document.getElementById('typeError').classList.add('d-block');
+        valid = false;
+      }
+
+      if (!formData.get('form[description]')?.trim()) {
+        document.getElementById('descriptionError').innerText = 'Description requise';
+        document.getElementById('descriptionError').classList.add('d-block');
+        valid = false;
+      }
+
+      const quantity = formData.get('form[quantity]');
+      if (!quantity || isNaN(quantity) || quantity <= 0 || quantity >= 1000) {
+        document.getElementById('quantityError').innerText = 'Quantité invalide (1-999)';
+        document.getElementById('quantityError').classList.add('d-block');
+        valid = false;
+      }
+
+      if (!formData.get('form[status]')?.trim()) {
+        document.getElementById('statusError').innerText = 'Statut requis';
+        document.getElementById('statusError').classList.add('d-block');
+        valid = false;
+      }
+
+      if (valid) {
+        form.submit();
+      } else {
+        addToast('Erreur', 'Veuillez corriger les erreurs ci-dessus.');
+      }
+    });
+
+    function addToast(title, message) {
+      const toastHTML = `
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <strong class="me-auto">${title}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">${message}</div>
+        </div>
+      `;
+      toastContainer.innerHTML = toastHTML;
+      new bootstrap.Toast(toastContainer.querySelector('.toast')).show();
+    }
+  });
+</script>
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+  <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

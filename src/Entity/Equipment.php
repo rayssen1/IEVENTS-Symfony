@@ -2,7 +2,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -16,35 +15,18 @@ class Equipment
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank(message: "Name should not be blank.")]
-    #[Assert\Regex(
-        pattern: '/\D/', 
-        message: 'Name should not contain any digits.'
-    )]
     private ?string $name = null;
 
     #[ORM\Column(type: 'string', length: 100)]
-    #[Assert\NotBlank(message: "Type should not be blank.")]
     private ?string $type = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank(message: "Status should not be blank.")]
     private ?string $status = null;
 
     #[ORM\Column(type: 'integer')]
-    #[Assert\NotBlank(message: "Quantity should not be blank.")]
-    #[Assert\LessThan(
-        value: 1000,
-        message: "Quantity must be less than 1000."
-    )]
     private ?int $quantity = null;
 
     #[ORM\Column(type: 'text')]
-    #[Assert\NotBlank(message: "Description should not be blank.")]
-    #[Assert\Length(
-        max: 1000, 
-        maxMessage: "Description cannot be longer than {{ limit }} characters."
-    )]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'equipment', targetEntity: Maintenancerecord::class, cascade: ['remove'])]
