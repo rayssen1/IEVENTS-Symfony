@@ -1,5 +1,4 @@
-{{ form_start(form) }}
-
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 <div class="row">
   <!-- Titre -->
   <div class="mb-3 col-md-6">
@@ -46,9 +45,20 @@
   <!-- Statut -->
   <div class="mb-3 col-md-6">
     {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label'}}) }}
-    {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+    {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
     {{ form_errors(form.status) }}
   </div>
+  <!-- Event Speaker -->
+    <div class="mb-3 col-md-6">
+        {{ form_label(form.eventspeakerId, 'speaker', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.eventspeakerId, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.eventspeakerId) }}
+        {% if form.eventspeakerId.vars.choices|length == 0 %}
+            <small class="text-danger">Il n'y a pas de speaker disponible.</small>
+        {% else %}
+            <small class="text-muted">Sélectionnez un speaker disponible.</small>
+        {% endif %}
+    </div>
 
   <!-- Image Path -->
   <div class="mb-3 col-md-6">

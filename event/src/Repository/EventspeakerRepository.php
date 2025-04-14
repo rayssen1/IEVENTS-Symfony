@@ -8,11 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Eventspeaker>
- *
- * @method Eventspeaker|null find($id, $lockMode = null, $lockVersion = null)
- * @method Eventspeaker|null findOneBy(array $criteria, array $orderBy = null)
- * @method Eventspeaker[]    findAll()
- * @method Eventspeaker[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class EventspeakerRepository extends ServiceEntityRepository
 {
@@ -22,8 +17,8 @@ class EventspeakerRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find all Eventspeakers with status 'dispo'
-     * 
+     * Find all Eventspeakers with status 'dispo', sorted by name.
+     *
      * @return Eventspeaker[]
      */
     public function findAvailableEventspeakers(): array
@@ -31,14 +26,15 @@ class EventspeakerRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->andWhere('e.status = :status')
             ->setParameter('status', 'dispo')
-            ->orderBy('e.id', 'ASC')
+            ->orderBy('e.nom', 'ASC') // Sort by last name
+            ->addOrderBy('e.prenom', 'ASC') // Then first name
             ->getQuery()
             ->getResult();
     }
 
     /**
-     * Find one Eventspeaker with status 'dispo'
-     * 
+     * Find one Eventspeaker with status 'dispo', sorted by name.
+     *
      * @return Eventspeaker|null
      */
     public function findOneAvailableEventspeaker(): ?Eventspeaker
@@ -46,7 +42,8 @@ class EventspeakerRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->andWhere('e.status = :status')
             ->setParameter('status', 'dispo')
-            ->orderBy('e.id', 'ASC')
+            ->orderBy('e.nom', 'ASC')
+            ->addOrderBy('e.prenom', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();

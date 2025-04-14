@@ -32,15 +32,7 @@ final class EvenementController extends AbstractController
     {
         $evenement = new Evenement();
         
-       /* // Get the current user
-        $currentUser = $this->getUser();
-        // Check if the user is logged in and has the role "organisateur"
-        if ($currentUser && $currentUser->getRole() === 'organisateur') {
-        $evenement->setOrganisateurId($currentUser);
-        } else {
-        // Optionally handle the case where the user is not an organisateur
-        throw $this->createAccessDeniedException('Seuls les organisateurs peuvent créer des événements.');
-        }*/
+    
         $organisateur = $em->getRepository(User::class)->findOneBy(['role' => 'organisateur']);
         
         if (!$organisateur) {
@@ -49,22 +41,21 @@ final class EvenementController extends AbstractController
         
         // Set the fetched organisateur as the organisateurId
         $evenement->setOrganisateurId($organisateur);
-        // Find the first available Eventspeaker with status "dispo"
-        $availableEventspeaker = $eventspeakerRepository->findOneAvailableEventspeaker(); 
-        if (!$availableEventspeaker) {
-            throw $this->createNotFoundException('No available Eventspeaker found');
-        }
-
-        // Set the available Eventspeaker to the Evenement
-        $evenement->setEventspeakerId($availableEventspeaker);
+        
         $form = $this->createForm(EvenementType::class, $evenement);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Update Eventspeaker status if selected
+            $selectedSpeaker = $evenement->getEventspeakerId();
+            if ($selectedSpeaker) {
+                $selectedSpeaker->setStatus('non dispo');
+                $em->persist($selectedSpeaker);
+            }
             $em->persist($evenement);
             // Update the Eventspeaker's status to "non dispo"
-            $availableEventspeaker->setStatus('non dispo');
-            $em->persist($availableEventspeaker);
+            $selectedSpeaker->setStatus('non dispo');
+            $em->persist($selectedSpeaker);
             $em->flush();
             return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
         }
