@@ -45,7 +45,7 @@
   <!-- Statut -->
   <div class="mb-3 col-md-6">
     {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label'}}) }}
-    {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+    {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
     {{ form_errors(form.status) }}
   </div>
   <!-- Event Speaker -->
@@ -62,10 +62,12 @@
 
   <!-- Image Path -->
   <div class="mb-3 col-md-6">
-    {{ form_label(form.img, 'Chemin de l\'image', {'label_attr': {'class': 'form-label'}}) }}
-    {{ form_widget(form.img, {'attr': {'class': 'form-control'}}) }}
-    {{ form_errors(form.img) }}
-    <small class="text-muted">Exemple: /images/events/event1.jpg</small>
+      {{ form_label(form.img, 'Image') }}
+            <div class="custom-file">
+                {{ form_widget(form.img, {'attr': {'class': 'form-control'}}) }}
+                <label class="custom-file-label" for="{{ form.img.vars.id }}"></label>
+            </div>
+            {{ form_errors(form.img) }}
   </div>
 </div>
 
@@ -75,5 +77,11 @@
     <i class="bx bx-save me-1"></i> {{ button_label|default('Enregistrer') }}
   </button>
 </div>
-
+  <script>
+        // Update the file input label when a file is selected
+        document.querySelector('.custom-file-input').addEventListener('change', function(e) {
+            var fileName = e.target.files[0] ? e.target.files[0].name : 'Choisir une image';
+            e.target.nextElementSibling.textContent = fileName;
+        });
+    </script>
 {{ form_end(form) }}

@@ -24,10 +24,10 @@ class Payment
     #[ORM\Column(type: "datetime")]
     private \DateTimeInterface $paymentDate;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string")]
     private string $status;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string")]
     private string $paymentType;
 
     public function getId()

@@ -1,0 +1,118 @@
+{% extends 'baya.html.twig' %}
+{% block body_class %}no-bg{% endblock %}
+{% block body %}
+<style>
+    body.no-bg {
+     background: none;
+     background-color:rgb(215, 210, 210);
+    }
+    .form-container {
+
+        max-width: 600px;
+        margin: 100px auto 50px auto; 
+        padding: 30px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h3 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-container form div {
+        margin-bottom: 20px;
+    }
+
+    .form-container input,
+    .form-container select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .form-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .form-buttons button,
+    .form-buttons input[type="submit"],
+    .form-buttons a {
+        background-color: #c5eff7;
+        color: white;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .form-buttons button:hover,
+    .form-buttons input[type="submit"]:hover,
+    .form-buttons a:hover {
+        background-color: #33a6e6;
+    }
+</style>
+
+    <header id="header">
+        <div id="menu" class="header-menu fixed">
+            <div class="box">
+                <div class="row">
+                    <nav role="navigation" class="col-sm-12">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+
+                            <!--== Logo ==-->
+                            <span class="navbar-brand logo">
+                                I-EVENTS
+                            </span>
+                        </div>
+                        <div class="navbar-collapse collapse">
+                            <!--== Navigation Menu ==-->
+                            <ul class="nav navbar-nav">
+                                <li class="current"><a href="#header">Home</a></li>
+                                <li><a href="#about">About us</a></li>
+                                <li><a href="/reservation">Mes Reservations</a></li>
+                                <li><a href="/reclamation/new">Reclamation</a></li>
+                                <li><a href="#prices">Pricing</a></li>
+                              {% if app.session.get('session_key') %}
+    <!-- User is logged in -->
+                            <li><a href="{{ path('app_user_edit', {'id': app.session.get('user_id')}) }}">Profile</a></li>
+                             <li><a href="/logout">Log out</a></li>
+                            {% else %}
+    <!-- User is not logged in -->
+                             <li><a href="/authentication">Sign In</a></li>
+                            <li><a href="/user/new">Sign Up</a></li>
+                            {% endif %}
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+   
+    <div class="form-container">
+    <h3>Modifier la réservation</h3>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="form-buttons">
+            <input type="submit" value="Update">
+            <a href="{{ path('app_reservation_index') }}">Back to my reservations</a>
+        </div>
+    {{ form_end(form) }}
+
+    <div class="form-buttons" style="margin-top: 20px ;">
+        {{ include('reservation/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

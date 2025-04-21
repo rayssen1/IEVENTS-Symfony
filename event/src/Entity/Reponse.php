@@ -2,91 +2,102 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-use App\Entity\Reclamation;
+use App\Repository\ReponseRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ReponseRepository::class)]
+#[ORM\Table(name: 'reponse')]
 class Reponse
 {
-
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-        #[ORM\ManyToOne(targetEntity: Reclamation::class, inversedBy: "reponses")]
-    #[ORM\JoinColumn(name: 'idRec', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private Reclamation $idRec;
-
-    #[ORM\Column(type: "text")]
-    private string $message;
-
-    #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $dateRep;
-
-    #[ORM\Column(type: "string", length: 255)]
-    private string $etat;
-
-    #[ORM\Column(type: "string", length: 500)]
-    private string $messageRec;
-
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($value)
+    public function setId(int $id): self
     {
-        $this->id = $value;
+        $this->id = $id;
+        return $this;
     }
 
-    public function getIdRec()
+    #[ORM\ManyToOne(targetEntity: Reclamation::class, inversedBy: 'reponses')]
+    #[ORM\JoinColumn(name: 'idRec', referencedColumnName: 'id')]
+    private ?Reclamation $reclamation = null;
+
+    public function getReclamation(): ?Reclamation
     {
-        return $this->idRec;
+        return $this->reclamation;
     }
 
-    public function setIdRec($value)
+    public function setReclamation(?Reclamation $reclamation): self
     {
-        $this->idRec = $value;
+        $this->reclamation = $reclamation;
+        return $this;
     }
 
-    public function getMessage()
+    #[ORM\Column(type: 'text',name: 'message', nullable: false)]
+    private ?string $message = null;
+
+    public function getMessage(): ?string
     {
         return $this->message;
     }
 
-    public function setMessage($value)
+    public function setMessage(string $message): self
     {
-        $this->message = $value;
+        $this->message = $message;
+        return $this;
     }
 
-    public function getDateRep()
+    #[ORM\Column(type: 'datetime', name: 'dateRep', nullable: true)]
+    private ?\DateTimeInterface $dateRep = null;
+
+    public function getDateRep(): ?\DateTimeInterface
     {
         return $this->dateRep;
     }
 
-    public function setDateRep($value)
+    public function setDateRep(?\DateTimeInterface $dateRep): self
     {
-        $this->dateRep = $value;
+        $this->dateRep = $dateRep;
+        return $this;
     }
 
-    public function getEtat()
+    #[ORM\Column(type: 'string',name: 'etat', nullable: false)]
+    private ?string $etat = null;
+
+    public function getEtat(): ?string
     {
         return $this->etat;
     }
 
-    public function setEtat($value)
+    public function setEtat(string $etat): self
     {
-        $this->etat = $value;
+        $this->etat = $etat;
+        return $this;
     }
 
-    public function getMessageRec()
+    #[ORM\Column(type: 'string',name: 'messageRec', nullable: false)]
+    private ?string $messageRec = null;
+
+    public function getMessageRec(): ?string
     {
         return $this->messageRec;
     }
 
-    public function setMessageRec($value)
+    public function setMessageRec(string $messageRec): self
     {
-        $this->messageRec = $value;
+        $this->messageRec = $messageRec;
+        return $this;
     }
+
 }

@@ -2,134 +2,150 @@
 
 namespace App\Entity;
 
+use App\Repository\ReclamationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Doctrine\Common\Collections\Collection;
-use App\Entity\Reponse;
-
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ReclamationRepository::class)]
+#[ORM\Table(name: 'reclamation')]
 class Reclamation
 {
-
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    #[ORM\Column(type: "integer")]
-    private int $idUser;
+    #[ORM\Column(type: 'integer', name: 'idUser', nullable: false)]
+    private ?int $idUser = null;
 
-    #[ORM\Column(type: "integer")]
-    private int $idEvent;
+    #[ORM\ManyToOne(targetEntity: Evenement::class)]
+    #[ORM\JoinColumn(name: 'idEvent', referencedColumnName: 'id', nullable: false)]
+    private ?Evenement $evenement = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $subject;
+    #[ORM\Column(type: 'string', name: 'subject', nullable: false)]
+    private ?string $subject = null;
 
-    #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $dateReclamation;
+    #[ORM\Column(type: 'datetime', name: 'dateReclamation', nullable: false)]
+    private ?\DateTimeInterface $dateReclamation = null;
 
-    #[ORM\Column(type: "float")]
-    private float $rate;
+    #[ORM\Column(type: 'decimal', name: 'rate', precision: 10, scale: 2, nullable: false)]
+    private ?string $rate = null;
 
-    #[ORM\Column(type: "string", length: 500)]
-    private string $email;
+    #[ORM\Column(type: 'string', name: 'email', nullable: false)]
+    private ?string $email = null;
 
-    public function getId()
+    #[ORM\OneToMany(targetEntity: Reponse::class, mappedBy: 'reclamation')]
+    private Collection $reponses;
+
+    public function __construct()
+    {
+        $this->reponses = new ArrayCollection();
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($value)
+    public function setId(int $id): self
     {
-        $this->id = $value;
+        $this->id = $id;
+        return $this;
     }
 
-    public function getIdUser()
+    public function getIdUser(): ?int
     {
         return $this->idUser;
     }
 
-    public function setIdUser($value)
+    public function setIdUser(int $idUser): self
     {
-        $this->idUser = $value;
+        $this->idUser = $idUser;
+        return $this;
     }
 
-    public function getIdEvent()
+    public function getEvenement(): ?Evenement
     {
-        return $this->idEvent;
+        return $this->evenement;
     }
 
-    public function setIdEvent($value)
+    public function setEvenement(Evenement $evenement): self
     {
-        $this->idEvent = $value;
+        $this->evenement = $evenement;
+        return $this;
     }
 
-    public function getSubject()
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
 
-    public function setSubject($value)
+    public function setSubject(string $subject): self
     {
-        $this->subject = $value;
+        $this->subject = $subject;
+        return $this;
     }
 
-    public function getDateReclamation()
+    public function getDateReclamation(): ?\DateTimeInterface
     {
         return $this->dateReclamation;
     }
 
-    public function setDateReclamation($value)
+    public function setDateReclamation(\DateTimeInterface $dateReclamation): self
     {
-        $this->dateReclamation = $value;
+        $this->dateReclamation = $dateReclamation;
+        return $this;
     }
 
-    public function getRate()
+    public function getRate(): ?string
     {
         return $this->rate;
     }
 
-    public function setRate($value)
+    public function setRate(string $rate): self
     {
-        $this->rate = $value;
+        $this->rate = $rate;
+        return $this;
     }
 
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail($value)
+    public function setEmail(string $email): self
     {
-        $this->email = $value;
+        $this->email = $email;
+        return $this;
     }
 
-    #[ORM\OneToMany(mappedBy: "idRec", targetEntity: Reponse::class)]
-    private Collection $reponses;
+    /**
+     * @return Collection<int, Reponse>
+     */
+    public function getReponses(): Collection
+    {
+        return $this->reponses;
+    }
 
-        public function getReponses(): Collection
-        {
-            return $this->reponses;
+    public function addReponse(Reponse $reponse): self
+    {
+        if (!$this->reponses->contains($reponse)) {
+            $this->reponses[] = $reponse;
+            $reponse->setReclamation($this);
         }
-    
-        public function addReponse(Reponse $reponse): self
-        {
-            if (!$this->reponses->contains($reponse)) {
-                $this->reponses[] = $reponse;
-                $reponse->setIdRec($this);
+
+        return $this;
+    }
+
+    public function removeReponse(Reponse $reponse): self
+    {
+        if ($this->reponses->removeElement($reponse)) {
+            if ($reponse->getReclamation() === $this) {
+                $reponse->setReclamation(null);
             }
-    
-            return $this;
         }
-    
-        public function removeReponse(Reponse $reponse): self
-        {
-            if ($this->reponses->removeElement($reponse)) {
-                // set the owning side to null (unless already changed)
-                if ($reponse->getIdRec() === $this) {
-                    $reponse->setIdRec(null);
-                }
-            }
-    
-            return $this;
-        }
+
+        return $this;
+    }
 }

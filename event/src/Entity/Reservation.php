@@ -14,22 +14,30 @@ class Reservation
 
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
+    #[ORM\GeneratedValue]
     private int $id;
 
-        #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "reservations")]
-    #[ORM\JoinColumn(name: 'userId', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "reservations")]
+    #[ORM\JoinColumn(name: 'userId', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     private User $userId;
 
-    #[ORM\Column(type: "integer")]
-    private int $eventId;
+    #[ORM\ManyToOne(targetEntity: Evenement::class)]
+    #[ORM\JoinColumn(name: "eventId", referencedColumnName: "id", onDelete: "CASCADE", nullable: false)]
+    private Evenement $evenement;
+    
+    
 
-    #[ORM\Column(type: "float")]
+    #[ORM\Column(type: "float", name: "totalPrice")]
+    #[Assert\NotBlank(message: "Le prix est requis.")]
+    #[Assert\Positive(message: "Le prix doit être un nombre positif.")]
     private float $totalPrice;
 
     #[ORM\Column(type: "string", length: 255)]
+    #[Assert\NotBlank(message: "Le statut est requis.")]
+    #[Assert\Choice(choices: ["en attente", "confirmée", "annulée"], message: "Statut invalide.")]
     private string $status;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: "datetime", name: "createdAt")]
     private \DateTimeInterface $createdAt;
 
     public function getId()
@@ -50,6 +58,17 @@ class Reservation
     public function setUserId($value)
     {
         $this->userId = $value;
+    }
+
+    public function getEvenement(): Evenement
+    {
+        return $this->evenement;
+    }
+    
+    public function setEvenement(Evenement $evenement): self
+    {
+        $this->evenement = $evenement;
+        return $this;
     }
 
     public function getEventId()

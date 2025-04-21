@@ -16,7 +16,7 @@ class Ticket
     #[ORM\Column(type: "integer")]
     private int $reservationId;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string")]
     private string $ticketType;
 
     #[ORM\Column(type: "string", length: 255)]

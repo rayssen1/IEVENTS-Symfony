@@ -6,102 +6,196 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Evenement;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 
 #[ORM\Entity]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
     #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "AUTO")] // or "IDENTITY"
     #[ORM\Column(type: "integer")]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: "string", length: 50)]
-    private string $nom;
+    #[Assert\NotBlank(message: "Nom is required")]
+    #[Assert\Regex(
+        pattern: "/^[^\d]+$/",
+        message: "Nom should not contain digits"
+    )]
+    private ?string $nom ;
 
     #[ORM\Column(type: "string", length: 50)]
-    private string $prenom;
+    #[Assert\NotBlank(message: "Prenom is required")]
+    #[Assert\Regex(
+        pattern: "/^[^\d]+$/",
+        message: "Prenom should not contain digits"
+    )]
+    private ?string $prenom ;
 
     #[ORM\Column(type: "string", length: 100)]
-    private string $email;
+    #[Assert\NotBlank(message: "Email is required")]
+    #[Assert\Email(message: "Enter a valid email address")]
+    private ?string $email ;
 
     #[ORM\Column(type: "string", length: 255)]
-    private string $password;
+    #[Assert\NotBlank(message: "Password is required")]
+    #[Assert\Regex(
+        pattern: "/^(?=.*[A-Z])(?=.*\d).{8,}$/",
+        message: "Password must be at least 8 characters, contain an uppercase letter and a digit"
+    )]
+    private ?string $password ;
 
     #[ORM\Column(type: "string", length: 50)]
-    private string $role;
+    #[Assert\NotBlank(message: "Role is required")]
+    private ?string $role ;
 
+    #[ORM\Column( name:'phoneNumber', type: "string", length: 255,nullable:true)]
+    #[Assert\NotBlank(message: "Phone number is required")]
+    private ?string $phoneNumber ='' ;
     #[ORM\Column(type: "string", length: 250)]
-    private string $state;
-
-    public function getId()
+    private ?string $state= 'active' ;
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($value)
+    public function setId(int $id): self
     {
-        $this->id = $value;
+        $this->id = $id;
+        return $this;
     }
 
-    public function getNom()
+    public function getNom(): string
     {
         return $this->nom;
     }
 
-    public function setNom($value)
+    public function setNom(string $nom): self
     {
-        $this->nom = $value;
+        $this->nom = $nom;
+        return $this;
     }
 
-    public function getPrenom()
+    public function getPrenom(): string
     {
         return $this->prenom;
     }
 
-    public function setPrenom($value)
+    public function setPrenom(string $prenom): self
     {
-        $this->prenom = $value;
+        $this->prenom = $prenom;
+        return $this;
     }
 
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail($value)
+    public function setEmail(string $email): self
     {
-        $this->email = $value;
+        $this->email = $email;
+        return $this;
     }
 
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword($value)
+    public function setPassword(string $password): self
     {
-        $this->password = $value;
+        $this->password = $password;
+        return $this;
     }
 
-    public function getRole()
+    public function getRole(): string
     {
         return $this->role;
     }
 
-    public function setRole($value)
+    public function setRole(string $role): self
     {
-        $this->role = $value;
+        $this->role = $role;
+        return $this;
     }
 
-    public function getState()
+    public function getPhoneNumber(): string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(string $phoneNumber): self
+    {
+        $this->phoneNumber = $phoneNumber;
+        return $this;
+    }
+    public function getState(): ?string
     {
         return $this->state;
     }
 
-    public function setState($value)
+    public function setState(?string $state): self
     {
-        $this->state = $value;
+        $this->state = $state;
+        return $this;
     }
+
+    // Optional: If you're using salt, you can implement getSalt()
+    public function getSalt(): ?string
+    {
+        return null; // BCrypt doesn't require salt explicitly
+    }
+
+    // Implement other methods required by UserInterface
+    public function getRoles(): array
+    {
+        return ['ROLE_USER']; // Adjust depending on your user roles
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email; // Or however your user is identified (e.g., email)
+    }
+
+
+    public function eraseCredentials(): void
+    {
+        // Clean up any sensitive data if needed
+    }
+    #[ORM\OneToMany(mappedBy: "userId", targetEntity: Reservation::class)]
+    private Collection $reservations;
+
+        public function getReservations(): Collection
+        {
+            return $this->reservations;
+        }
+    
+        public function addReservation(Reservation $reservation): self
+        {
+            if (!$this->reservations->contains($reservation)) {
+                $this->reservations[] = $reservation;
+                $reservation->setUserId($this);
+            }
+    
+            return $this;
+        }
+    
+        public function removeReservation(Reservation $reservation): self
+        {
+            if ($this->reservations->removeElement($reservation)) {
+                // set the owning side to null (unless already changed)
+                if ($reservation->getUserId() === $this) {
+                    $reservation->setUserId(null);
+                }
+            }
+    
+            return $this;
+        }
 
     #[ORM\OneToMany(mappedBy: "user_id", targetEntity: Session::class)]
     private Collection $sessions;
@@ -127,36 +221,6 @@ class User
                 // set the owning side to null (unless already changed)
                 if ($session->getUser_id() === $this) {
                     $session->setUser_id(null);
-                }
-            }
-    
-            return $this;
-        }
-
-    #[ORM\OneToMany(mappedBy: "userId", targetEntity: Reservation::class)]
-    private Collection $reservations;
-
-        public function getReservations(): Collection
-        {
-            return $this->reservations;
-        }
-    
-        public function addReservation(Reservation $reservation): self
-        {
-            if (!$this->reservations->contains($reservation)) {
-                $this->reservations[] = $reservation;
-                $reservation->setUserId($this);
-            }
-    
-            return $this;
-        }
-    
-        public function removeReservation(Reservation $reservation): self
-        {
-            if ($this->reservations->removeElement($reservation)) {
-                // set the owning side to null (unless already changed)
-                if ($reservation->getUserId() === $this) {
-                    $reservation->setUserId(null);
                 }
             }
     

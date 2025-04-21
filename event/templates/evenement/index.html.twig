@@ -8,25 +8,41 @@
     <span class="text-muted fw-light">Événements /</span> Liste
   </h4>
 
-  <!-- Bouton Créer un événement -->
-  <div class="mb-3">
+  <!-- Bouton Créer un événement, champ de recherche et tri -->
+  <div class="mb-3 d-flex justify-content-between align-items-center">
     <a href="{{ path('app_evenement_new') }}" class="btn btn-primary btn-md">
       <i class="bx bx-plus me-1"></i> Créer un nouvel événement
     </a>
   </div>
+  <div class="mb-3 d-flex justify-content-between align-items-center">
+    <div class="input-group w-50">
+      <input type="text" id="searchInput" class="form-control" placeholder="Rechercher ">
+      <span class="input-group-text"><i class="bx bx-search"></i></span>
+    </div>
+    <div>
+      <select id="sortSelect" class="form-select">
+        <option value="">Trier par prix</option>
+        <option value="asc">Prix : croissant</option>
+        <option value="desc">Prix : decroissant</option>
+      </select>
+    </div>
+  </div>
 
   <!-- Liste des événements sous forme de cartes -->
-  <div class="row">
+  <div class="row" id="eventList">
     {% for evenement in evenements %}
-      <div class="col-md-8 mb-2"> <!-- Réduit de mb-3 à mb-2 pour moins d'espacement -->
+      <div class="col-md-8 mb-2 event-card" 
+           data-title="{{ evenement.titre|lower }}" 
+           data-description="{{ evenement.description|lower }}"
+           data-price="{{ evenement.prix }}"> <!-- Attribut pour le tri par prix -->
         <div class="card shadow-sm">
-          <div class="card-body p-2"> <!-- Réduit le padding de p-3 à p-2 -->
+          <div class="card-body p-2">
             <div class="row align-items-center">
               <!-- Attributs à gauche -->
               <div class="col-md-8">
-                <h6 class="card-title mb-1">{{ evenement.titre }}</h6> <!-- Réduit la marge -->
+                <h6 class="card-title mb-1">{{ evenement.titre }}</h6>
                 <p class="card-text small mb-1"><strong>Description :</strong> {{ evenement.description }}</p>
-                <p class="card-text small mb-1"><strong>Date :</strong> {{ evenement.dateEvent ? evenement.dateEvent|date('d/m/Y H:i') : 'Non définie' }}</p>
+                <p class="card-text small mb-1"><strong>Date :</strong> {{ evenement.dateEvent ? evenement.dateEvent|date('d/m/Y') : 'Non définie' }}</p>
                 <p class="card-text small mb-1"><strong>Lieu :</strong> {{ evenement.lieu }}</p>
                 <p class="card-text small mb-1"><strong>Nombre de places :</strong> {{ evenement.nbPlace }}</p>
                 <p class="card-text small mb-1"><strong>Prix :</strong> {{ evenement.prix }} TND</p>
@@ -37,10 +53,9 @@
 
               <!-- Image et boutons à droite -->
               <div class="col-md-4 d-flex align-items-center">
-                <!-- Boutons à gauche de l'image, alignés verticalement -->
-                <div class="d-flex flex-column me-2 gap-1"> <!-- Alignement vertical avec espacement -->
+                <div class="d-flex flex-column me-2 gap-1">
                   <a href="{{ path('app_evenement_show', {'id': evenement.id}) }}"
-                     class="btn btn-sm btn-outline-primary py-0 px-1"> <!-- Réduit le padding -->
+                     class="btn btn-sm btn-outline-primary py-0 px-1">
                     <i class="bx bx-show"></i>
                   </a>
                   <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}"
@@ -48,12 +63,10 @@
                     <i class="bx bx-edit-alt"></i>
                   </a>
                 </div>
-
-                <!-- Image à droite -->
                 <div class="text-center">
                   {% if evenement.img %}
-                    <img src="{{ asset(evenement.img) }}" alt="Image de l'événement"
-                         class="rounded border shadow-sm" style="max-height: 150px; max-width: 100%; object-fit: cover;"> <!-- Réduit de 120px à 80px -->
+                    <img src="{{ asset('images/events/' ~ evenement.img) }}" alt="Image de l'événement"
+                         class="rounded border shadow-sm" style="max-height: 150px; max-width: 100%; object-fit: cover;">
                   {% else %}
                     <span class="text-muted fst-italic small">Pas d'image</span>
                   {% endif %}
@@ -72,4 +85,72 @@
     {% endfor %}
   </div>
 </div>
+
+<!-- Script pour la recherche en temps réel et le tri -->
+{% block javascripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.getElementById('searchInput');
+      const sortSelect = document.getElementById('sortSelect');
+      const eventList = document.getElementById('eventList');
+      const eventCards = document.querySelectorAll('.event-card');
+
+      // Fonction pour filtrer les cartes
+      function filterCards() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        eventCards.forEach(card => {
+          const title = card.getAttribute('data-title');
+          const description = card.getAttribute('data-description');
+
+          // Vérifier si le terme de recherche correspond au titre ou à la description
+          if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      // Recherche en temps réel
+      searchInput.addEventListener('input', filterCards);
+
+      // Tri par prix
+      sortSelect.addEventListener('change', function () {
+        const sortValue = sortSelect.value;
+        const cardsArray = Array.from(eventCards);
+
+        // Réinitialiser l'affichage des cartes filtrées
+        filterCards();
+
+        // Filtrer les cartes visibles
+        const visibleCards = cardsArray.filter(card => card.style.display !== 'none');
+
+        // Trier les cartes visibles
+        visibleCards.sort((a, b) => {
+          const priceA = parseFloat(a.getAttribute('data-price'));
+          const priceB = parseFloat(b.getAttribute('data-price'));
+
+          if (sortValue === 'asc') {
+            return priceA - priceB;
+          } else if (sortValue === 'desc') {
+            return priceB - priceA;
+          }
+          return 0;
+        });
+
+        // Vider la liste et réajouter les cartes triées
+        eventList.innerHTML = '';
+        visibleCards.forEach(card => eventList.appendChild(card));
+
+        // Réajouter les cartes non visibles (cachées par la recherche)
+        cardsArray.forEach(card => {
+          if (card.style.display === 'none') {
+            eventList.appendChild(card);
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}
 {% endblock %}

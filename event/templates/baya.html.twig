@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{% block title %}Event - Landing Page{% endblock %}</title>
+
+    <!-- CSS Files -->
+    {% block stylesheets %}
+        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/owl.carousel.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/flexslider.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/fancySelect.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/responsive.css') }}" rel="stylesheet" media="screen">
+        <!-- Google Fonts -->
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Belgrano" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Dosis" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    {% endblock %}
+</head>
+<body>
+    {% block body %}{% endblock %}
+
+    <!-- JavaScript Files -->
+    {% block javascripts %}
+        <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <script src="{{ asset('JS/jquery-2.1.0.min.js') }}"></script>
+        <script src="{{ asset('JS/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('JS/jquery.scrollTo.js') }}"></script>
+        <script src="{{ asset('JS/jquery.nav.js') }}"></script>
+        <script src="{{ asset('JS/jquery.flexslider.js') }}"></script>
+        <script src="{{ asset('JS/jquery.accordion.js') }}"></script>
+        <script src="{{ asset('JS/jquery.placeholder.js') }}"></script>
+        <script src="{{ asset('JS/jquery.fitvids.js') }}"></script>
+        <script src="{{ asset('JS/gmap3.js') }}"></script>
+        <script src="{{ asset('JS/fancySelect.js') }}"></script>
+        <script src="{{ asset('JS/owl.carousel.min.js') }}"></script>
+        <script src="{{ asset('JS/main.js') }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#testimonial-container").owlCarousel({
+                    navigation: false,
+                    slideSpeed: 700,
+                    paginationSpeed: 400,
+                    singleItem: true,
+                });
+            });
+        </script>
+    {% endblock %}
+</body>
+</html>

@@ -26,40 +26,63 @@ final class EvenementController extends AbstractController
     }
 
     #[Route('/new', name: 'app_evenement_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $em,
-    EventspeakerRepository $eventspeakerRepository 
-    ): Response
+    public function new(Request $request, EntityManagerInterface $em, EventspeakerRepository $eventspeakerRepository): Response
     {
         $evenement = new Evenement();
         
+        $session = $request->getSession();
+        $userId = $session->get('user_id');
     
-        $organisateur = $em->getRepository(User::class)->findOneBy(['role' => 'organisateur']);
-        
-        if (!$organisateur) {
-            throw $this->createNotFoundException('No user with role "organisateur" found. Please add one to the database.');
+        if (!$userId) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour créer un événement.');
+        }
+    
+        // Fetch the current user from the database
+        $currentUser = $em->getRepository(User::class)->find($userId);
+    
+        if (!$currentUser || $currentUser->getRole() !== 'organisateur') {
+            throw $this->createAccessDeniedException('Seuls les organisateurs peuvent créer des événements.');
         }
         
-        // Set the fetched organisateur as the organisateurId
-        $evenement->setOrganisateurId($organisateur);
-        
-        $form = $this->createForm(EvenementType::class, $evenement);
+        // Set the organisateurId
+        $evenement->setOrganisateurId($currentUser);
+    
+        // Set a default Eventspeaker
+        $defaultSpeaker = $eventspeakerRepository->findOneBy(['status' => 'dispo']);
+        if (!$defaultSpeaker) {
+            throw new \RuntimeException('Aucun conférencier disponible trouvé. Veuillez ajouter un conférencier avec le statut "dispo".');
+        }
+        $evenement->setEventspeakerId($defaultSpeaker);
+    
+        // Pass currentSpeakerId to the form
+        $currentSpeakerId = $defaultSpeaker->getId();
+        $form = $this->createForm(EvenementType::class, $evenement, [
+            'currentSpeakerId' => $currentSpeakerId,
+        ]);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            // Update Eventspeaker status if selected
+            // Update Eventspeaker status
             $selectedSpeaker = $evenement->getEventspeakerId();
-            if ($selectedSpeaker) {
+            if ($selectedSpeaker && $selectedSpeaker !== $defaultSpeaker) {
                 $selectedSpeaker->setStatus('non dispo');
                 $em->persist($selectedSpeaker);
             }
+            // Handle file upload
+            $imageFile = $form->get('img')->getData();
+            if ($imageFile) {
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                $imageFile->move(
+                    $this->getParameter('images_directory'),
+                    $newFilename
+                );
+                $evenement->setImg($newFilename);
+            }
             $em->persist($evenement);
-            // Update the Eventspeaker's status to "non dispo"
-            $selectedSpeaker->setStatus('non dispo');
-            $em->persist($selectedSpeaker);
             $em->flush();
             return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->render('evenement/new.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -90,28 +113,50 @@ final class EvenementController extends AbstractController
         methods: ['GET', 'POST'],
         requirements: ['id' => Requirement::DIGITS]
     )]
-    public function edit(Request $request, int $id, EvenementRepository $repository, EntityManagerInterface $em): Response
+    public function edit(Request $request, int $id, EvenementRepository $repository, EntityManagerInterface $em, EventspeakerRepository $eventspeakerRepository): Response
     {
         $evenement = $repository->find($id);
         
         if (!$evenement) {
             throw $this->createNotFoundException('Événement introuvable');
         }
-
-        $form = $this->createForm(EvenementType::class, $evenement);
+        $oldSpeaker = $evenement->getEventspeakerId();
+        $currentSpeakerId = $oldSpeaker ? $oldSpeaker->getId() : null;
+        $form = $this->createForm(EvenementType::class, $evenement, [
+            'currentSpeakerId' => $currentSpeakerId,
+        ]);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
+            // Update Eventspeaker status
+            $selectedSpeaker = $evenement->getEventspeakerId();
+            if ($selectedSpeaker && $selectedSpeaker !== $oldSpeaker) {
+                $selectedSpeaker->setStatus('non dispo');
+                $em->persist($selectedSpeaker);
+                if ($oldSpeaker) {
+                    $oldSpeaker->setStatus('dispo');
+                    $em->persist($oldSpeaker);
+                }
+            }
+            // Handle file upload
+            $imageFile = $form->get('img')->getData();
+            if ($imageFile) {
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                $imageFile->move(
+                    $this->getParameter('images_directory'),
+                    $newFilename
+                );
+                $evenement->setImg($newFilename);
+            }
             $em->flush();
             return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->render('evenement/edit.html.twig', [
             'evenement' => $evenement,
             'form' => $form->createView(),
         ]);
     }
-
     #[Route(
         '/{id}',
         name: 'app_evenement_delete',

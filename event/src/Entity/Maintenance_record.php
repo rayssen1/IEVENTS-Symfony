@@ -24,7 +24,7 @@ class Maintenance_record
     #[ORM\Column(type: "text")]
     private string $description;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string")]
     private string $status;
 
     public function getId()
