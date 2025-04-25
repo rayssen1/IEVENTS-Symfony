@@ -1,0 +1,156 @@
+{% extends 'baya.html.twig' %}
+
+{% block title %}ArtXibition HTML Event Template{% endblock %}
+
+{% block body %}
+{% include 'partials/pre_header.html.twig' %}
+{% include 'partials/header.html.twig' %}
+
+
+<!-- ***** Main Banner ***** -->
+<div class="main-banner">
+  <div class="counter-content">
+    <ul>
+      <li>Days<span id="days"></span></li>
+      <li>Hours<span id="hours"></span></li>
+      <li>Minutes<span id="minutes"></span></li>
+      <li>Seconds<span id="seconds"></span></li>
+    </ul>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="main-content">
+          <div class="next-show"><i class="fa fa-arrow-up"></i><span>Next Show</span></div>
+          <h6>Opening on Thursday, March 31st</h6>
+          <h2>The Sunny Hill Festival 2022</h2>
+          <div class="main-white-button">
+            <a href="#">Purchase Tickets</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- *** Owl Carousel *** -->
+<div class="show-events-carousel">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="owl-show-events owl-carousel">
+          {% for i in 1..4 %}
+            <div class="item">
+              <a href="#"><img src="{{ asset('images/show-events-0' ~ i ~ '.jpg') }}" alt=""></a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- *** Amazing Venues *** -->
+<div class="amazing-venues">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9">
+        <div class="left-content">
+          <h4>Three Amazing Venues for events</h4>
+          <p>ArtXibition Event Template is brought to you by Tooplate website and includes 7 pages...</p>
+          <br>
+          <p>Visit <a href="https://www.toocss.com/" target="_blank">Too CSS</a> for more templates.</p>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="right-content">
+          <h5><i class="fa fa-map-marker"></i> Visit Us</h5>
+          <span>5 College St NW, <br>Norcross, GA 30071<br>United States</span>
+          <div class="text-button"><a href="#">Need Directions? <i class="fa fa-arrow-right"></i></a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- *** Map *** -->
+<div class="map-image">
+  <img src="{{ asset('images/map-image.jpg') }}" alt="Maps of 3 Venues">
+</div>
+
+<!-- *** Venues & Tickets *** -->
+<div class="venue-tickets">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="section-heading">
+          <h2>Our Venues & Tickets</h2>
+        </div>
+      </div>
+      {% set venues = [
+        {'title': 'Radio City Musical Hall', 'img': 'venue-01.jpg', 'price': 45},
+        {'title': 'Madison Square Garden', 'img': 'venue-02.jpg', 'price': 55},
+        {'title': 'Royce Hall', 'img': 'venue-03.jpg', 'price': 65}
+      ] %}
+      {% for venue in venues %}
+        <div class="col-lg-4">
+          <div class="venue-item">
+            <div class="thumb"><img src="{{ asset('images/' ~ venue.img) }}" alt=""></div>
+            <div class="down-content">
+              <div class="left-content">
+                <div class="main-white-button">
+                  <a href="#">Purchase Tickets</a>
+                </div>
+              </div>
+              <div class="right-content">
+                <h4>{{ venue.title }}</h4>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <ul>
+                  <li><i class="fa fa-sitemap"></i>250</li>
+                  <li><i class="fa fa-user"></i>500</li>
+                </ul>
+                <div class="price">
+                  <span>1 ticket<br>from <em>${{ venue.price }}</em></span>
+                </div>
+              </div> 
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- *** Coming Events *** -->
+<div class="coming-events">
+  <div class="left-button">
+    <div class="main-white-button">
+      <a href="#">Discover More</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      {% for i, name in {
+        1: 'Radio City Musical Hall',
+        2: 'Madison Square Garden',
+        3: 'Royce Hall'
+      } %}
+        <div class="col-lg-4">
+          <div class="event-item">
+            <div class="thumb">
+              <a href="#"><img src="{{ asset('images/event-0' ~ i ~ '.jpg') }}" alt=""></a>
+            </div>
+            <div class="down-content">
+              <a href="#"><h4>{{ name }}</h4></a>
+              <ul>
+                <li><i class="fa fa-clock-o"></i> {{ ['Tuesday', 'Wednesday', 'Thursday'][i - 1] }}: 15:30-19:30</li>
+                <li><i class="fa fa-map-marker"></i> Copacabana Beach, Rio de Janeiro</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

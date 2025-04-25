@@ -1,0 +1,85 @@
+{% extends 'baya.html.twig' %}
+
+{% block title %}ArtXibition Template - Event Detail Page{% endblock %}
+
+{% block body %}
+
+{% include 'partials/pre_header.html.twig' %}
+{% include 'partials/header.html.twig' %}
+
+
+<!-- ***** Page Heading ***** -->
+<div class="page-heading-rent-venue">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2>Event Details</h2>
+        <span>Check out our latest Shows & Events and be part of us.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ***** Event Listing ***** -->
+<div class="shows-events-schedule">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="section-heading">
+          <h2>Event Listing</h2>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <ul>
+          {% for event in [
+            {'title': 'Sunny Hill Festival', 'tickets': 140, 'date': 'Sep 16, 2021', 'place': 'Copacabana Beach'},
+            {'title': 'Gala Rock Festival', 'tickets': 128, 'date': 'Sep 18, 2021', 'place': 'Copacabana Beach'},
+            {'title': 'Hip Hop Farm', 'tickets': 160, 'date': 'Sep 20, 2021', 'place': 'Copacabana Beach'},
+            {'title': 'Balada Music', 'tickets': 240, 'date': 'Oct 14, 2021', 'place': 'Copacabana Beach'},
+            {'title': 'Beerland Festival', 'tickets': 360, 'date': 'Oct 20, 2021', 'place': 'Copacabana Beach'},
+            {'title': 'Bump & Bass', 'tickets': 168, 'date': 'Oct 22, 2021', 'place': 'Copacabana Beach'}
+          ] %}
+          <li>
+            <div class="row">
+              <div class="col-lg-3">
+                <div class="title">
+                  <h4>{{ event.title }}</h4>
+                  <span>{{ event.tickets }} Tickets Available</span>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="time">
+                  <span><i class="fa fa-clock-o"></i> {{ event.date }}<br>18:00 to 22:00</span>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="place">
+                  <span><i class="fa fa-map-marker"></i>{{ event.place }}, <br>Rio de Janeiro</span>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="main-dark-button">
+                  <a href="#">Purchase Tickets</a>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-lg-12">
+        <div class="pagination">
+          <ul>
+            <li><a href="#">Prev</a></li>
+            <li><a href="#">1</a></li>
+            <li class="active"><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">Next</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

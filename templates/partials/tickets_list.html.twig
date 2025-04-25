@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-lg-4" *ngFor="let ticket of tickets">
+    <div class="ticket-item">
+      <div class="thumb">
+        <img src="{{ asset(ticket.image) }}" alt="">
+        <div class="price">
+          <span>1 ticket<br>from <em>{{ ticket.price }}</em></span>
+        </div>
+      </div>
+      <div class="down-content">
+        <span>There Are {{ ticket.remaining }} Tickets Left For This Show</span>
+        <h4>{{ ticket.title }}</h4>
+        <ul>
+          <li><i class="fa fa-clock-o"></i> {{ ticket.time }}</li>
+          <li><i class="fa fa-map-marker"></i>{{ ticket.location }}</li>
+        </ul>
+        <div class="main-dark-button">
+          <a href="{{ path('ticket_details') }}">Purchase Tickets</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

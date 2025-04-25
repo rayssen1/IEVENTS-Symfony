@@ -34,6 +34,7 @@
         "symfony/runtime": "6.4.*",
         "symfony/security-bundle": "6.4.*",
         "symfony/serializer": "6.4.*",
+<<<<<<< HEAD
         "symfony/stimulus-bundle": "^2.23",
         "symfony/string": "6.4.*",
         "symfony/translation": "6.4.*",
@@ -41,6 +42,16 @@
         "symfony/ux-turbo": "^2.23",
         "symfony/validator": "6.4.*",
         "symfony/web-link": "6.4.*",
+=======
+        "symfony/stimulus-bundle": "^2.24",
+        "symfony/string": "6.4.*",
+        "symfony/translation": "6.4.*",
+        "symfony/twig-bundle": "6.4.*",
+        "symfony/ux-turbo": "^2.24",
+        "symfony/validator": "6.4.*",
+        "symfony/web-link": "6.4.*",
+        "symfony/webpack-encore-bundle": "^2.2",
+>>>>>>> 4dbb084 (code barre eq)
         "symfony/yaml": "6.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"

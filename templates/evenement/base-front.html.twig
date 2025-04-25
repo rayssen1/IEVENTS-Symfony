@@ -38,7 +38,11 @@
 
                             <!--== Logo ==-->
                             <span class="navbar-brand logo">
+<<<<<<< HEAD
                                 Evento
+=======
+                                I-EVENTS
+>>>>>>> 4dbb084 (code barre eq)
                             </span>
                         </div>
                         <div class="navbar-collapse collapse">
@@ -46,12 +50,27 @@
                             <ul class="nav navbar-nav">
                                 <li class="current"><a href="#header">Home</a></li>
                                 <li><a href="#about">About us</a></li>
+<<<<<<< HEAD
                                 <li><a href="#schedule">Schedule</a></li>
                                 <li><a href="#blog">Blog</a></li>
                                 <li><a href="#prices">Pricing</a></li>
                                 <li><a href="#team">Our Team</a></li>
                                 <li><a href="#testimonial">Testimonials</a></li>
                                 <li><a href="#contact">Contact</a></li>
+=======
+                                <li><a href="{{ path('app_reservation_index_current') }}">Mes Reservations</a></li>
+                                <li><a href="/reclamation/new">Reclamation</a></li>+
+                                <li><a href="#prices">Pricing</a></li>
+                              {% if app.session.get('session_key') %}
+    <!-- User is logged in -->
+                            <li><a href="{{ path('app_user_edit', {'id': app.session.get('user_id')}) }}">Profile</a></li>
+                             <li><a href="/logout">Log out</a></li>
+                            {% else %}
+    <!-- User is not logged in -->
+                             <li><a href="/authentication">Sign In</a></li>
+                            <li><a href="/user/new">Sign Up</a></li>
+                            {% endif %}
+>>>>>>> 4dbb084 (code barre eq)
                             </ul>
                         </div>
                     </nav>
@@ -79,8 +98,13 @@
             <div class="main-slider" id="main-slider">
                 <!--== Main Slider ==-->
                 <ul class="slides">
+<<<<<<< HEAD
                     <li><img src="{{ asset('images/demo/bg-slide-01.jpg') }}" alt="Slide Image"/></li>
                     <li><img src="{{ asset('images/demo/bg-slide-02.jpg') }}" alt="Slide Image 2"/></li>
+=======
+                    <li><img src="{{ asset('images/events/bg-slide-01.jpg') }}" alt="Slide Image"/></li>
+                    <li><img src="{{ asset('images/events/bg-slide-02.jpg') }}" alt="Slide Image 2"/></li>
+>>>>>>> 4dbb084 (code barre eq)
                 </ul>
             </div>
         </div>
@@ -152,16 +176,20 @@
             <!--== Schedule ===================-->
             <!--===============================-->
             <section id="schedule" class="row">
+<<<<<<< HEAD
                 <div class="title-start schedule-menu col-md-4 col-md-offset-4">
                 <br />
                     <h2>Events Schedule</h2>
                     <p class="sub-text text-center">Check out the event details</p>
                 </div>
+=======
+>>>>>>> 4dbb084 (code barre eq)
                 <ul class="timeline">
                     <li>
                         <div class="timeline-badge">
                           <a><i class="fa fa-circle" id=""></i></a>
                         </div>
+<<<<<<< HEAD
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4>Event One</h4>
@@ -343,6 +371,12 @@
                             </div>
                         </div>
                     </li>
+=======
+                    
+                    </li>
+                    {% block body %}
+                    {% endblock body %}
+>>>>>>> 4dbb084 (code barre eq)
                     <li class="clearfix no-float"></li>
                 </ul>
             </section>

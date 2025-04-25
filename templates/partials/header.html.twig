@@ -1,0 +1,40 @@
+ <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="index.html" class="logo">I<em>Events</em></a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="index.html.twig">Home</a></li>
+                            <li><a href="home.html.twig" class="active">Shows & Events</a></li>
+                            <li><a href="rent-venue.html.twig">Rent Venue</a></li>
+                            <li><a href="shows-events.html.twig">Reclamations</a></li> 
+                            <li><a href="tickets.html.twig">Tickets</a></li>
+                            <li><a href="{{ path('equipmentF_index') }}">Stock</a></li>
+
+
+
+
+                            {% if app.session.get('session_key') %}
+                            <!-- User is logged in -->
+                            <li><a href="{{ path('app_user_edit', {'id': app.session.get('user_id')}) }}">Profile</a></li>
+                            <li><a href="{{ path('app_logout') }}">Log out</a></li>
+                        {% else %}
+                            <!-- User is not logged in -->
+                            <li><a href="{{ path('app_authentication') }}">Sign In</a></li>
+                            <li><a href="{{ path('app_user_new') }}">Sign Up</a></li>
+                        {% endif %}
+                        </ul>        
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->

@@ -1,0 +1,40 @@
+{{ form_start(form) }}
+
+<div class="row">
+  <!-- Nom -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.nom, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.nom) }}
+  </div>
+
+  <!-- Prenom -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.prenom, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.prenom) }}
+  </div>
+
+  <!-- Description -->
+  <div class="mb-3 col-md-12">
+    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
+    {{ form_errors(form.description) }}
+  </div>
+
+  <!-- Status -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+    {{ form_errors(form.status) }}
+  </div>
+</div>
+
+<!-- Bouton Submit -->
+<div class="mt-4">
+  <button type="submit" class="btn btn-primary">
+    <i class="bx bx-save me-1"></i> {{ button_label|default('Enregistrer') }}
+  </button>
+</div>
+
+{{ form_end(form) }}

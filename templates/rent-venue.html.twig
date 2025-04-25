@@ -1,0 +1,94 @@
+{% extends 'baya.html.twig' %}
+
+{% block title %}Rent a Venue - ArtXibition{% endblock %}
+
+{% block body %}
+
+{% include 'partials/pre_header.html.twig' %}
+{% include 'partials/header.html.twig' %}
+
+
+<!-- ***** Page Heading ***** -->
+<div class="page-heading-rent-venue">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2>Are You Looking For A Venue?</h2>
+        <span>Check out our venues, pick your choice and fill the reservation application.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ***** Venue Tabs ***** -->
+<div class="rent-venue-tabs">
+  <div class="container">
+    <div class="row" id="tabs">
+      <div class="col-lg-12">
+        <div class="heading-tabs">
+          <div class="row">
+            <div class="col-lg-8">
+              <ul>
+                <li><a href="#tabs-1">Madison Square Garden</a></li>
+                <li><a href="#tabs-2">Radio City Musical Hall</a></li>
+                <li><a href="#tabs-3">Royce Hall</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-4">
+              <div class="main-dark-button">
+                <a href="{{ path('app_tickets') }}">Purchase Tickets</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="tabs-content">
+          {% include 'partials/venue_tab1.html.twig' %}
+          {% include 'partials/venue_tab2.html.twig' %}
+          {% include 'partials/venue_tab3.html.twig' %}
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ***** Reservation Form ***** -->
+<div class="rent-venue-application">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9">
+        <div class="heading-text">
+          <h4>Reservation Application</h4>
+        </div>
+        <div class="contact-form">
+          <form id="contact" action="{{ path('app_rent_submit') }}" method="post">
+            <div class="row">
+              {% for field in ['name','email','phone-number','company-organization','venue-requested','type-event','date-requested-first','date-requested-second'] %}
+                <div class="col-md-6 col-sm-12">
+                  <fieldset>
+                    <input name="{{ field }}" type="text" id="{{ field }}" placeholder="{{ field|replace({'-':' '})|title }}*" required>
+                  </fieldset>
+                </div>
+              {% endfor %}
+              <div class="col-lg-12">
+                <fieldset>
+                  <textarea name="about-event-hosting" rows="6" id="about-event-hosting" placeholder="About The Event You Are Hosting" required></textarea>
+                </fieldset>
+              </div>
+              <div class="col-lg-12">
+                <fieldset>
+                  <button type="submit" id="form-submit" class="main-dark-button">Submit Request</button>
+                </fieldset>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'partials/subscribe.html.twig' %}
+{% include 'partials/footer.html.twig' %}
+
+{% endblock %}

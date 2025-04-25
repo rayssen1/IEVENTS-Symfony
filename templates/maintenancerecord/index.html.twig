@@ -9,16 +9,31 @@
   </h4>
 
   <!-- Bouton Créer un enregistrement -->
+<<<<<<< HEAD
   <div class="mb-3">
     <a href="{{ path('maintenance_record_new') }}" class="btn btn-success">
       <i class="bx bx-plus me-1"></i> Ajouter un enregistrement
     </a>
+=======
+  <div class="mb-3 d-flex justify-content-between">
+    <a href="{{ path('maintenance_record_new') }}" class="btn btn-success">
+      <i class="bx bx-plus me-1"></i> Ajouter un enregistrement
+    </a>
+    <!-- Champ de recherche -->
+    <div class="col-md-4">
+      <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par équipement, description ou statut...">
+    </div>
+>>>>>>> 4dbb084 (code barre eq)
   </div>
 
   <!-- Tableau -->
   <div class="card">
     <div class="table-responsive text-nowrap">
+<<<<<<< HEAD
       <table class="table table-hover">
+=======
+      <table class="table table-hover" id="maintenanceTable">
+>>>>>>> 4dbb084 (code barre eq)
         <thead class="table-light">
           <tr>
             <th>ID</th>
@@ -31,7 +46,11 @@
         </thead>
         <tbody class="table-border-bottom-0">
           {% for maintenance_record in maintenance_records %}
+<<<<<<< HEAD
             <tr>
+=======
+            <tr class="maintenance-row">
+>>>>>>> 4dbb084 (code barre eq)
               <td>{{ maintenance_record.id }}</td>
               <td>
                 {% if maintenance_record.equipment %}
@@ -73,4 +92,35 @@
     </div>
   </div>
 </div>
+<<<<<<< HEAD
 {% endblock %}
+=======
+
+{% block javascripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('searchInput');
+      const table = document.getElementById('maintenanceTable');
+      const rows = table.querySelectorAll('.maintenance-row');
+
+      searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        rows.forEach(row => {
+          const equipment = row.cells[1].textContent.toLowerCase();
+          const description = row.cells[3].textContent.toLowerCase();
+          const status = row.cells[4].textContent.toLowerCase();
+
+          // Vérifie si le terme de recherche correspond à l'équipement, la description ou le statut
+          const matches = equipment.includes(searchTerm) || 
+                         description.includes(searchTerm) || 
+                         status.includes(searchTerm);
+
+          row.style.display = matches ? '' : 'none';
+        });
+      });
+    });
+  </script>
+{% endblock %}
+{% endblock %}
+>>>>>>> 4dbb084 (code barre eq)
