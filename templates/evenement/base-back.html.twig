@@ -43,7 +43,7 @@
     />
 
     <!-- Icons. Uncomment required icon fonts -->
-    {# <link rel="stylesheet" href="{{ asset('vendor/fonts/boxicons.css') }}" /> #}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}" />
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/css/core.css') }}" class="template-customizer-core-css" />
@@ -160,6 +160,13 @@
                 <div data-i18n="Analytics">Events Management</div>
               </a>
             </li>
+                 </li>
+               <li class="menu-item active">
+              <a href="/eventspeaker" class="menu-link">
+              
+                <div data-i18n="Analytics">Speakers Management</div>
+              </a>
+            </li>
             </li>
           
             </li>
@@ -197,11 +204,12 @@
                     class="form-control border-0 shadow-none"
                     placeholder="Search..."
                     aria-label="Search..."
+                    name="search"
+                    id="search-input"
                   />
                 </div>
-              </div>
-              <!-- /Search -->
-
+            </div>
+            
               <ul class="navbar-nav flex-row align-items-center ms-auto">
             
 

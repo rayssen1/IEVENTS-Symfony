@@ -35,8 +35,16 @@
     {{ form_label(form.phoneNumber) }}
    
     {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'e.g. +123456789'}}) }}
-    <div class="text-danger">{{ form_errors(form.phoneNumber) }}</div></div>
+    <div class="text-danger">{{ form_errors(form.phoneNumber) }}</div>
+</div>
 
+ {% if form.role is defined %}
+    <div class="g-recaptcha" data-sitekey="6LctDBwrAAAAAApkvyHWIHxpJW7vSWxmH0WdxQoE"></div>
+    {% if form.vars.errors|length > 0 %}
+    <div class="alert alert-danger">
+        {{ form_errors(form) }}
+    </div>
+    {% endif %}
+{% endif %}
 <button class="btn btn-primary d-grid w-100" type="submit">Submit</button>
-
 {{ form_end(form) }}

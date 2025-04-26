@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType; // <-- Import for rate field
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -28,7 +28,7 @@ class ReclamationType extends AbstractType
             ])
             ->add('evenement', EntityType::class, [
                 'class' => Evenement::class,
-                'choice_label' => 'nom', // Replace "nom" with "title" if necessary
+                'choice_label' => 'titre', // ✅ Changed from 'nom' to 'titre'
                 'required' => true,
             ])
             ->add('dateReclamation', DateTimeType::class, [
@@ -51,7 +51,7 @@ class ReclamationType extends AbstractType
                 ],
             ])
             ->add('rate', IntegerType::class, [
-                'required' => false, // Optional, can be set to true if needed
+                'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                 ],

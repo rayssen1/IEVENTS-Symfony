@@ -21,83 +21,101 @@ class ReclamationController extends AbstractController
 {
     private $validator;
 
-    // Injecting ValidatorInterface into the controller
     public function __construct(ValidatorInterface $validator)
     {
         $this->validator = $validator;
     }
 
     #[Route('/new', name: 'reclamation_new', methods: ['GET', 'POST'])]
-public function new(
-    Request $request,
-    EntityManagerInterface $em,
-    UserRepository $userRepository,
-    ReclamationRepository $reclamationRepository
-): Response {
-    $reclamation = new Reclamation();
-    $form = $this->createForm(ReclamationType::class, $reclamation);
-    $form->handleRequest($request);
+    public function new(
+        Request $request,
+        EntityManagerInterface $em,
+        EvenementRepository $evenementRepository,
+        UserRepository $userRepository,
+        ReclamationRepository $reclamationRepository
+    ): Response {
+        $reclamation = new Reclamation();
+        $form = $this->createForm(ReclamationType::class, $reclamation);
+        $form->handleRequest($request);
+        //$session = $request->getSession();
+        //$userId = $session->get('user_id');
+         //$user = $entityManager->getRepository(User::class)->find($userId); 
+         //$email = $user->getEmail();
 
-    $existingReclamation = null;
+        $existingReclamation = null;
 
-    if ($form->isSubmitted()) {
-        if ($form->isValid()) {
-            $email = $form->get('email')->getData();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $email = $form->get('email')->getData();
+                $evenement = $form->get('evenement')->getData();
 
-            // Validate email format manually
-            $emailConstraint = new Email();
-            $emailConstraint->message = 'L\'email que vous avez fourni n\'est pas valide.';
-            $errors = $this->validator->validate($email, $emailConstraint);
+                $emailConstraint = new Email();
+                $emailConstraint->message = 'L\'email que vous avez fourni n\'est pas valide.';
+                $errors = $this->validator->validate($email, $emailConstraint);
 
-            if (count($errors) > 0) {
-                foreach ($errors as $error) {
+                if (count($errors) > 0) {
+                    foreach ($errors as $error) {
+                        $this->addFlash('error', $error->getMessage());
+                    }
+                    return $this->redirectToRoute('reclamation_new');
+                }
+
+                $existingReclamation = $reclamationRepository->findOneBy(['email' => $email]);
+
+                // ✅ Utilisation de findByEmail() au lieu de findOneBy()
+                $user = $userRepository->findByEmail($email);
+
+                if (!$user) {
+                    $this->addFlash('error', 'Utilisateur introuvable avec cet email');
+                    return $this->redirectToRoute('reclamation_new');
+                }
+
+                if (!$evenement) {
+                    $this->addFlash('error', 'Événement introuvable');
+                    return $this->redirectToRoute('reclamation_new');
+                }
+
+                if ($existingReclamation) {
+                    $reclamation = $existingReclamation;
+                }
+
+                $reclamation->setIdUser($user->getId());
+                $reclamation->setEvenement($evenement);
+                $reclamation->setEmail($email);
+                $reclamation->setDateReclamation(new \DateTime());
+
+                $subject = $form->get('subject')->getData();
+                if ($evenement) {
+                    $reclamation->setSubject($evenement->getTitre() . ': ' . $subject);
+                } else {
+                    $reclamation->setSubject($subject);
+                }
+
+                $reclamation->setRate($form->get('rate')->getData());
+
+                $em->persist($reclamation);
+                $em->flush();
+
+                if ($existingReclamation) {
+                    $this->addFlash('success', 'Réclamation mise à jour avec succès');
+                } else {
+                    $this->addFlash('success', 'Réclamation envoyée avec succès');
+                }
+
+                return $this->redirectToRoute('reclamation_new');
+            } else {
+                foreach ($form->getErrors(true) as $error) {
                     $this->addFlash('error', $error->getMessage());
                 }
-                return $this->redirectToRoute('reclamation_new');
-            }
-
-            // Check if a reclamation already exists for this email
-            $existingReclamation = $reclamationRepository->findOneBy(['email' => $email]);
-
-            // Find user by email
-            $user = $userRepository->findOneBy(['email' => $email]);
-            if (!$user) {
-                $this->addFlash('error', 'Utilisateur introuvable avec cet email');
-                return $this->redirectToRoute('reclamation_new');
-            }
-
-            // Use existing reclamation if exists
-            if ($existingReclamation) {
-                $reclamation = $existingReclamation;
-            }
-
-            // Set reclamation details
-            $reclamation->setIdUser($user->getId());
-            $reclamation->setEmail($email);
-            $reclamation->setDateReclamation(new \DateTime());
-            $reclamation->setSubject($form->get('subject')->getData());
-            $reclamation->setRate($form->get('rate')->getData());
-
-            $em->persist($reclamation);
-            $em->flush();
-
-            $this->addFlash('success', $existingReclamation ? 'Réclamation mise à jour avec succès' : 'Réclamation envoyée avec succès');
-            return $this->redirectToRoute('reclamation_new');
-        } else {
-            foreach ($form->getErrors(true) as $error) {
-                $this->addFlash('error', $error->getMessage());
             }
         }
+
+        return $this->render('reclamation/new.html.twig', [
+            'form' => $form->createView(),
+            'reclamation' => $existingReclamation ?? $reclamation,
+        ]);
     }
 
-    return $this->render('reclamation/new.html.twig', [
-        'form' => $form->createView(),
-        'reclamation' => $existingReclamation ?? $reclamation,
-    ]);
-}
-
-
-    // AJAX endpoint to check if a reclamation exists by email
     #[Route('/check-email', name: 'reclamation_check_email', methods: ['GET'])]
     public function checkEmail(Request $request, ReclamationRepository $reclamationRepository): JsonResponse
     {
@@ -111,7 +129,6 @@ public function new(
         return new JsonResponse(['exists' => $exists]);
     }
 
-    // List all reclamations
     #[Route('/', name: 'reclamation_index', methods: ['GET'])]
     public function index(ReclamationRepository $reclamationRepository): Response
     {
@@ -122,7 +139,6 @@ public function new(
         ]);
     }
 
-    // Show a specific reclamation
     #[Route('/{id}', name: 'reclamation_show', methods: ['GET'])]
     public function show(Reclamation $reclamation): Response
     {
@@ -131,7 +147,6 @@ public function new(
         ]);
     }
 
-    // Edit an existing reclamation
     #[Route('/{id}/edit', name: 'reclamation_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
@@ -144,7 +159,7 @@ public function new(
         if ($form->isSubmitted() && $form->isValid()) {
             $subject = $form->get('subject')->getData();
             if ($reclamation->getEvenement()) {
-                $reclamation->setSubject($reclamation->getEvenement()->getNom() . ': ' . $subject);
+                $reclamation->setSubject($reclamation->getEvenement()->getTitre() . ': ' . $subject);
             } else {
                 $reclamation->setSubject($subject);
             }
@@ -160,7 +175,6 @@ public function new(
         ]);
     }
 
-    // Delete a reclamation
     #[Route('/{id}/delete', name: 'reclamation_delete', methods: ['POST'])]
     public function delete(
         Request $request,

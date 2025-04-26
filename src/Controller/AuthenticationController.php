@@ -11,6 +11,8 @@ use App\Entity\Session;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\PasswordHasher;
 use Psr\Log\LoggerInterface;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class AuthenticationController extends AbstractController
 {
@@ -20,7 +22,44 @@ final class AuthenticationController extends AbstractController
     {
         $this->logger = $logger;
     }
+    #[Route('/connect/google', name: 'connect_google_start')]
+    public function connectGoogle(ClientRegistry $clientRegistry): RedirectResponse
+    {
+    return $clientRegistry->getClient('google')->redirect([
+        'profile', 'email'
+    ]);
+    }
+    #[Route('/connect/google/check', name: 'connect_google_check')]
+    public function connectGoogleCheck(Request $request, ClientRegistry $clientRegistry, EntityManagerInterface $entityManager, PasswordHasher $passwordHasher, UserRepository $userRepository)
+    {
+   
+        $client = $clientRegistry->getClient('google');
 
+        // Un seul appel pour échanger code → token
+        $accessToken = $client->getAccessToken();
+    
+        // Puis on récupère l’utilisateur à partir du token
+        /** @var \League\OAuth2\Client\Provider\GoogleUser $user */
+        $user = $client->fetchUserFromToken($accessToken);
+        $firstName = $user->getFirstName();        
+        $lastName = $user->getLastName();          
+        $googleId = $user->getId(); 
+        $email  = $user->getEmail();
+        $us = $userRepository->findByEmail($email);
+        if($us==null){
+            $us = new User($email,$lastName,$lastName,$googleId,'participant');
+            $entityManager->persist($us);
+            $entityManager->flush();  
+        }
+        $session = $request->getSession();
+        $sessionKey = bin2hex(random_bytes(32));
+        $session->set('session_key', $sessionKey);
+        $session->set('user_id', $us->getId());
+        $ss = new Session($sessionKey, $us, new \DateTime(), true);
+        $entityManager->persist($ss);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_events_index', [], Response::HTTP_SEE_OTHER);
+    }
     #[Route('/authentication', name: 'app_authentication', methods: ['GET', 'POST'])]
     public function index(
         Request $request,

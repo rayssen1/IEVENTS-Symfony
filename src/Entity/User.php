@@ -58,6 +58,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $phoneNumber ='' ;
     #[ORM\Column(type: "string", length: 250)]
     private ?string $state= 'active' ;
+    public function __construct(string $email, string $nom, string $prenom, string $password, string $role)
+{
+    $this->email = $email;
+    $this->nom = $nom;
+    $this->prenom = $prenom;
+    $this->password = $password;
+    $this->role = $role;
+
+    // Initialize collections (to avoid null errors later)
+    $this->reservations = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->sessions = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->evenements = new \Doctrine\Common\Collections\ArrayCollection();
+}
+
     public function getId(): ?int
     {
         return $this->id;
@@ -167,6 +181,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // Clean up any sensitive data if needed
     }
+    public function getLastLogin(): ?\DateTimeInterface
+{
+    $lastLogin = null;
+    foreach ($this->getSessions() as $session) {
+        $loginTime = $session->getLogin_time();
+        if ($lastLogin === null || $loginTime > $lastLogin) {
+            $lastLogin = $loginTime;
+        }
+    }
+    return $lastLogin;
+}
     #[ORM\OneToMany(mappedBy: "userId", targetEntity: Reservation::class)]
     private Collection $reservations;
 

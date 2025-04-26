@@ -1,16 +1,21 @@
 <?php
 
 namespace App\Entity;
+
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 use App\Entity\Eventspeaker;
+use App\Entity\User;
+use App\Entity\Reclamation;
+use App\Repository\EvenementRepository;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     #[ORM\Column(type: "integer")]
@@ -50,16 +55,22 @@ class Evenement
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "evenements")]
     #[ORM\JoinColumn(name: 'organisateurId', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private User $organisateurId;
-//    private int $organisateurId = 1;
 
-        #[ORM\ManyToOne(targetEntity: Eventspeaker::class, inversedBy: "evenements")]
+    #[ORM\ManyToOne(targetEntity: Eventspeaker::class, inversedBy: "evenements")]
     #[ORM\JoinColumn(name: 'eventspeakerId', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private Eventspeaker $eventspeakerId;
 
     #[ORM\Column(type: "string", length: 255)]
     private string $img;
 
-    // Validation personnalisée pour dateEvent
+    #[ORM\OneToMany(mappedBy: 'evenement', targetEntity: Reclamation::class)]
+    private Collection $reclamations; // added
+
+    public function __construct()
+    {
+        $this->reclamations = new ArrayCollection(); // added
+    }
+
     #[Assert\Callback]
     public function validateDateEvent(ExecutionContextInterface $context): void
     {
@@ -72,6 +83,7 @@ class Evenement
                 ->addViolation();
         }
     }
+
     #[Assert\Callback]
     public function validateTitre(ExecutionContextInterface $context): void
     {
@@ -186,5 +198,32 @@ class Evenement
     public function setImg($value)
     {
         $this->img = $value;
+    }
+
+    /**
+     * @return Collection<int, Reclamation>
+     */
+    public function getReclamations(): Collection
+    {
+        return $this->reclamations; // added
+    }
+
+    public function addReclamation(Reclamation $reclamation): self
+    {
+        if (!$this->reclamations->contains($reclamation)) {
+            $this->reclamations[] = $reclamation;
+            $reclamation->setEvenement($this);
+        }
+        return $this; // added
+    }
+
+    public function removeReclamation(Reclamation $reclamation): self
+    {
+        if ($this->reclamations->removeElement($reclamation)) {
+            if ($reclamation->getEvenement() === $this) {
+                $reclamation->setEvenement(null);
+            }
+        }
+        return $this; // added
     }
 }

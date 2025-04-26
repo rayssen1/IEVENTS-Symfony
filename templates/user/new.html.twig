@@ -84,12 +84,16 @@
               <p class="mb-4">Make your app management easy and fun!</p>
               <!-- form -->
                   {{ include('user/_form.html.twig') }}
+
                <p class="text-center">
                 <span>Already have an account?</span>
                 <a href="/authentication">
                   <span>Sign in instead</span>
                 </a>
+
               </p>
+                              {# <div class="g-recaptcha" data-sitekey="6LctDBwrAAAAAApkvyHWIHxpJW7vSWxmH0WdxQoE"></div> #}
+
             </div>
           </div>
           <!-- Register Card -->
@@ -97,5 +101,8 @@
       </div>
     </div>
 {% endblock %} 
-
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
 
