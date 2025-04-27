@@ -3,12 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-<<<<<<< HEAD
-
-use App\Entity\User;
-use Doctrine\Common\Collections\Collection;
-use App\Entity\Payment;
-=======
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,34 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\User;
 use App\Entity\Payment;
 use App\Entity\Ticket;
->>>>>>> 4dbb084 (code barre eq)
 
 #[ORM\Entity]
 class Reservation
 {
-<<<<<<< HEAD
-
-    #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
-
-        #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "reservations")]
-    #[ORM\JoinColumn(name: 'userId', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private User $userId;
-
-    #[ORM\Column(type: "integer")]
-    private int $eventId;
-
-    #[ORM\Column(type: "float")]
-    private float $totalPrice;
-
-    #[ORM\Column(type: "string", length: 255)]
-    private string $status;
-
-    #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $createdAt;
-
-=======
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue]
@@ -80,7 +50,6 @@ class Reservation
         $this->tickets = new ArrayCollection();
     }
 
->>>>>>> 4dbb084 (code barre eq)
     public function getId()
     {
         return $this->id;
@@ -101,16 +70,6 @@ class Reservation
         $this->userId = $value;
     }
 
-<<<<<<< HEAD
-    public function getEventId()
-    {
-        return $this->eventId;
-    }
-
-    public function setEventId($value)
-    {
-        $this->eventId = $value;
-=======
     public function getEvenement(): Evenement
     {
         return $this->evenement;
@@ -120,7 +79,6 @@ class Reservation
     {
         $this->evenement = $evenement;
         return $this;
->>>>>>> 4dbb084 (code barre eq)
     }
 
     public function getTotalPrice()
@@ -153,10 +111,6 @@ class Reservation
         $this->createdAt = $value;
     }
 
-<<<<<<< HEAD
-    #[ORM\OneToMany(mappedBy: "reservationId", targetEntity: Payment::class)]
-    private Collection $payments;
-=======
     /**
      * @return Collection<int, Ticket>
      */
@@ -183,5 +137,4 @@ class Reservation
         }
         return $this;
     }
->>>>>>> 4dbb084 (code barre eq)
 }

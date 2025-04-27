@@ -2,40 +2,6 @@
 
 namespace App\Entity;
 
-<<<<<<< HEAD
-use Doctrine\ORM\Mapping as ORM;
-
-use Doctrine\Common\Collections\Collection;
-use App\Entity\Reponse;
-
-#[ORM\Entity]
-class Reclamation
-{
-
-    #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
-
-    #[ORM\Column(type: "integer")]
-    private int $idUser;
-
-    #[ORM\Column(type: "integer")]
-    private int $idEvent;
-
-    #[ORM\Column(type: "string", length: 255)]
-    private string $subject;
-
-    #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $dateReclamation;
-
-    #[ORM\Column(type: "float")]
-    private float $rate;
-
-    #[ORM\Column(type: "string", length: 500)]
-    private string $email;
-
-    public function getId()
-=======
 use App\Repository\ReclamationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -78,19 +44,10 @@ class Reclamation
     }
 
     public function getId(): ?int
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->id;
     }
 
-<<<<<<< HEAD
-    public function setId($value)
-    {
-        $this->id = $value;
-    }
-
-    public function getIdUser()
-=======
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -98,29 +55,10 @@ class Reclamation
     }
 
     public function getIdUser(): ?int
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->idUser;
     }
 
-<<<<<<< HEAD
-    public function setIdUser($value)
-    {
-        $this->idUser = $value;
-    }
-
-    public function getIdEvent()
-    {
-        return $this->idEvent;
-    }
-
-    public function setIdEvent($value)
-    {
-        $this->idEvent = $value;
-    }
-
-    public function getSubject()
-=======
     public function setIdUser(int $idUser): self
     {
         $this->idUser = $idUser;
@@ -139,19 +77,10 @@ class Reclamation
     }
 
     public function getSubject(): ?string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->subject;
     }
 
-<<<<<<< HEAD
-    public function setSubject($value)
-    {
-        $this->subject = $value;
-    }
-
-    public function getDateReclamation()
-=======
     public function setSubject(string $subject): self
     {
         $this->subject = $subject;
@@ -159,19 +88,10 @@ class Reclamation
     }
 
     public function getDateReclamation(): ?\DateTimeInterface
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->dateReclamation;
     }
 
-<<<<<<< HEAD
-    public function setDateReclamation($value)
-    {
-        $this->dateReclamation = $value;
-    }
-
-    public function getRate()
-=======
     public function setDateReclamation(\DateTimeInterface $dateReclamation): self
     {
         $this->dateReclamation = $dateReclamation;
@@ -179,19 +99,10 @@ class Reclamation
     }
 
     public function getRate(): ?string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->rate;
     }
 
-<<<<<<< HEAD
-    public function setRate($value)
-    {
-        $this->rate = $value;
-    }
-
-    public function getEmail()
-=======
     public function setRate(string $rate): self
     {
         $this->rate = $rate;
@@ -199,47 +110,10 @@ class Reclamation
     }
 
     public function getEmail(): ?string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->email;
     }
 
-<<<<<<< HEAD
-    public function setEmail($value)
-    {
-        $this->email = $value;
-    }
-
-    #[ORM\OneToMany(mappedBy: "idRec", targetEntity: Reponse::class)]
-    private Collection $reponses;
-
-        public function getReponses(): Collection
-        {
-            return $this->reponses;
-        }
-    
-        public function addReponse(Reponse $reponse): self
-        {
-            if (!$this->reponses->contains($reponse)) {
-                $this->reponses[] = $reponse;
-                $reponse->setIdRec($this);
-            }
-    
-            return $this;
-        }
-    
-        public function removeReponse(Reponse $reponse): self
-        {
-            if ($this->reponses->removeElement($reponse)) {
-                // set the owning side to null (unless already changed)
-                if ($reponse->getIdRec() === $this) {
-                    $reponse->setIdRec(null);
-                }
-            }
-    
-            return $this;
-        }
-=======
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -274,5 +148,4 @@ class Reclamation
 
         return $this;
     }
->>>>>>> 4dbb084 (code barre eq)
 }

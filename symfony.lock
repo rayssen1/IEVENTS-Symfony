@@ -26,6 +26,15 @@
             "./migrations/.gitignore"
         ]
     },
+    "knplabs/knp-snappy-bundle": {
+        "version": "1.10",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.5",
+            "ref": "c81bdcf4a9d4e7b1959071457f9608631865d381"
+        }
+    },
     "phpunit/phpunit": {
         "version": "9.6",
         "recipe": {
@@ -210,11 +219,7 @@
         ]
     },
     "symfony/stimulus-bundle": {
-<<<<<<< HEAD
-        "version": "2.23",
-=======
         "version": "2.24",
->>>>>>> 4dbb084 (code barre eq)
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -254,11 +259,7 @@
         ]
     },
     "symfony/ux-turbo": {
-<<<<<<< HEAD
-        "version": "2.23",
-=======
         "version": "2.24",
->>>>>>> 4dbb084 (code barre eq)
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -291,8 +292,6 @@
             "./config/routes/web_profiler.yaml"
         ]
     },
-<<<<<<< HEAD
-=======
     "symfony/webpack-encore-bundle": {
         "version": "2.2",
         "recipe": {
@@ -309,7 +308,6 @@
             "./webpack.config.js"
         ]
     },
->>>>>>> 4dbb084 (code barre eq)
     "twig/extra-bundle": {
         "version": "v3.20.0"
     }

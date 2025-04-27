@@ -1,5 +1,5 @@
 {# templates/equipment/show.html.twig #}
-{% extends 'evenement/base-back.html.twig' %}
+{% extends 'equipment/base-back.html.twig' %}
 
 {% block title %}Détails de l'Équipement{% endblock %}
 
@@ -55,6 +55,14 @@
             </table>
         </div>
     </div>
+    <a href="{{ path('equipment_maintenance_show', {'id': equipment.id}) }}" 
+   class="btn btn-info btn-sm rounded-circle d-flex align-items-center justify-content-center" 
+   style="width: 80px; height: 40px;" 
+   data-bs-toggle="tooltip" 
+   data-bs-placement="top" 
+   title="Voir la Maintenance">
+    <i class="bx bx-wrench"></i>
+</a>
 
     <div class="mt-4">
         <a href="{{ path('equipment_index') }}" class="btn btn-outline-secondary">
@@ -62,4 +70,8 @@
         </a>
     </div>
 </div>
+
+
+
+
 {% endblock %}

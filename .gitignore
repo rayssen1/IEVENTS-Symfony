@@ -23,8 +23,6 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
-<<<<<<< HEAD
-=======
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
@@ -32,4 +30,3 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
->>>>>>> 4dbb084 (code barre eq)

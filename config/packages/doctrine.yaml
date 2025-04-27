@@ -1,9 +1,5 @@
 doctrine:
     dbal:
-<<<<<<< HEAD
-    
-=======
->>>>>>> 4dbb084 (code barre eq)
         url: '%env(resolve:DATABASE_URL)%'
 
         # IMPORTANT: You MUST configure your server version,
@@ -12,11 +8,8 @@ doctrine:
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
-<<<<<<< HEAD
-=======
         mapping_types:
             enum: string
->>>>>>> 4dbb084 (code barre eq)
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\MaintenanceRecord; // 🛠️ Corrected this line
 
 #[ORM\Entity]
 #[ORM\Table(name: 'equipment')]
@@ -52,8 +53,8 @@ class Equipment
     )]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'equipment', targetEntity: Maintenancerecord::class, cascade: ['remove'])]
-    private Collection $maintenancerecords;
+    #[ORM\OneToMany(mappedBy: 'equipment', targetEntity: MaintenanceRecord::class, cascade: ['remove'])] // 🛠️ Corrected here too
+    private Collection $maintenanceRecords; // 🛠️ Better camelCase here
 
     const STATUS_AVAILABLE = 'AVAILABLE';
     const STATUS_RESERVED = 'RESERVED';
@@ -61,7 +62,7 @@ class Equipment
 
     public function __construct()
     {
-        $this->maintenancerecords = new ArrayCollection();
+        $this->maintenanceRecords = new ArrayCollection(); // 🛠️ camelCase corrected
     }
 
     public function getId(): ?int
@@ -124,26 +125,26 @@ class Equipment
         return $this;
     }
 
-    public function getMaintenancerecords(): Collection
+    public function getMaintenanceRecords(): Collection // 🛠️ getter corrected
     {
-        return $this->maintenancerecords;
+        return $this->maintenanceRecords;
     }
 
-    public function addMaintenancerecord(Maintenancerecord $maintenancerecord): self
+    public function addMaintenanceRecord(MaintenanceRecord $maintenanceRecord): self // 🛠️ method corrected
     {
-        if (!$this->maintenancerecords->contains($maintenancerecord)) {
-            $this->maintenancerecords[] = $maintenancerecord;
-            $maintenancerecord->setEquipment($this);
+        if (!$this->maintenanceRecords->contains($maintenanceRecord)) {
+            $this->maintenanceRecords[] = $maintenanceRecord;
+            $maintenanceRecord->setEquipment($this);
         }
 
         return $this;
     }
 
-    public function removeMaintenancerecord(Maintenancerecord $maintenancerecord): self
+    public function removeMaintenanceRecord(MaintenanceRecord $maintenanceRecord): self // 🛠️ method corrected
     {
-        if ($this->maintenancerecords->removeElement($maintenancerecord)) {
-            if ($maintenancerecord->getEquipment() === $this) {
-                $maintenancerecord->setEquipment(null);
+        if ($this->maintenanceRecords->removeElement($maintenanceRecord)) {
+            if ($maintenanceRecord->getEquipment() === $this) {
+                $maintenanceRecord->setEquipment(null);
             }
         }
 

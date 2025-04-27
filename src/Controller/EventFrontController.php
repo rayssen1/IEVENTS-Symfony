@@ -14,14 +14,8 @@ final class EventFrontController extends AbstractController
     #[Route(name: 'app_events_index', methods: ['GET'])]
     public function index(EvenementRepository $repository): Response
     {
-<<<<<<< HEAD
-        return $this->render('eventfront/showevent.html.twig', [
-            'evenements' => $repository->findAll(),
-            'is_single' => false
-=======
         return $this->render('shows-events.html.twig', [
             'evenements' => $repository->findAll(),
->>>>>>> 4dbb084 (code barre eq)
         ]);
     }
 
@@ -39,14 +33,8 @@ final class EventFrontController extends AbstractController
             throw $this->createNotFoundException('Event not found');
         }
 
-<<<<<<< HEAD
-        return $this->render('eventfront/showevent.html.twig', [
-            'evenements' => [$evenement],
-            'is_single' => true
-=======
         return $this->render('event-details.html.twig', [
             'evenement' => $evenement,
->>>>>>> 4dbb084 (code barre eq)
         ]);
     }
 }

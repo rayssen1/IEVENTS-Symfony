@@ -1,4 +1,4 @@
-{% extends 'evenement/base-back.html.twig' %}
+{% extends 'equipment/base-back.html.twig' %}
 
 {% block title %}Liste des Enregistrements de Maintenance{% endblock %}
 
@@ -9,12 +9,6 @@
   </h4>
 
   <!-- Bouton Créer un enregistrement -->
-<<<<<<< HEAD
-  <div class="mb-3">
-    <a href="{{ path('maintenance_record_new') }}" class="btn btn-success">
-      <i class="bx bx-plus me-1"></i> Ajouter un enregistrement
-    </a>
-=======
   <div class="mb-3 d-flex justify-content-between">
     <a href="{{ path('maintenance_record_new') }}" class="btn btn-success">
       <i class="bx bx-plus me-1"></i> Ajouter un enregistrement
@@ -23,17 +17,12 @@
     <div class="col-md-4">
       <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par équipement, description ou statut...">
     </div>
->>>>>>> 4dbb084 (code barre eq)
   </div>
 
   <!-- Tableau -->
   <div class="card">
     <div class="table-responsive text-nowrap">
-<<<<<<< HEAD
-      <table class="table table-hover">
-=======
       <table class="table table-hover" id="maintenanceTable">
->>>>>>> 4dbb084 (code barre eq)
         <thead class="table-light">
           <tr>
             <th>ID</th>
@@ -46,11 +35,7 @@
         </thead>
         <tbody class="table-border-bottom-0">
           {% for maintenance_record in maintenance_records %}
-<<<<<<< HEAD
-            <tr>
-=======
             <tr class="maintenance-row">
->>>>>>> 4dbb084 (code barre eq)
               <td>{{ maintenance_record.id }}</td>
               <td>
                 {% if maintenance_record.equipment %}
@@ -89,12 +74,13 @@
           {% endfor %}
         </tbody>
       </table>
+      <a href="{{ path('maintenance_record_export_pdf') }}" class="btn btn-outline-secondary">
+  <i class="bx bx-download"></i> Exporter en PDF
+</a>
+
     </div>
   </div>
 </div>
-<<<<<<< HEAD
-{% endblock %}
-=======
 
 {% block javascripts %}
   <script>
@@ -123,4 +109,3 @@
   </script>
 {% endblock %}
 {% endblock %}
->>>>>>> 4dbb084 (code barre eq)

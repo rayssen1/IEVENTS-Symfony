@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Enregistrements de Maintenance</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 5px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        h1 { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Liste des Enregistrements de Maintenance</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Équipement</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for maintenance_record in maintenance_records %}
+                <tr>
+                    <td>{{ maintenance_record.id }}</td>
+                    <td>
+                        {% if maintenance_record.equipment %}
+                            {{ maintenance_record.equipment.name }}
+                        {% else %}
+                            Non défini
+                        {% endif %}
+                    </td>
+                    <td>{{ maintenance_record.date ? maintenance_record.date|date('d/m/Y') : 'N/A' }}</td>
+                    <td>{{ maintenance_record.description }}</td>
+                    <td>{{ maintenance_record.status }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" style="text-align:center;">Aucun enregistrement trouvé</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p style="margin-top: 30px; text-align: right;">Exporté le {{ "now"|date("d/m/Y H:i") }}</p>
+</body>
+</html>

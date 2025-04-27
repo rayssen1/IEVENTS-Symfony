@@ -6,15 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'maintenancerecord')]
-class Maintenancerecord
+#[ORM\Table(name: 'maintenanceRecord')]
+class MaintenanceRecord
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Equipment::class, inversedBy: 'maintenancerecords')]
+    #[ORM\ManyToOne(targetEntity: Equipment::class, inversedBy: 'maintenanceRecords')]
     #[ORM\JoinColumn(name: 'equipmentid', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: true)]
     #[Assert\NotBlank(message: "L'équipement ne doit pas être vide.")]
     private ?Equipment $equipment = null;
@@ -25,7 +25,12 @@ class Maintenancerecord
         type: \DateTimeInterface::class,
         message: "La date doit être valide."
     )]
+    #[Assert\GreaterThanOrEqual(
+        value: "today",
+        message: "La date ne peut pas être dans le passé."
+    )]
     private ?\DateTimeInterface $date = null;
+    
 
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank(message: "La description ne doit pas être vide.")]

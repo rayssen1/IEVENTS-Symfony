@@ -6,26 +6,16 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Evenement;
-<<<<<<< HEAD
-
-#[ORM\Entity]
-=======
 use App\Repository\EventspeakerRepository;
 
 #[ORM\Entity(repositoryClass: EventspeakerRepository::class)]
->>>>>>> 4dbb084 (code barre eq)
 class Eventspeaker
 {
 
     #[ORM\Id]
-<<<<<<< HEAD
-    #[ORM\Column(type: "integer")]
-    private int $id;
-=======
     #[ORM\GeneratedValue(strategy: "AUTO")]
     #[ORM\Column(type: "integer")]
     private ?int $id = null;
->>>>>>> 4dbb084 (code barre eq)
 
     #[ORM\Column(type: "string", length: 50)]
     private string $nom;

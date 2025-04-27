@@ -3,38 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-<<<<<<< HEAD
-
-=======
 use Symfony\Component\Validator\Constraints as Assert;
->>>>>>> 4dbb084 (code barre eq)
 
 #[ORM\Entity]
 class Ticket
 {
-<<<<<<< HEAD
-
-    #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
-
-    #[ORM\Column(type: "integer")]
-    private int $reservationId;
-
-    #[ORM\Column(type: "string", length: 255)]
-    private string $ticketType;
-
-    #[ORM\Column(type: "string", length: 255)]
-    private string $qrCode;
-
-    #[ORM\Column(type: "integer")]
-    private int $TicketCount;
-
-    #[ORM\Column(type: "float")]
-    private float $price;
-
-    public function getId()
-=======
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
@@ -60,19 +33,10 @@ class Ticket
     private float $price;
 
     public function getId(): int
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->id;
     }
 
-<<<<<<< HEAD
-    public function setId($value)
-    {
-        $this->id = $value;
-    }
-
-    public function getReservationId()
-=======
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -80,19 +44,10 @@ class Ticket
     }
 
     public function getReservationId(): Reservation
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->reservationId;
     }
 
-<<<<<<< HEAD
-    public function setReservationId($value)
-    {
-        $this->reservationId = $value;
-    }
-
-    public function getTicketType()
-=======
     public function setReservationId(Reservation $reservation): self
     {
         $this->reservationId = $reservation;
@@ -100,19 +55,10 @@ class Ticket
     }
 
     public function getTicketType(): string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->ticketType;
     }
 
-<<<<<<< HEAD
-    public function setTicketType($value)
-    {
-        $this->ticketType = $value;
-    }
-
-    public function getQrCode()
-=======
     public function setTicketType(string $ticketType): self
     {
         $this->ticketType = $ticketType;
@@ -120,29 +66,10 @@ class Ticket
     }
 
     public function getQrCode(): string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->qrCode;
     }
 
-<<<<<<< HEAD
-    public function setQrCode($value)
-    {
-        $this->qrCode = $value;
-    }
-
-    public function getTicketCount()
-    {
-        return $this->TicketCount;
-    }
-
-    public function setTicketCount($value)
-    {
-        $this->TicketCount = $value;
-    }
-
-    public function getPrice()
-=======
     public function setQrCode(string $qrCode): self
     {
         $this->qrCode = $qrCode;
@@ -161,20 +88,13 @@ class Ticket
     }
 
     public function getPrice(): float
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->price;
     }
 
-<<<<<<< HEAD
-    public function setPrice($value)
-    {
-        $this->price = $value;
-=======
     public function setPrice(float $price): self
     {
         $this->price = $price;
         return $this;
->>>>>>> 4dbb084 (code barre eq)
     }
 }

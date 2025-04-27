@@ -6,36 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Evenement;
-<<<<<<< HEAD
-
-#[ORM\Entity]
-class User
-{
-
-    #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
-
-    #[ORM\Column(type: "string", length: 50)]
-    private string $nom;
-
-    #[ORM\Column(type: "string", length: 50)]
-    private string $prenom;
-
-    #[ORM\Column(type: "string", length: 100)]
-    private string $email;
-
-    #[ORM\Column(type: "string", length: 255)]
-    private string $password;
-
-    #[ORM\Column(type: "string", length: 50)]
-    private string $role;
-
-    #[ORM\Column(type: "string", length: 250)]
-    private string $state;
-
-    public function getId()
-=======
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -89,19 +59,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 250)]
     private ?string $state= 'active' ;
     public function getId(): ?int
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->id;
     }
 
-<<<<<<< HEAD
-    public function setId($value)
-    {
-        $this->id = $value;
-    }
-
-    public function getNom()
-=======
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -109,19 +70,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function getNom(): string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->nom;
     }
 
-<<<<<<< HEAD
-    public function setNom($value)
-    {
-        $this->nom = $value;
-    }
-
-    public function getPrenom()
-=======
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
@@ -129,19 +81,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function getPrenom(): string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->prenom;
     }
 
-<<<<<<< HEAD
-    public function setPrenom($value)
-    {
-        $this->prenom = $value;
-    }
-
-    public function getEmail()
-=======
     public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
@@ -149,19 +92,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function getEmail(): string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->email;
     }
 
-<<<<<<< HEAD
-    public function setEmail($value)
-    {
-        $this->email = $value;
-    }
-
-    public function getPassword()
-=======
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -169,19 +103,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function getPassword(): string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->password;
     }
 
-<<<<<<< HEAD
-    public function setPassword($value)
-    {
-        $this->password = $value;
-    }
-
-    public function getRole()
-=======
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -189,19 +114,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function getRole(): string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->role;
     }
 
-<<<<<<< HEAD
-    public function setRole($value)
-    {
-        $this->role = $value;
-    }
-
-    public function getState()
-=======
     public function setRole(string $role): self
     {
         $this->role = $role;
@@ -219,18 +135,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
     public function getState(): ?string
->>>>>>> 4dbb084 (code barre eq)
     {
         return $this->state;
     }
 
-<<<<<<< HEAD
-    public function setState($value)
-    {
-        $this->state = $value;
-    }
-
-=======
     public function setState(?string $state): self
     {
         $this->state = $state;
@@ -289,7 +197,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             return $this;
         }
 
->>>>>>> 4dbb084 (code barre eq)
     #[ORM\OneToMany(mappedBy: "user_id", targetEntity: Session::class)]
     private Collection $sessions;
 
@@ -320,39 +227,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             return $this;
         }
 
-<<<<<<< HEAD
-    #[ORM\OneToMany(mappedBy: "userId", targetEntity: Reservation::class)]
-    private Collection $reservations;
-
-        public function getReservations(): Collection
-        {
-            return $this->reservations;
-        }
-    
-        public function addReservation(Reservation $reservation): self
-        {
-            if (!$this->reservations->contains($reservation)) {
-                $this->reservations[] = $reservation;
-                $reservation->setUserId($this);
-            }
-    
-            return $this;
-        }
-    
-        public function removeReservation(Reservation $reservation): self
-        {
-            if ($this->reservations->removeElement($reservation)) {
-                // set the owning side to null (unless already changed)
-                if ($reservation->getUserId() === $this) {
-                    $reservation->setUserId(null);
-                }
-            }
-    
-            return $this;
-        }
-
-=======
->>>>>>> 4dbb084 (code barre eq)
     #[ORM\OneToMany(mappedBy: "organisateurId", targetEntity: Evenement::class)]
     private Collection $evenements;
 

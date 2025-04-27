@@ -1,5 +1,5 @@
 {# templates/equipment/index.html.twig #}
-{% extends 'evenement/base-back.html.twig' %}
+{% extends 'equipment/base-back.html.twig' %}
 
 {% block title %}Liste des Équipements{% endblock %}
 
@@ -14,6 +14,16 @@
     <a href="{{ path('equipment_new') }}" class="btn btn-success">
       <i class="bx bx-plus me-1"></i> Créer un nouvel équipement
     </a>
+ <!-- New Button to trigger stock alert -->
+  <button id="sendStockAlert" class="btn btn-warning">
+    <i class="bx bx-mail-send me-1"></i> Envoyer Alerte Stock
+  </button>
+  </div>
+
+
+  <!-- Barre de recherche -->
+  <div class="mb-3">
+    <input type="text" id="searchInput" class="form-control" placeholder="Rechercher un équipement...">
   </div>
 
   <!-- Tableau -->
@@ -31,50 +41,68 @@
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody class="table-border-bottom-0">
-          {% for equipment in equipments %}
-            <tr>
-              <td><strong>{{ equipment.name }}</strong></td>
-              <td>{{ equipment.type }}</td>
-              <td>{{ equipment.description }}</td>
-              <td>{{ equipment.quantity }}</td>
-              <td>
-                {% if equipment.status == 'Active' %}
-                  <span class="badge bg-label-primary">{{ equipment.status }}</span>
-                {% elseif equipment.status == 'Inactive' %}
-                  <span class="badge bg-label-warning">{{ equipment.status }}</span>
-                {% elseif equipment.status == 'Maintenance' %}
-                  <span class="badge bg-label-info">{{ equipment.status }}</span>
-                {% else %}
-                  <span class="badge bg-label-secondary">{{ equipment.status }}</span>
-                {% endif %}
-              </td>
-              <td>{{ equipment.maintenancerecords|length }} enregistrements</td>
-              <td>
-                <a href="{{ path('equipment_show', {'id': equipment.id}) }}"
-                   class="btn btn-sm btn-outline-primary mb-1">
-                  <i class="bx bx-show"></i>
-                </a>
-                <a href="{{ path('equipment_edit', {'id': equipment.id}) }}"
-                   class="btn btn-sm btn-outline-warning mb-1">
-                  <i class="bx bx-edit-alt"></i>
-                </a>
-                <form method="post" action="{{ path('equipment_delete', {'id': equipment.id}) }}" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet équipement ?');">
-                  <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipment.id) }}">
-                  <button type="submit" class="btn btn-sm btn-outline-danger mb-1">
-                    <i class="bx bx-trash"></i>
-                  </button>
-                </form>
-              </td>
-            </tr>
-          {% else %}
-            <tr>
-              <td colspan="8" class="text-center text-muted fst-italic py-4">Aucun équipement trouvé</td>
-            </tr>
-          {% endfor %}
+        <tbody id="equipmentTableBody" class="table-border-bottom-0">
+          {% include 'equipment/_equipments_table.html.twig' with {equipments: equipments} %}
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<!-- Script AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#searchInput').on('keyup', function() {
+      let searchTerm = $(this).val();
+      $.ajax({
+        url: "{{ path('equipment_index') }}",
+        type: "GET",
+        data: {
+          name: searchTerm,
+          ajax: 1
+        },
+        success: function(data) {
+          $('#equipmentTableBody').html(data);
+        }
+      });
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    // Search functionality
+    $('#searchInput').on('keyup', function() {
+      let searchTerm = $(this).val();
+      $.ajax({
+        url: "{{ path('equipment_index') }}",
+        type: "GET",
+        data: {
+          name: searchTerm,
+          ajax: 1
+        },
+        success: function(data) {
+          $('#equipmentTableBody').html(data);
+        }
+      });
+    });
+
+    // Stock Alert button functionality
+    $('#sendStockAlert').click(function() {
+      $.ajax({
+        url: '/api/stock/alert', // The route to send email
+        type: 'GET',
+        success: function(response) {
+          //alert(response.message); // Show success message
+        },
+        error: function() {
+         // alert('Erreur lors de l\'envoi de l\'alerte.');
+        }
+      });
+      alert("email sent !")
+    });
+  });
+</script>
+
+
 {% endblock %}

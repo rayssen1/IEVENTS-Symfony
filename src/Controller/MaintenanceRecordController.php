@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Maintenancerecord;
+use App\Entity\MaintenanceRecord;
 use App\Form\MaintenanceRecordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 #[Route('/maintenance_record')]
 final class MaintenanceRecordController extends AbstractController
@@ -79,4 +82,39 @@ public function show(Maintenancerecord $maintenanceRecord): Response
 
         return $this->redirectToRoute('maintenance_record_index', [], Response::HTTP_SEE_OTHER);
     }
+  
+
+    #[Route('/maintenance/records/export-pdf', name: 'maintenance_record_export_pdf')]
+    public function exportPdf(EntityManagerInterface $entityManager): Response
+    {
+        // Fetch all maintenance records
+        $maintenanceRecords = $entityManager->getRepository(\App\Entity\MaintenanceRecord::class)->findAll();
+    
+        // Configure Dompdf
+        $pdfOptions = new \Dompdf\Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        $dompdf = new \Dompdf\Dompdf($pdfOptions);
+    
+        // Render Twig template to HTML
+        $html = $this->renderView('pdf/maintenance_record_pdf.html.twig', [
+            'maintenance_records' => $maintenanceRecords,
+        ]);
+        
+    
+        $dompdf->loadHtml($html);
+    
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+    
+        return new Response(
+            $dompdf->output(),
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="maintenance-records.pdf"',
+            ]
+        );
+    }
+    
+    
 }
