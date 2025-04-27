@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fiche Événement - {{ evenement.titre }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; }
+        .event-title { color: #6f42c1; font-size: 24px; }
+        .personal-message { font-style: italic; text-align: center; color: #6f42c1; margin: 20px 0; }
+        .badge { padding: 5px 10px; border-radius: 4px; }
+        .bg-label-success { background-color: #28a745; color: white; }
+        .bg-label-danger { background-color: #dc3545; color: white; }
+        .bg-label-primary { background-color: #6f42c1; color: white; }
+        img { max-width: 110px; max-height: 110px; border: 1px solid #ddd; border-radius: 4px; }
+        .text-muted { color: #6c757d; }
+        .fst-italic { font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="event-title">{{ evenement.titre }}</h1>
+        <p class="personal-message">
+            Bienvenue à {{ evenement.titre }} avec {{ evenement.eventspeakerId.nom }} {{ evenement.eventspeakerId.prenom }} !
+        </p>
+        <div class="card">
+            <h4>Événement</h4>
+            <p><strong>Description :</strong> {{ evenement.description }}</p>
+            <p><strong>Date :</strong> {{ evenement.dateEvent ? evenement.dateEvent|date('Y-m-d') : 'N/A' }}</p>
+            <p><strong>Lieu :</strong> {{ evenement.lieu }}</p>
+            <p><strong>Places :</strong> {{ evenement.nbPlace }}</p>
+            <p><strong>Prix :</strong> {{ evenement.prix }} TND</p>
+            {% if evenement.img %}
+                <img src="{{ (project_dir ~ '/public/images/events/' ~ evenement.img)|replace({'\\': '/'}) }}" 
+                     alt="{{ evenement.titre }}">
+            {% else %}
+                <span class="text-muted fst-italic">Pas d'image</span>
+            {% endif %}
+        </div>
+        <div class="card">
+            <h4>Event Speaker</h4>
+            <p><strong>Nom :</strong> {{ evenement.eventspeakerId.nom }} {{ evenement.eventspeakerId.prenom }}</p>
+            <p><strong>Description :</strong> {{ evenement.eventspeakerId.description }}</p>
+            
+        </div>
+    </div>
+</body>
+</html>

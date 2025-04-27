@@ -8,25 +8,39 @@
     <span class="text-muted fw-light">Événements /</span> Liste
   </h4>
 
-  <!-- Bouton Créer un événement -->
-  <div class="mb-3">
+
+  <div class="mb-3 d-flex justify-content-between align-items-center">
     <a href="{{ path('app_evenement_new') }}" class="btn btn-primary btn-md">
       <i class="bx bx-plus me-1"></i> Créer un nouvel événement
     </a>
   </div>
+  <div class="mb-3 d-flex justify-content-between align-items-center">
+    <div class="input-group w-50">
+      <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par titre ou description" autocomplete="off">
+      <span class="input-group-text"><i class="bx bx-search"></i></span>
+    </div>
+    <div>
+      <select id="sortSelect" class="form-select">
+        <option value="">Trier par prix</option>
+        <option value="asc">Prix : croissant</option>
+        <option value="desc">Prix : décroissant</option>
+      </select>
+    </div>
+  </div>
 
-  <!-- Liste des événements sous forme de cartes -->
-  <div class="row">
-    {% for evenement in evenements %}
-      <div class="col-md-8 mb-2"> <!-- Réduit de mb-3 à mb-2 pour moins d'espacement -->
+  <div class="row" id="eventList">
+    {% for evenement in pagination.items %}
+      <div class="col-md-8 mb-2 event-card" 
+           data-title="{{ evenement.titre|lower }}" 
+           data-description="{{ evenement.description|lower }}"
+           data-price="{{ evenement.prix }}">
         <div class="card shadow-sm">
-          <div class="card-body p-2"> <!-- Réduit le padding de p-3 à p-2 -->
+          <div class="card-body p-2">
             <div class="row align-items-center">
-              <!-- Attributs à gauche -->
               <div class="col-md-8">
-                <h6 class="card-title mb-1">{{ evenement.titre }}</h6> <!-- Réduit la marge -->
+                <h6 class="card-title mb-1">{{ evenement.titre }}</h6>
                 <p class="card-text small mb-1"><strong>Description :</strong> {{ evenement.description }}</p>
-                <p class="card-text small mb-1"><strong>Date :</strong> {{ evenement.dateEvent ? evenement.dateEvent|date('d/m/Y H:i') : 'Non définie' }}</p>
+                <p class="card-text small mb-1"><strong>Date :</strong> {{ evenement.dateEvent ? evenement.dateEvent|date('d/m/Y') : 'Non définie' }}</p>
                 <p class="card-text small mb-1"><strong>Lieu :</strong> {{ evenement.lieu }}</p>
                 <p class="card-text small mb-1"><strong>Nombre de places :</strong> {{ evenement.nbPlace }}</p>
                 <p class="card-text small mb-1"><strong>Prix :</strong> {{ evenement.prix }} TND</p>
@@ -34,13 +48,10 @@
                   <span class="badge bg-label-primary small">{{ evenement.status }}</span>
                 </p>
               </div>
-
-              <!-- Image et boutons à droite -->
               <div class="col-md-4 d-flex align-items-center">
-                <!-- Boutons à gauche de l'image, alignés verticalement -->
-                <div class="d-flex flex-column me-2 gap-1"> <!-- Alignement vertical avec espacement -->
+                <div class="d-flex flex-column me-2 gap-1">
                   <a href="{{ path('app_evenement_show', {'id': evenement.id}) }}"
-                     class="btn btn-sm btn-outline-primary py-0 px-1"> <!-- Réduit le padding -->
+                     class="btn btn-sm btn-outline-primary py-0 px-1">
                     <i class="bx bx-show"></i>
                   </a>
                   <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}"
@@ -48,12 +59,10 @@
                     <i class="bx bx-edit-alt"></i>
                   </a>
                 </div>
-
-                <!-- Image à droite -->
                 <div class="text-center">
                   {% if evenement.img %}
-                    <img src="{{ asset(evenement.img) }}" alt="Image de l'événement"
-                         class="rounded border shadow-sm" style="max-height: 150px; max-width: 100%; object-fit: cover;"> <!-- Réduit de 120px à 80px -->
+                    <img src="{{ asset('images/events/' ~ evenement.img) }}" alt="Image de l'événement"
+                         class="rounded border shadow-sm" style="max-height: 150px; max-width: 100%; object-fit: cover;">
                   {% else %}
                     <span class="text-muted fst-italic small">Pas d'image</span>
                   {% endif %}
@@ -71,5 +80,136 @@
       </div>
     {% endfor %}
   </div>
+
+  <div class="mt-3">
+    {{ knp_pagination_render(pagination, null, {}, {'align': 'center'}) }}
+  </div>
+    <!-- Statistiques -->
+      <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Statistiques /</span> Details
+  </h4>
+  <div class="row mb-4">
+    <!-- Événements par Lieu -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Événements par Lieu</h5>
+          <canvas id="eventsByLocationChart" style="max-height: 300px;"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Événements par Mois -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Événements par Mois</h5>
+          <canvas id="eventsByMonthChart" style="max-height: 300px;"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+{% block javascripts %}
+  <script src="{{ asset('js/event-search.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Graphique des événements par lieu
+      const eventsByLocation = {{ eventsByLocation|json_encode|raw }};
+      const locationLabels = eventsByLocation.map(item => item.lieu);
+      const locationData = eventsByLocation.map(item => item.count);
+
+      const locationCtx = document.getElementById('eventsByLocationChart').getContext('2d');
+      new Chart(locationCtx, {
+        type: 'bar',
+        data: {
+          labels: locationLabels,
+          datasets: [{
+            label: 'Nombre d\'Événements',
+            data: locationData,
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Nombre d\'Événements'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Lieu'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Répartition des Événements par Lieu'
+            }
+          }
+        }
+      });
+
+      // Graphique des événements par mois
+      const eventsByMonth = {{ eventsByMonth|json_encode|raw }};
+      const monthLabels = eventsByMonth.map(item => item.month);
+      const monthData = eventsByMonth.map(item => item.count);
+
+      const monthCtx = document.getElementById('eventsByMonthChart').getContext('2d');
+      new Chart(monthCtx, {
+        type: 'line',
+        data: {
+          labels: monthLabels,
+          datasets: [{
+            label: 'Nombre d\'Événements',
+            data: monthData,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Nombre d\'Événements'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Mois'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Évolution des Événements par Mois'
+            }
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}
 {% endblock %}

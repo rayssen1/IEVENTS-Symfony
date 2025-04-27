@@ -275,6 +275,12 @@
 
 <!-- List of Responses -->
 <div class="px-4">
+<div class="d-flex justify-content-end px-4 mt-4">
+    <a href="{{ path('organisateur_statistics') }}" class="btn btn-primary">
+    📊 View Statistics
+</a>
+
+</div>
     <h1 class="mt-4">List of Responses</h1>
 
     <table class="table mt-4">
@@ -314,8 +320,6 @@
             {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('reponse_new') }}" class="btn btn-primary w-100">Add a response</a>
 </div>
 
 

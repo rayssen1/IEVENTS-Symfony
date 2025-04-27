@@ -1,0 +1,48 @@
+{# templates/equipment/_form.html.twig #}
+{{ form_start(form) }}
+
+<div class="row">
+  <!-- Nom -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.name) }}
+  </div>
+
+  <!-- Type -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.type, 'Type', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.type) }}
+  </div>
+
+  <!-- Description -->
+  <div class="mb-3 col-md-12">
+    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
+    {{ form_errors(form.description) }}
+  </div>
+
+  <!-- Quantité -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.quantity, 'Quantité', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.quantity, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.quantity) }}
+  </div>
+
+  <!-- Statut -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+    {{ form_errors(form.status) }}
+  </div>
+</div>
+
+<!-- Bouton Submit -->
+<div class="mt-4">
+  <button type="submit" class="btn btn-primary">
+    <i class="bx bx-save me-1"></i> {{ button_label|default('Enregistrer') }}
+  </button>
+</div>
+
+{{ form_end(form) }}

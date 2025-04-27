@@ -58,6 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $phoneNumber ='' ;
     #[ORM\Column(type: "string", length: 250)]
     private ?string $state= 'active' ;
+   
     public function __construct(string $email, string $nom, string $prenom, string $password, string $role)
 {
     $this->email = $email;

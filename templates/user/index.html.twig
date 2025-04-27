@@ -285,6 +285,37 @@ doc.autoTable({
 </script>
 
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input');
+    const tableBody   = document.getElementById('user-table-body');
+    let timeout       = null;
+
+    searchInput.addEventListener('input', () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const q = encodeURIComponent(searchInput.value);
+
+            fetch(`{{ path('app_user_index') }}?search=${q}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not OK');
+                }
+                return response.text();
+            })
+            .then(html => {
+                // Replace only the rows inside your <tbody id="user-table-body">
+                tableBody.innerHTML = html;
+            })
+            .catch(err => console.error('Live search error:', err));
+        }, 300); // wait 300ms after last keystroke
+    });
+});
+</script>
 
 {% endblock %}
 

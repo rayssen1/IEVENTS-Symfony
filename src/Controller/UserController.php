@@ -108,7 +108,7 @@ final class UserController extends AbstractController
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, PasswordHasher $passwordHasher, UserRepository $userRepository): Response
     {
-        $user = new User();
+    $user = new User("","","","","");
     $form = $this->createForm(UserType::class, $user);
     $form->handleRequest($request);
 
@@ -192,7 +192,7 @@ final class UserController extends AbstractController
                         ->from('klichealaeddine@gmail.com')
                         ->to($user->getEmail())
                         ->subject('Password Reset Code')
-                        ->text("Your password reset code is: $code");
+                        ->text("Hi " . $user->getNom() . " " . $user->getPrenom() . ", your password reset code is: " . $code);
                     $mailer->send($emailMessage);
                     $this->addFlash('success', 'Reset code sent to your email.');
                     return $this->redirectToRoute('app_user_forgetPasswordCode');
@@ -257,7 +257,7 @@ final class UserController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush(); 
                 $this->addFlash('success', 'your password reset sucessfully ');
-                return $this->redirectToRoute('app_user_forgetPasswordConfirmation');
+                return $this->redirectToRoute('app_authentication');
             }
         }
         return $this->render('user/forget-password-confirmation.html.twig');

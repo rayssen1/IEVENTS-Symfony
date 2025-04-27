@@ -41,7 +41,7 @@ class Evenement
 
     #[ORM\Column(name: "nbPlace",type: "integer")]
     #[Assert\NotBlank(message: 'Le nombre de places est requis.')]
-    #[Assert\GreaterThanOrEqual(value: 0, message: 'Le nombre de places doit être positif ou zéro.')]
+    #[Assert\GreaterThanOrEqual(value: 1, message: 'Le nombre de places doit être >= 1.')]
     private int $nbPlace;
 
     #[ORM\Column(type: "float")]
@@ -58,6 +58,7 @@ class Evenement
 
     #[ORM\ManyToOne(targetEntity: Eventspeaker::class, inversedBy: "evenements")]
     #[ORM\JoinColumn(name: 'eventspeakerId', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Assert\NotNull(message: 'Un orateur est requis pour l\'événement.')]
     private Eventspeaker $eventspeakerId;
 
     #[ORM\Column(type: "string", length: 255)]
@@ -69,16 +70,18 @@ class Evenement
     public function __construct()
     {
         $this->reclamations = new ArrayCollection(); // added
+        $this->dateEvent = new \DateTime();
     }
 
     #[Assert\Callback]
     public function validateDateEvent(ExecutionContextInterface $context): void
     {
         $now = new \DateTime('now');
-        $minDate = (clone $now)->modify('+24 hours');
-
+        $minDate = (clone $now)->modify('+2 days')->setTime(0, 0); // Minimum le surlendemain à 00:00
+    
         if ($this->dateEvent < $minDate) {
-            $context->buildViolation('La date de l\'événement doit être au moins 24 heures après maintenant.')
+            $context->buildViolation('La date de l\'événement doit être au moins dans 2 jours (à partir du {{ date }}).')
+                ->setParameter('{{ date }}', $minDate->format('d/m/Y'))
                 ->atPath('dateEvent')
                 ->addViolation();
         }

@@ -46,8 +46,9 @@
                             <ul class="nav navbar-nav">
                                 <li class="current"><a href="#header">Home</a></li>
                                 <li><a href="#about">About us</a></li>
-                                <li><a href="#schedule">Schedule</a></li>
-                                <li><a href="/reclamation/new">Reclamation</a></li>
+                                <li><a href="/events/chat">Gemini</a></li>
+                                <li><a href="{{ path('app_reservation_index_current') }}">Mes Reservations</a></li>
+                                <li><a href="/reclamation/new">Reclamation</a></li>+
                                 <li><a href="#prices">Pricing</a></li>
                               {% if app.session.get('session_key') %}
     <!-- User is logged in -->
@@ -78,25 +79,35 @@
             </div>
         </div>
 
-        <div class="header-bg">
-            <div id="preloader">
-                <div class="preloader"></div>
-            </div>
-            <div class="main-slider" id="main-slider">
-                <!--== Main Slider ==-->
-                <ul class="slides">
-                    <li><img src="{{ asset('images/events/bg-slide-01.jpg') }}" alt="Slide Image"/></li>
-                    <li><img src="{{ asset('images/events/bg-slide-02.jpg') }}" alt="Slide Image 2"/></li>
-                </ul>
-            </div>
+        <div class="header-bg">      
+        <li><img src="{{ asset('images/demo/img14') }}" alt="Slide Image"/></li>
         </div>
     </header>
 
     <div class="content">
         <div class="container box">
+          
+
             <!--===============================-->
+            <!--== Schedule ===================-->
+            <!--===============================-->
+            <section id="schedule" class="row">
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-badge">
+                          <a><i class="fa fa-circle" id=""></i></a>
+                        </div>
+                    
+                    </li>
+                    {% block body %}
+                    {% endblock body %}
+                    <li class="clearfix no-float"></li>
+                </ul>
+            </section>
+              <!--===============================-->
             <!--== About us ===================-->
             <!--===============================-->
+            <!--==========-->
             <section id="about" class="about-us">
                 <div class="title-start col-md-4 col-md-offset-4">
                 <br />
@@ -152,25 +163,6 @@
                     </div>
                 </div>
             </section>
-            <!--==========-->
-
-            <!--===============================-->
-            <!--== Schedule ===================-->
-            <!--===============================-->
-            <section id="schedule" class="row">
-                <ul class="timeline">
-                    <li>
-                        <div class="timeline-badge">
-                          <a><i class="fa fa-circle" id=""></i></a>
-                        </div>
-                       
-                    </li>
-                    {% block body %}
-                    {% endblock body %}
-                    <li class="clearfix no-float"></li>
-                </ul>
-            </section>
-
             <!--===============================-->
             <!--== Blog =============-->
             <!--===============================-->

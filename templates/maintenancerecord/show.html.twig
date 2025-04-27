@@ -1,0 +1,64 @@
+{% extends 'equipment/base-back.html.twig' %}
+
+{% block title %}Détails de l'Enregistrement de Maintenance{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">
+            <span class="text-muted fw-light">Maintenance /</span> Détails
+        </h4>
+        <div>
+            <a href="{{ path('maintenance_record_edit', {'id': maintenance_record.id}) }}" class="btn btn-warning me-2">
+                <i class="bx bx-edit-alt me-1"></i> Modifier
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="card-title mb-0">Informations de l'enregistrement</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th width="20%" class="bg-light">ID</th>
+                        <td>{{ maintenance_record.id }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">Équipement</th>
+                        <td>
+                            {% if maintenance_record.equipment %}
+                                {{ maintenance_record.equipment.name }} (ID: {{ maintenance_record.equipment.id }})
+                            {% else %}
+                                Non défini
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">Date</th>
+                        <td>{{ maintenance_record.date ? maintenance_record.date|date('d/m/Y') : 'Non définie' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">Description</th>
+                        <td>{{ maintenance_record.description }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">Statut</th>
+                        <td>
+                            <span class="badge bg-info text-dark">{{ maintenance_record.status }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ path('maintenance_record_index') }}" class="btn btn-outline-secondary">
+            <i class="bx bx-arrow-back me-1"></i> Retour à la liste
+        </a>
+    </div>
+</div>
+{% endblock %}

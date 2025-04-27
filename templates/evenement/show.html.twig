@@ -59,7 +59,7 @@
                         <th class="bg-light">Image</th>
                         <td>
                             {% if evenement.img %}
-                                <img src="{{ asset(evenement.img) }}" alt="Image de l'événement"
+                                <img src="{{ asset('images/events/' ~ evenement.img) }}" alt="Image de l'événement"
                                      class="img-thumbnail" style="max-width: 300px;">
                             {% else %}
                                 <span class="text-muted">Aucune image</span>

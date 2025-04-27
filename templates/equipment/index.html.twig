@@ -1,0 +1,108 @@
+{# templates/equipment/index.html.twig #}
+{% extends 'equipment/base-back.html.twig' %}
+
+{% block title %}Liste des Équipements{% endblock %}
+
+{% block body %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Équipements /</span> Liste
+  </h4>
+
+  <!-- Bouton Créer un équipement -->
+  <div class="mb-3">
+    <a href="{{ path('equipment_new') }}" class="btn btn-success">
+      <i class="bx bx-plus me-1"></i> Créer un nouvel équipement
+    </a>
+ <!-- New Button to trigger stock alert -->
+  <button id="sendStockAlert" class="btn btn-warning">
+    <i class="bx bx-mail-send me-1"></i> Envoyer Alerte Stock
+  </button>
+  </div>
+
+
+  <!-- Barre de recherche -->
+  <div class="mb-3">
+    <input type="text" id="searchInput" class="form-control" placeholder="Rechercher un équipement...">
+  </div>
+
+  <!-- Tableau -->
+  <div class="card">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Quantité</th>
+            <th>Statut</th>
+            <th>Maintenance</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="equipmentTableBody" class="table-border-bottom-0">
+          {% include 'equipment/_equipments_table.html.twig' with {equipments: equipments} %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Script AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#searchInput').on('keyup', function() {
+      let searchTerm = $(this).val();
+      $.ajax({
+        url: "{{ path('equipment_index') }}",
+        type: "GET",
+        data: {
+          name: searchTerm,
+          ajax: 1
+        },
+        success: function(data) {
+          $('#equipmentTableBody').html(data);
+        }
+      });
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    // Search functionality
+    $('#searchInput').on('keyup', function() {
+      let searchTerm = $(this).val();
+      $.ajax({
+        url: "{{ path('equipment_index') }}",
+        type: "GET",
+        data: {
+          name: searchTerm,
+          ajax: 1
+        },
+        success: function(data) {
+          $('#equipmentTableBody').html(data);
+        }
+      });
+    });
+
+    // Stock Alert button functionality
+    $('#sendStockAlert').click(function() {
+      $.ajax({
+        url: '/api/stock/alert', // The route to send email
+        type: 'GET',
+        success: function(response) {
+          //alert(response.message); // Show success message
+        },
+        error: function() {
+         // alert('Erreur lors de l\'envoi de l\'alerte.');
+        }
+      });
+      alert("email sent !")
+    });
+  });
+</script>
+
+
+{% endblock %}

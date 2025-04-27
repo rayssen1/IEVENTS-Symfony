@@ -6,7 +6,6 @@ use App\Entity\Reponse;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,12 +15,25 @@ class ReponseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $email = $options['email'] ?? '';
+
         $builder
-            ->add('message', TextType::class, [
+            ->add('email', EmailType::class, [
+                'mapped' => false,
+                'data' => $email,
+                'disabled' => true,
                 'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Message cannot be empty.',
-                    ]),
+                    new Assert\NotBlank(['message' => 'Email is required.']),
+                    new Assert\Email(['message' => 'Please enter a valid email.']),
+                ],
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('message', TextType::class, [
+                'empty_data' => '',
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Message cannot be empty.']),
                     new Assert\Length([
                         'max' => 200,
                         'maxMessage' => 'Message must not exceed 200 characters.',
@@ -31,21 +43,7 @@ class ReponseType extends AbstractType
                     'maxlength' => 200,
                     'class' => 'form-control',
                     'placeholder' => 'Enter your message (max 200 characters)',
-                ],
-            ])
-            ->add('email', EmailType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Email is required.',
-                    ]),
-                    new Assert\Email([
-                        'message' => 'Please enter a valid email address.',
-                    ]),
-                ],
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'e.g., user@mail.com',
+                    'oninput' => 'checkMessageLength(this)',
                 ],
             ])
             ->add('etat', ChoiceType::class, [
@@ -59,12 +57,6 @@ class ReponseType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
-            ])
-            ->add('dateRep', DateTimeType::class, [
-                'widget' => 'single_text',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
             ]);
     }
 
@@ -72,6 +64,7 @@ class ReponseType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Reponse::class,
+            'email' => null, // 👈 Custom option to receive email
         ]);
     }
 }

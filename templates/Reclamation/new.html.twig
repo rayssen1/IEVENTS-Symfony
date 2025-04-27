@@ -1,32 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Event - Landing Page</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>  
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="">
+{% extends 'baya.html.twig' %}
+{% block title %}ArtXibition Template - Event Detail Page{% endblock %}
 
-    
+{% block body %}
 
-    <!--== CSS Files ==-->
-    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ asset('css/owl.carousel.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ asset('css/flexslider.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ asset('css/fancySelect.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ asset('css/responsive.css') }}" rel="stylesheet" media="screen">
+{% include 'partials/pre_header.html.twig' %}
+{% include 'partials/header.html.twig' %}
 
-    <!--== Google Fonts ==-->
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Belgrano' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Dosis' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
-    <!--== SweetAlert2 ==-->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <style>
+ <style>
     /* Style pour le formulaire */
 #reclamation-form {
     background-color: #f9f9f9;
@@ -80,338 +62,193 @@
     font-size: 12px;
 }
 </style>
-    
-</head>
-<body>
-    <header id="header">
-        <div id="menu" class="header-menu fixed">
-            <div class="box">
-                <div class="row">
-                    <nav role="navigation" class="col-sm-12">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
 
-                            <!--== Logo ==-->
-                            <span class="navbar-brand logo">I-Events</span>
-                        </div>
-                        <div class="navbar-collapse collapse">
-                            <!--== Navigation Menu ==-->
-                            <ul class="nav navbar-nav">
-                                <li class="current"><a href="#header">Home</a></li>
-                                <li><a href="#reclamation">Reclamation</a></li>
-                                <li><a href="#testimonial">Testimonials</a></li>
-                                <li><a href="#contact">Contact</a></li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
 
-        <!--== Site Description ==-->
-        <div class="header-cta">
-            <div class="container">
-                <div class="row">
-                    <div class="entry-content">
-                        <p><span class="start-text"><b>From THE MARCH 7, 2014</b></span></p>
-                        <h4 class="entry-title"><a href="#">Organizing World class events</a></h4>
-                        <h5><span><b>Schrodinger confirms that Germany international ...</b></span></h5>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- ***** Page Heading ***** -->
+<div class="page-heading-rent-venue">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2>Event Details</h2>
+        <span>Check out our latest Shows & Events and be part of us.</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <div class="header-bg">
-            <div id="preloader">
-                <div class="preloader"></div>
-            </div>
-            <div class="main-slider" id="main-slider">
-                <!--== Main Slider ==-->
-                <ul class="slides">
-                    <li><img src="{{ asset('images/demo/bg-slide-01.jpg') }}" alt="Slide Image"/></li>
-                    <li><img src="{{ asset('images/demo/bg-slide-02.jpg') }}" alt="Slide Image 2"/></li>
-                </ul>
-            </div>
-        </div>
-    </header>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
 
+
+    <br>
+    <br>
+    <br>
+    <br>
 <!-- Reclamation Form -->
-<section id="reclamation">
-    <div class="container">
-        <h2 class="team-heading text-center mb-4">Reclamation Form</h2>
-        
-        {{ form_start(form, {'attr': {'id': 'reclamation-form'}}) }}
-            <div class="form-row">
-                {{ form_label(form.email, 'Email Address', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.email) }}
-                </div>
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="text-center">{{  'Reclamation' }}</h1>
+
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+            <!-- Email Field -->
+            <div class="mb-3">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'Enter your email',
+                        'oninput': 'validateEmail(this)'
+                    }
+                }) }}
+                <div class="text-danger">{{ form_errors(form.email) }}</div>
             </div>
 
-            <div class="form-row">
-                {{ form_label(form.evenement, 'Event', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.evenement, {'attr': {'class': 'form-control'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.evenement) }}
-                </div>
+            <!-- Event Field -->
+            <div class="mb-3">
+                {{ form_label(form.evenement) }}
+                {{ form_widget(form.evenement, {
+                    'attr': {
+                        'class': 'form-control'
+                    }
+                }) }}
+                <div class="text-danger">{{ form_errors(form.evenement) }}</div>
             </div>
 
-            <div class="form-row">
-                {{ form_label(form.dateReclamation, 'Reclamation Date', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.dateReclamation, {'attr': {'class': 'form-control'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.dateReclamation) }}
-                </div>
+<!-- Subject Field -->
+<div class="mb-3">
+    {{ form_label(form.subject) }}
+    {{ form_widget(form.subject, {
+        'attr': {
+            'class': 'form-control',
+            'placeholder': 'Describe your issue...',
+            'id': 'reclamation_subject',
+            'rows': 4
+        }
+    }) }}
+    <div class="text-danger">{{ form_errors(form.subject) }}</div>
+</div>
+
+
+
+
+            <!-- Rate Field -->
+            <div class="mb-3">
+                {{ form_label(form.rate) }}
+                {{ form_widget(form.rate, {
+                    'attr': {
+                        'class': 'form-control'
+                    }
+                }) }}
+                <div class="text-danger">{{ form_errors(form.rate) }}</div>
             </div>
 
-<div class="form-row">
-    {{ form_label(form.subject, 'Subject', {'label_attr': {'class': 'form-label'}}) }}
-    {{ form_widget(form.subject, {'attr': {'class': 'form-control', 'rows': 4}}) }}
-    <div class="invalid-feedback">
-        {{ form_errors(form.subject) }}
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-success btn-lg w-100">
+                    {{ reclamation is defined ? 'send' : 'Submit' }}
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
     </div>
 </div>
 
-            <div class="form-row">
-                {{ form_label(form.rate, 'Rate', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.rate, {'attr': {'class': 'form-control'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.rate) }}
-                </div>
-            </div>
 
-            <div class="text-center">
-                <button type="button" class="btn btn-success btn-lg" id="confirm-button">Submit</button>
-            </div>
-        {{ form_end(form) }}
-    </div>
-</section>
 
 
     <br>
     <br>
 
-    <!--== Testimonials =============-->
-    <section id="testimonial" class="testimonial-area">
-        <div class="container">
-            <div class="title-start col-md-4 col-md-offset-4">
-                <h2 class="team-heading white">Testimonial</h2>
-                <p class="sub-text text-center">What they say and see among us</p>
-            </div>
-            <div class="row">
-                <div id="testimonial-container" class="col-xs-12">
-                    <div class="testimonila-block">
-                        <img src="{{ asset('images/testimonial.jpg') }}" alt="clients" class="selfshot">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem sed mollitia illum! Molestiae dignissimos, hic dolorem et eius ut nobis.</p>
-                        <strong>Monir Hossain</strong>
-                        <br>
-                        <small>C.E.O</small>
-                    </div>
-                    <div class="testimonila-block">
-                        <img src="{{ asset('images/testimonial2.jpg') }}" alt="clients" class="selfshot">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem sed mollitia illum! Molestiae dignissimos, hic dolorem et eius ut nobis.</p>
-                        <strong>Nur Ul Hossain</strong>
-                        <br>
-                        <small>Project Manager</small>
-                    </div>
-                    <div class="testimonila-block">
-                        <img src="{{ asset('images/testimonial3.jpg') }}" alt="clients" class="selfshot">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem sed mollitia illum! Molestiae dignissimos, hic dolorem et eius ut nobis.</p>
-                        <strong>Rub Elvi</strong>
-                        <br>
-                        <small>Developer</small>
-                    </div>
-                </div>
-            </div>
-        </div><!-- container -->
-    </section><!-- testimonial -->
 
-    <!-- Contact Area -->
-    <section id="contact" class="mapWrap">
-        <div id="googleMap" style="width:100%;"></div>
-        <div id="contact-area">
-            <div class="container">
-                <h2 class="block_title">Hey !!!</h2>
-                <div class="row">
-                    <div class="col-xs-12"></div>
-                    <div class="col-sm-6">
-                        <div class="moreDetails">
-                            <h2 class="con-title">More About me</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum animi repudiandae nihil aspernatur repellat temporibus doloremque sint ea laboriosam.</p>
-                            <ul class="address">
-                                <li><i class="pe-7s-map-marker"></i><span>1600 Pennsylvania Ave NW,<br>Washington, DC 20500,<br>United States</span></li>
-                                <li><i class="pe-7s-mail"></i><span>example@gmail.com</span></li>
-                                <li><i class="pe-7s-phone"></i><span>+1-202-555-0144</span></li>
-                                <li><i class="pe-7s-global"></i><span><a href="#">www.themewagon.com</a></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <h2 class="con-title">Contact us</h2>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="user_name" placeholder="Enter your name">
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control" id="your_email" placeholder="Enter your email">
-                            </div>
-                            <div class="form-group">
-                                <textarea name="InputMessage" id="user_message" class="form-control" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn medium">Let us know</button>
-                        </form>   
-                    </div>
-                </div>
-            </div><!-- container -->
-        </div><!-- contact-area -->
-        <div id="social">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <ul class="scoialinks">
-                            <li class="normal-txt">Find us on</li>
-                            <li class="social-icons"><a class="facebook" href="#"></a></li>
-                            <li class="social-icons"><a class="twitter" href="#"></a></li>
-                            <li class="social-icons"><a class="linkedin" href="#"></a></li>
-                            <li class="social-icons"><a class="google-plus" href="#"></a></li>
-                            <li class="social-icons"><a class="wordpress" href="#"></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div><!-- social -->
-    </section><!-- contact -->
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6">
-                    <p class="copyright">© Copyright 2014 <a href="http://wwww.technextit.com" target="_blank">Technext</a></p>
-                </div>
-                <div class="col-sm-6">
-                    <p class="designed">Designed and Developed by <a href="http://themewagon.com" target="_blank">Themewagon</a></p>
-                </div>
-            </div>
-        </div>
-    </footer>
 
-<!--== Javascript Files ==-->
-    <script src="{{ asset('js/jquery-2.1.0.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/jquery.scrollTo.js') }}"></script>
-    <script src="{{ asset('js/waypoints.js') }}"></script>
-    <script src="{{ asset('js/owl.carousel.js') }}"></script>
-    <script src="{{ asset('js/jquery.flexslider.js') }}"></script>
-    <script src="{{ asset('js/fancySelect.js') }}"></script>
-    <script src="{{ asset('js/functions.js') }}"></script>
 
 <script>
-    document.getElementById('confirm-button').addEventListener('click', async (event) => {
-        event.preventDefault();  // Prevent form submission until after the notification
+document.addEventListener('DOMContentLoaded', function () {
+    const subjectField = document.getElementById('reclamation_subject');
+    let timeout = null;
 
-        const email = document.querySelector('#reclamation_email').value;
-        const subject = document.querySelector('#reclamation_subject').value;
-        const rate = document.querySelector('#reclamation_rate').value;
+    // List of offensive words (add more if needed)
+    const offensiveWords = [
+        'damn', 'crap', 'hell', 'shit', 'fuck', 'fucking',
+        'idiot', 'stupid', 'dumb', 'moron', 'jerk', 'loser',
+        'bitch', 'bastard', 'asshole', 'suck', 'trash',
+        'retard', 'retarded', 'nigger', 'negro', 'fag', 'faggot',
+        'slut', 'whore', 'cunt', 'dick', 'cock', 'pussy', 'boobs',
+        'bollocks', 'bugger', 'bloody', 'arse', 'wanker',
+        'motherfucker', 'son of a bitch', 'shithead', 'scumbag',
+        'twat', 'douche', 'dipshit', 'jackass', 'prick', 'numbnuts',
+        'tool', 'hoe', 'skank', 'tramp', 'scum', 'nutjob'
+    ];
 
-        let formValid = true;  // Flag to track form validity
+    // Build a single RegExp from the list
+    const offensiveRegex = new RegExp(`\\b(${offensiveWords.join('|')})\\b`, 'gi');
 
-        // Vérification du format de l'email
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if (!email) {
-            Swal.fire({ icon: 'warning', title: 'Please enter an email.' });
-            formValid = false;
-        } else if (!emailRegex.test(email)) {
-            Swal.fire({ icon: 'warning', title: 'Invalid email format.' });
-            formValid = false;
-        }
+    subjectField.addEventListener('input', function () {
+        clearTimeout(timeout);
 
-        // Vérification de la longueur du subject (maximum 50 caractères)
-        if (!subject) {
-            Swal.fire({ icon: 'warning', title: 'Subject cannot be empty.' });
-            formValid = false;
-        } else if (subject.length > 100) {
-            Swal.fire({ icon: 'warning', title: 'Subject should not exceed 100 characters.' });
-            formValid = false;
-        }
+        timeout = setTimeout(() => {
+            let originalText = subjectField.value;
 
-        // Vérification de la valeur du rate (not empty, and within range 1-5)
-        if (!rate) {
-            Swal.fire({ icon: 'warning', title: 'Rate cannot be empty.' });
-            formValid = false;
-        } else if (rate < 1 || rate > 5) {
-            Swal.fire({ icon: 'warning', title: 'Rate should be between 1 and 5.' });
-            formValid = false;
-        }
+            // Check if the original text ends with a space
+            const endsWithSpace = originalText.endsWith(' ');
 
-        // If all checks pass, proceed to submit the form
-        if (formValid) {
+            // Remove offensive words and extra spaces
+            let cleanedText = originalText.replace(offensiveRegex, '').replace(/\s{2,}/g, ' ').trim();
+
+            // If the original text ended with a space, add the space back to the cleaned text
+            if (endsWithSpace) {
+                cleanedText += ' ';
+            }
+
+            // Update the input field with the cleaned text
+            if (cleanedText !== originalText) {
+                subjectField.value = cleanedText;
+            }
+        }, 600); // Delay to prevent spamming
+    });
+});
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const subjectInput = document.querySelector('#reclamation_subject');
+        form.addEventListener('submit', async function(event) {
+            const subjectText = subjectInput.value.trim();
+
+            //  API Detect Language
             try {
-                const response = await fetch('/reclamation/check-email?email=' + encodeURIComponent(email));
-                const data = await response.json();
-
-                if (data.exists) {
-                    const confirmUpdate = confirm("A Reclamation with this email already exists. Do you really want to update it?");
-                    if (!confirmUpdate) return;  // Do not submit if the user cancels
-                }
-
-                // Show success notification after validation
-                Swal.fire({ 
-                    icon: 'success', 
-                    title: 'Form submitted successfully!', 
-                    text: 'Your reclamation has been submitted.' 
+                const response = await fetch('https://ws.detectlanguage.com/0.2/detect', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer 7eb591ac417f6cde62adc8e842282ddf',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({ q: subjectText })
                 });
 
-                // Now submit the form after all validation passes
-                document.querySelector('#reclamation-form').submit();
+                const data = await response.json();
+                const detectedLanguage = data.data.detections[0]?.language;
 
-            } catch (e) {
-                Swal.fire({ icon: 'error', title: 'Error checking email.' });
-                console.error(e);
+                if (detectedLanguage !== 'en') {
+                    event.preventDefault();
+                    alert('The form can only be submitted in English.');
+                }
+
+            } catch (error) {
+                console.error('Language detection failed:', error);
+                // API
             }
-        }
+        });
     });
 </script>
 
 
-    
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{% include 'partials/subscribe.html.twig' %}
+{% include 'partials/footer.html.twig' %}
+{% endblock %}
 
 

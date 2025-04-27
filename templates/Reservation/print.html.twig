@@ -1,0 +1,46 @@
+{% extends 'baya.html.twig' %}
+
+{% block title %}Ticket de Réservation{% endblock %}
+
+{% block body %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card p-4 shadow" style="max-width: 700px; width: 100%; border: 2px dashed #333;">
+        <div class="text-center mb-4">
+            <h2>I-EVENTS 🎟️</h2>
+            <h4>Votre Billet</h4>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7">
+                {% if reservation.evenement is not null %}
+                    <p><strong>Événement :</strong> {{ reservation.evenement.titre }}</p>
+                    <p><strong>Date :</strong> {{ reservation.evenement.dateEvent ? reservation.evenement.dateEvent|date('d/m/Y') : 'Date inconnue' }}</p>
+                    <p><strong>Lieu :</strong> {{ reservation.evenement.lieu }}</p>
+                {% else %}
+                    <p><strong>Événement :</strong> Événement supprimé</p>
+                {% endif %}
+                <p><strong>Prix Total :</strong> {{ reservation.totalPrice }} DT</p>
+                <p><strong>Statut :</strong> 
+                    {% if reservation.status == 'confirmee' %}
+                        <span class="badge bg-success">Confirmée</span>
+                    {% elseif reservation.status == 'annulee' %}
+                        <span class="badge bg-danger">Annulée</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">En attente</span>
+                    {% endif %}
+                </p>
+            </div>
+            {% if qrCode is defined %}
+            <div class="text-center mt-4">
+            <h5>QR Code de la Réservation</h5>
+            <img src="{{ qrCode }}" alt="QR Code" style="width: 150px; height: 150px;">
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="text-center mt-4">
+            <button onclick="window.print()" class="btn btn-primary">🖨️ Imprimer le Billet</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

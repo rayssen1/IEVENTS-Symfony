@@ -1,0 +1,137 @@
+{% extends 'baya.html.twig' %}
+
+{% block title %}Mes Réservations | I-Events{% endblock %}
+
+{% block body %}
+{% include 'partials/pre_header.html.twig' %}
+{% include 'partials/header.html.twig' %}
+
+<!-- ***** Page Heading ***** -->
+<div class="page-heading-shows-events">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2>Mes Réservations</h2>
+        <span>Gérez vos réservations en toute simplicité.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="shows-events-tabs">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <!-- Filtres par statut -->
+        <div class="text-center mb-5">
+          <button class="btn btn-outline-primary filter-btn" data-filter="all">Tous</button>
+          <button class="btn btn-outline-success filter-btn" data-filter="confirmee">Confirmée</button>
+          <button class="btn btn-outline-warning filter-btn" data-filter="enattente">En attente</button>
+          <button class="btn btn-outline-danger filter-btn" data-filter="annulee">Annulée</button>
+        </div>
+
+        <section class="tabs-content">
+          <div class="row" id="reservation-list">
+            {% for reservation in reservations %}
+              <div class="col-lg-6 reservation-item" data-status="{{ reservation.status|lower|replace({'é': 'e', 'è': 'e', 'ê': 'e', 'à': 'a', 'ù': 'u',' ': ''}) }}">
+                <div class="event-item">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="thumb">
+                        {% if reservation.evenement is not null and reservation.evenement.img %}
+                          <img src="{{ asset(reservation.evenement.img) }}" alt="Image de l'événement">
+                        {% else %}
+                          <img src="{{ asset(reservation.evenement.img) }}" alt="Événement inconnu">
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="col-lg-8">
+                      <div class="left-content">
+                        {% if reservation.evenement is not null %}
+                          <h4>{{ reservation.evenement.titre }}</h4>
+                          <p>Date: {{ reservation.evenement.dateEvent ? reservation.evenement.dateEvent|date('d/m/Y') : 'Date inconnue' }}</p>
+                          <p>Lieu: {{ reservation.evenement.lieu }}</p>
+                        {% else %}
+                          <h4>Événement supprimé</h4>
+                          <p>Informations indisponibles</p>
+                        {% endif %}
+                        
+                        <p><strong>Prix total:</strong> {{ reservation.totalPrice }} $</p>
+                        <p><strong>Status:</strong> 
+                          {% if reservation.status == 'confirmee' %}
+                            <span class="badge bg-success">Confirmée</span>
+                          {% elseif reservation.status == 'annulee' %}
+                            <span class="badge bg-danger">Annulée</span>
+                          {% else %}
+                            <span class="badge bg-warning text-dark">En attente</span>
+                          {% endif %}
+                        </p>
+
+                        <div class="main-dark-button mt-2">
+                          <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">Modifier la réservation</a>
+                        </div>
+                        <div class="main-dark-button mt-2">
+                          <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}">Voir les détails</a>
+                        </div>
+                        {% if reservation.status == 'en attente' %}
+                         <div class="main-dark-button mt-2">
+                        <a href="{{ path('app_reservation_pay', {'id': reservation.id}) }}">Payer maintenant</a>
+                        </div>
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <div class="col-lg-12 text-center">
+                <p>Aucune réservation trouvée.</p>
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'partials/subscribe.html.twig' %}
+{% include 'partials/footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+      console.log('Filter script loaded');
+      const buttons = document.querySelectorAll('.filter-btn');
+      const items = document.querySelectorAll('.reservation-item');
+
+      console.log('Found buttons:', buttons.length);
+      console.log('Found items:', items.length);
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const filter = this.getAttribute('data-filter');
+          console.log('Selected filter:', filter);
+
+          items.forEach(item => {
+            const status = item.getAttribute('data-status');
+            console.log('Comparing:', status, 'with', filter);
+            if (filter === 'all' || status === filter) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+
+          buttons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+</script>
+{% endblock %}

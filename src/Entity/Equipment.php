@@ -3,120 +3,160 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use App\Entity\Maintenance_record;
+use App\Entity\MaintenanceRecord; // 🛠️ Corrected this line
 
 #[ORM\Entity]
+#[ORM\Table(name: 'equipment')]
 class Equipment
 {
-
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $name;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Le nom ne doit pas être vide.")]
+    #[Assert\Regex(
+        pattern: "/^[^\d]*$/",
+        message: "Le nom ne doit pas contenir de chiffres."
+    )]
+    private ?string $name = null;
 
-    #[ORM\Column(type: "string", length: 100)]
-    private string $type;
+    #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank(message: "Le type ne doit pas être vide.")]
+    private ?string $type = null;
 
-    #[ORM\Column(type: "string")]
-    private string $status;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Le statut ne doit pas être vide.")]
+    private ?string $status = null;
 
-    #[ORM\Column(type: "integer")]
-    private int $quantity;
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull(message: "La quantité ne doit pas être vide.")]
+    #[Assert\LessThan(
+        value: 1000,
+        message: "La quantité doit être inférieure à 1000."
+    )]
+    #[Assert\GreaterThan(
+        value: 0,
+        message: "La quantité doit être supérieure à 0."
+    )]
+    private ?int $quantity = null;
 
-    #[ORM\Column(type: "text")]
-    private string $description;
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank(message: "La description ne doit pas être vide.")]
+    #[Assert\Length(
+        max: 30,
+        maxMessage: "La description ne doit pas dépasser 30 caractères."
+    )]
+    private ?string $description = null;
 
-    public function getId()
+    #[ORM\OneToMany(mappedBy: 'equipment', targetEntity: MaintenanceRecord::class, cascade: ['remove'])] // 🛠️ Corrected here too
+    private Collection $maintenanceRecords; // 🛠️ Better camelCase here
+
+    const STATUS_AVAILABLE = 'AVAILABLE';
+    const STATUS_RESERVED = 'RESERVED';
+    const STATUS_OUT_OF_STOCK = 'OUT OF STOCK';
+
+    public function __construct()
+    {
+        $this->maintenanceRecords = new ArrayCollection(); // 🛠️ camelCase corrected
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($value)
-    {
-        $this->id = $value;
-    }
-
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName($value)
+    public function setName(string $name): self
     {
-        $this->name = $value;
+        $this->name = $name;
+        return $this;
     }
 
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType($value)
+    public function setType(string $type): self
     {
-        $this->type = $value;
+        $this->type = $type;
+        return $this;
     }
 
-    public function getStatus()
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus($value)
+    public function setStatus(string $status): self
     {
-        $this->status = $value;
+        $this->status = $status;
+        return $this;
     }
 
-    public function getQuantity()
+    public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
-    public function setQuantity($value)
+    public function setQuantity(int $quantity): self
     {
-        $this->quantity = $value;
+        $this->quantity = $quantity;
+        return $this;
     }
 
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription($value)
+    public function setDescription(string $description): self
     {
-        $this->description = $value;
+        $this->description = $description;
+        return $this;
     }
 
-    #[ORM\OneToMany(mappedBy: "equipmentId", targetEntity: Maintenance_record::class)]
-    private Collection $maintenance_records;
+    public function getMaintenanceRecords(): Collection // 🛠️ getter corrected
+    {
+        return $this->maintenanceRecords;
+    }
 
-        public function getMaintenance_records(): Collection
-        {
-            return $this->maintenance_records;
+    public function addMaintenanceRecord(MaintenanceRecord $maintenanceRecord): self // 🛠️ method corrected
+    {
+        if (!$this->maintenanceRecords->contains($maintenanceRecord)) {
+            $this->maintenanceRecords[] = $maintenanceRecord;
+            $maintenanceRecord->setEquipment($this);
         }
-    
-        public function addMaintenance_record(Maintenance_record $maintenance_record): self
-        {
-            if (!$this->maintenance_records->contains($maintenance_record)) {
-                $this->maintenance_records[] = $maintenance_record;
-                $maintenance_record->setEquipmentId($this);
+
+        return $this;
+    }
+
+    public function removeMaintenanceRecord(MaintenanceRecord $maintenanceRecord): self // 🛠️ method corrected
+    {
+        if ($this->maintenanceRecords->removeElement($maintenanceRecord)) {
+            if ($maintenanceRecord->getEquipment() === $this) {
+                $maintenanceRecord->setEquipment(null);
             }
-    
-            return $this;
         }
-    
-        public function removeMaintenance_record(Maintenance_record $maintenance_record): self
-        {
-            if ($this->maintenance_records->removeElement($maintenance_record)) {
-                // set the owning side to null (unless already changed)
-                if ($maintenance_record->getEquipmentId() === $this) {
-                    $maintenance_record->setEquipmentId(null);
-                }
-            }
-    
-            return $this;
-        }
+
+        return $this;
+    }
+
+    public function getStatusOptions(): array
+    {
+        return [
+            self::STATUS_AVAILABLE => 'Available',
+            self::STATUS_RESERVED => 'Reserved',
+            self::STATUS_OUT_OF_STOCK => 'Out of Stock',
+        ];
+    }
 }

@@ -1,0 +1,13 @@
+{# templates/emails/low_stock_alert.html.twig #}
+
+<h1>Stock Alert: Low Stock Items</h1>
+
+<p>The following equipment are close to being out of stock:</p>
+
+<ul>
+    {% for equipment in equipments %}
+        <li>{{ equipment.name }} (Quantity: {{ equipment.quantity }})</li>
+    {% endfor %}
+</ul>
+
+<p>Please restock the items as soon as possible.</p>

@@ -21,13 +21,13 @@ class Payment
     #[ORM\Column(type: "float")]
     private float $amount;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: "datetime" , name :"paymentDate")]
     private \DateTimeInterface $paymentDate;
 
     #[ORM\Column(type: "string")]
     private string $status;
 
-    #[ORM\Column(type: "string")]
+    #[ORM\Column(type: "string", name:"paymentType")]
     private string $paymentType;
 
     public function getId()
