@@ -1,0 +1,92 @@
+{% extends 'baya.html.twig' %}
+
+{% block title %}Détails de la Réservation | I-Events{% endblock %}
+
+{% block body %}
+{% include 'partials/pre_header.html.twig' %}
+{% include 'partials/header.html.twig' %}
+
+<!-- ***** Page Heading ***** -->
+<div class="page-heading-shows-events">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h2>Détail de la Réservation</h2>
+        <span>Consultez les informations de votre réservation.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ***** Reservation Card Centered ***** -->
+<div class="shows-events-tabs" style="margin-top: 50px;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 d-flex justify-content-center">
+        <div class="event-item" style="width: 100%;">
+          <div class="row align-items-center">
+            <div class="col-lg-5 text-center">
+              <div class="thumb">
+                {% if reservation.evenement is not null and reservation.evenement.img %}
+                  <img src="{{ asset('images/events/' ~ reservation.evenement.img) }}" alt="Image de l'événement" style="width: 100%; height: auto;">
+                {% else %}
+                  <img src="{{ asset('images/events/' ~ reservation.evenement.img) }}" alt="Événement inconnu" style="width: 100%; height: auto;">
+                {% endif %}
+              </div>
+            </div>
+            <div class="col-lg-7">
+              <div class="left-content">
+                {% if reservation.evenement is not null %}
+                  <h4>{{ reservation.evenement.titre }}</h4>
+                  <p><strong>Date:</strong> {{ reservation.evenement.dateEvent ? reservation.evenement.dateEvent|date('d/m/Y') : 'Date inconnue' }}</p>
+                  <p><strong>Lieu:</strong> {{ reservation.evenement.lieu }}</p>
+                {% else %}
+                  <h4>Événement supprimé</h4>
+                  <p>Informations indisponibles</p>
+                {% endif %}
+
+                <p><strong>Prix total:</strong> {{ reservation.totalPrice }} $</p>
+
+                <p><strong>Statut :</strong> 
+                  {% if reservation.status == 'confirmee' %}
+                    <span class="badge bg-success">Confirmée</span>
+                  {% elseif reservation.status == 'annulee' %}
+                    <span class="badge bg-danger">Annulée</span>
+                  {% else %}
+                    <span class="badge bg-warning text-dark">En attente</span>
+                  {% endif %}
+                </p>
+
+                <div class="main-dark-button mt-3">
+                  <a href="{{ path('app_reservation_index_current') }}">Retour à mes réservations</a>
+                </div>
+
+                <div class="main-dark-button mt-2">
+                  <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">Modifier</a>
+                </div>
+
+                {% if reservation.status == 'confirmee' %}
+                <div class="main-dark-button mt-3">
+                 <a href="{{ path('app_reservation_ticket', {'id': reservation.id}) }}" target="_blank">🎟️ Imprimer le Ticket</a>
+                </div>
+                {% endif %}
+
+                <div class="main-dark-button mt-2">
+                  {{ include('reservation/_delete_form.html.twig') }}
+                </div>
+
+                
+
+
+              </div>
+            </div>
+          </div>
+        </div> <!-- event-item -->
+      </div> <!-- col-lg-8 -->
+    </div> <!-- row -->
+  </div> <!-- container -->
+</div>
+
+{% include 'partials/subscribe.html.twig' %}
+{% include 'partials/footer.html.twig' %}
+{% endblock %}

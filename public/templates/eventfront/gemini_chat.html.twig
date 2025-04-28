@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Discussion avec Gemini{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-container {
+            flex: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            overflow-y: auto;
+            background: transparent;
+        }
+        .chat-header {
+            text-align: center;
+            padding: 40px 0;
+        }
+        .chat-header h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #4285f4, #db4437);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .chat-header p {
+            color: #b0b0b0;
+            font-size: 1.1em;
+        }
+        .chat-message {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-message.user {
+            align-items: flex-end;
+        }
+        .chat-message.bot {
+            align-items: flex-start;
+        }
+        .chat-message .message-bubble {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            line-height: 1.5;
+        }
+        .chat-message.user .message-bubble {
+            background-color: #444;
+            color: #fff;
+            border-bottom-right-radius: 5px;
+        }
+        .chat-message.bot .message-bubble {
+            background-color: #555;
+            color: #fff;
+            border-bottom-left-radius: 5px;
+        }
+        .chat-message .message-label {
+            font-size: 0.85em;
+            color: #b0b0b0;
+            margin-bottom: 5px;
+        }
+        .chat-input {
+            position: sticky;
+            bottom: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 15px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chat-input form {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            gap: 10px;
+        }
+        .chat-input textarea {
+            flex: 1;
+            resize: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #fff;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+        .chat-input textarea::placeholder {
+            color: #b0b0b0;
+        }
+        .chat-input button {
+            background-color: #8a4af3;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .chat-input button:hover {
+            background-color: #7a3de0;
+        }
+        .chat-input button svg {
+            fill: #fff;
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="chat-header">
+        <h1>Welcome to Gemini / I-Events</h1>
+        <p>Posez vos questions sur les événements, speakers, tickets ou types de paiements.</p>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+        {% if chat_history %}
+            {% for entry in chat_history %}
+                <div class="chat-message user">
+                    <div class="message-label">VOUS</div>
+                    <div class="message-bubble">{{ entry.user }}</div>
+                </div>
+                <div class="chat-message bot">
+                    <div class="message-label">GEMINI</div>
+                    <div class="message-bubble">{{ entry.bot }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center" style="color: #b0b0b0;">Commencez la conversation en posant une question !</p>
+        {% endif %}
+    </div>
+
+    <div class="chat-input">
+        <form method="post" action="{{ path('app_gemini_chat') }}">
+            <textarea name="message" placeholder="Demandez à Gemini" required></textarea>
+            <button type="submit">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="4" />
+                </svg>
+            </button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Auto-scroll to the bottom of the chat container on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+    </script>
+{% endblock %}

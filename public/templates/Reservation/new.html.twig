@@ -1,0 +1,100 @@
+{% extends 'baya.html.twig' %}
+
+{% block body %}
+<div class="form-container">
+    <h3>Nouvelle Réservation</h3>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Détails de l'événement</h4>
+        </div>
+        <div class="card-body">
+            <h5>{{ event.titre }}</h5>
+            <p><strong>Date:</strong> {{ event.dateEvent|date('d/m/Y') }}</p>
+            <p><strong>Lieu:</strong> {{ event.lieu }}</p>
+            <p><strong>Prix de base:</strong> {{ event.prix }} €</p>
+            <p><strong>Places disponibles:</strong> {{ event.nbPlace }}</p>
+        </div>
+    </div>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.ticketType) }}
+                    {{ form_widget(form.ticketType, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.ticketType) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.ticketCount) }}
+                    {{ form_widget(form.ticketCount, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.ticketCount) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.totalPrice) }}
+                    {{ form_widget(form.totalPrice, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.totalPrice) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.status) }}
+                    {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.status) }}
+                </div>
+            </div>
+        </div>
+        <div class="form-buttons">
+            <input type="submit" value="Réserver">
+            <a href="{{ path('app_reservation_index') }}">Retour à la liste</a>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ticketTypeSelect = document.getElementById('{{ form.ticketType.vars.id }}');
+    const ticketCountInput = document.getElementById('{{ form.ticketCount.vars.id }}');
+    const totalPriceInput = document.getElementById('{{ form.totalPrice.vars.id }}');
+    const basePrice = {{ event.prix }};
+
+    function updateTotalPrice() {
+        const ticketType = ticketTypeSelect.value;
+        const ticketCount = parseInt(ticketCountInput.value) || 0;
+
+        let multiplier = 1.0;
+        switch (ticketType) {
+            case 'VIP':
+                multiplier = 2.0;
+                break;
+            case 'BASIC':
+                multiplier = 1.0;
+                break;
+            case 'KID':
+                multiplier = 0.5;
+                break;
+        }
+
+        if (!ticketCount || ticketCount <= 0) {
+            totalPriceInput.value = ''; 
+        } else {
+            const totalPrice = basePrice * ticketCount * multiplier;
+            totalPriceInput.value = totalPrice.toFixed(2);
+        }
+    }
+
+    ticketTypeSelect.addEventListener('change', updateTotalPrice);
+    ticketCountInput.addEventListener('input', updateTotalPrice);
+
+    updateTotalPrice(); // Initial update
+});
+</script>
+{% endblock %}

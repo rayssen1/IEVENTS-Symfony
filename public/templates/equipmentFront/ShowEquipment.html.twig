@@ -1,0 +1,73 @@
+{% extends 'baya.html.twig' %}
+
+{% block title %}IEvents - Nos Équipements{% endblock %}
+
+{% block body %}
+
+{% include 'partials/pre_header.html.twig' %}
+{% include 'partials/header.html.twig' %}
+
+<div class="page-heading-about">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2>Nos Équipements</h2>
+        <span>Découvrez le matériel disponible pour vos événements</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container my-5">
+  {% for equipment in equipments %}
+    <div class="row mb-4 p-4 rounded border align-items-center"
+         style="background: linear-gradient(to right, #ffffff, #cccccc); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+      <div class="col-md-6" style="padding: 20px;">
+        <h3 style="color: #333;">{{ equipment.name }}</h3>
+      </div>
+
+      <div class="col-md-6 text-end" style="padding: 20px;">
+        <!-- Button to toggle details -->
+        <button class="btn btn-outline-primary toggle-details" type="button" 
+                data-target="#details-{{ loop.index }}" aria-expanded="false" aria-controls="details-{{ loop.index }}">
+          <i class="fa fa-plus"></i>
+        </button>
+      </div>
+
+      <!-- Collapsible details -->
+      <div class="col-12 collapse" id="details-{{ loop.index }}">
+        <div class="mt-3">
+          <p><strong>Type :</strong> {{ equipment.type }}</p>
+          <p><strong>Description :</strong> {{ equipment.description }}</p>
+          <p><strong>Quantité :</strong> {{ equipment.quantity }}</p>
+          <p><strong>Statut :</strong> {{ equipment.status|capitalize }}</p>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="text-center">
+      <h4>Aucun équipement disponible pour le moment.</h4>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.toggle-details');
+
+    buttons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        const target = document.querySelector(button.getAttribute('data-target'));
+        target.classList.toggle('show');
+
+        if (target.classList.contains('show')) {
+          button.innerHTML = '<i class="fa fa-minus"></i>';
+        } else {
+          button.innerHTML = '<i class="fa fa-plus"></i>';
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

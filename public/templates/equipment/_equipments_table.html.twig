@@ -1,0 +1,42 @@
+{# templates/equipment/_equipments_table.html.twig #}
+{% for equipment in equipments %}
+  <tr>
+    <td><strong>{{ equipment.name }}</strong></td>
+    <td>{{ equipment.type }}</td>
+    <td>{{ equipment.description }}</td>
+    <td>{{ equipment.quantity }}</td>
+    <td>
+      {% if equipment.status == 'Active' %}
+        <span class="badge bg-label-primary">{{ equipment.status }}</span>
+      {% elseif equipment.status == 'Inactive' %}
+        <span class="badge bg-label-warning">{{ equipment.status }}</span>
+      {% elseif equipment.status == 'Maintenance' %}
+        <span class="badge bg-label-info">{{ equipment.status }}</span>
+      {% else %}
+        <span class="badge bg-label-secondary">{{ equipment.status }}</span>
+      {% endif %}
+    </td>
+    <td>{{ equipment.maintenancerecords|length }} enregistrements</td>
+    <td>
+      <a href="{{ path('equipment_show', {'id': equipment.id}) }}" class="btn btn-sm btn-outline-primary mb-1">
+        <i class="bx bx-show"></i>
+      </a>
+      <a href="{{ path('equipment_edit', {'id': equipment.id}) }}" class="btn btn-sm btn-outline-warning mb-1">
+        <i class="bx bx-edit-alt"></i>
+      </a>
+      <form method="post" action="{{ path('equipment_delete', {'id': equipment.id}) }}" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet équipement ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipment.id) }}">
+        <button type="submit" class="btn btn-sm btn-outline-danger mb-1">
+          <i class="bx bx-trash"></i>
+        </button>
+      </form>
+      <a href="{{ path('equipment_barcode', {'id': equipment.id}) }}" class="btn btn-sm btn-outline-info mb-1">
+        <i class="bx bx-download"></i> Télécharger le code-barres
+      </a>
+    </td>
+  </tr>
+{% else %}
+  <tr>
+    <td colspan="8" class="text-center text-muted fst-italic py-4">Aucun équipement trouvé</td>
+  </tr>
+{% endfor %}

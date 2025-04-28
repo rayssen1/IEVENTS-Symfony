@@ -1,0 +1,50 @@
+{# {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }} #}
+
+{{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }}
+<div class="mb-3">
+    {{ form_label(form.nom) }}
+    {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Enter your last name'}}) }}
+    <div class="text-danger">{{ form_errors(form.nom) }}</div></div>
+
+<div class="mb-3">
+    {{ form_label(form.prenom) }}
+    {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Enter your first name'}}) }}
+    <div class="text-danger">{{ form_errors(form.prenom) }}</div></div>
+<div class="mb-3">
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter your email'}}) }}
+    <div class="text-danger">{{ form_errors(form.email) }}</div></div>
+<div class="mb-3">
+    {{ form_label(form.password) }}
+    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+    <div class="text-danger">{{ form_errors(form.password) }}</div></div>
+
+ {% if form.role is defined %}
+    <div class="mb-3">
+        {{ form_label(form.role) }}
+        {{ form_widget(form.role, {'attr': {'class': 'form-select'}}) }}
+        <div class="text-danger">{{ form_errors(form.role) }}</div>
+    </div>
+{% endif %}
+
+
+<div class="mb-3">
+    {{ form_label(form.phoneNumber) }}
+   
+    {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'e.g. +123456789'}}) }}
+    <div class="text-danger">{{ form_errors(form.phoneNumber) }}</div>
+</div>
+
+ {% if form.role is defined %}
+    <div class="g-recaptcha" data-sitekey="6LctDBwrAAAAAApkvyHWIHxpJW7vSWxmH0WdxQoE"></div>
+    {% if form.vars.errors|length > 0 %}
+    <div class="alert alert-danger">
+        {{ form_errors(form) }}
+    </div>
+    {% endif %}
+{% endif %}
+<button class="btn btn-primary d-grid w-100" type="submit">Submit</button>
+{{ form_end(form) }}

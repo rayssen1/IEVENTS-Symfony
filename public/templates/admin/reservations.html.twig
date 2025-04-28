@@ -1,0 +1,68 @@
+{% extends 'equipment/base-back.html.twig' %}
+
+{% block title %}Admin - Reservations{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card p-3 shadow-sm text-center">
+        <h5>Total Reservations</h5>
+        <h2>{{ totalReservations }}</h2>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-3 shadow-sm text-center">
+        <h5>Confirmed Reservations</h5>
+        <h2>{{ confirmedReservations }}</h2>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-3 shadow-sm text-center">
+        <h5>Confirmation Rate</h5>
+        <h2>{{ confirmationRate|number_format(2, '.', ',') }}%</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title mb-3">All Reservations</h5>
+
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th>ID</th>
+              <th>User</th>
+              <th>Event</th>
+              <th>Total Price</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for reservation in reservations %}
+            <tr>
+              <td>{{ reservation.id }}</td>
+              <td>{{ reservation.evenement ? reservation.evenement.titre : 'Event deleted' }}</td>
+              <td>{{ reservation.totalPrice }} DT</td>
+              <td>
+                {% if reservation.status == 'confirmee' %}
+                  <span class="badge bg-success">Confirmée</span>
+                {% elseif reservation.status == 'annulee' %}
+                  <span class="badge bg-danger">Annulée</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark">En attente</span>
+                {% endif %}
+              </td>
+              <td>{{ reservation.createdAt|date('d/m/Y') }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

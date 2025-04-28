@@ -1,0 +1,111 @@
+{% extends 'equipment/base-back.html.twig' %}
+
+{% block title %}Liste des Enregistrements de Maintenance{% endblock %}
+
+{% block body %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Maintenance /</span> Liste
+  </h4>
+
+  <!-- Bouton Créer un enregistrement -->
+  <div class="mb-3 d-flex justify-content-between">
+    <a href="{{ path('maintenance_record_new') }}" class="btn btn-success">
+      <i class="bx bx-plus me-1"></i> Ajouter un enregistrement
+    </a>
+    <!-- Champ de recherche -->
+    <div class="col-md-4">
+      <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par équipement, description ou statut...">
+    </div>
+  </div>
+
+  <!-- Tableau -->
+  <div class="card">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hover" id="maintenanceTable">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Équipement</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          {% for maintenance_record in maintenance_records %}
+            <tr class="maintenance-row">
+              <td>{{ maintenance_record.id }}</td>
+              <td>
+                {% if maintenance_record.equipment %}
+                  {{ maintenance_record.equipment.name }}
+                {% else %}
+                  <em class="text-muted">Non défini</em>
+                {% endif %}
+              </td>
+              <td>{{ maintenance_record.date ? maintenance_record.date|date('d/m/Y') : 'N/A' }}</td>
+              <td>{{ maintenance_record.description }}</td>
+              <td>
+                <span class="badge bg-label-info">{{ maintenance_record.status }}</span>
+              </td>
+              <td>
+                <a href="{{ path('maintenance_record_show', {'id': maintenance_record.id}) }}"
+                   class="btn btn-sm btn-outline-primary mb-1">
+                  <i class="bx bx-show"></i>
+                </a>
+                <a href="{{ path('maintenance_record_edit', {'id': maintenance_record.id}) }}"
+                   class="btn btn-sm btn-outline-warning mb-1">
+                  <i class="bx bx-edit-alt"></i>
+                </a>
+                <form method="post" action="{{ path('maintenance_record_delete', {'id': maintenance_record.id}) }}"
+                      style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet enregistrement ?');">
+                  <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ maintenance_record.id) }}">
+                  <button type="submit" class="btn btn-sm btn-outline-danger mb-1">
+                    <i class="bx bx-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="6" class="text-center text-muted fst-italic py-4">Aucun enregistrement trouvé</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <a href="{{ path('maintenance_record_export_pdf') }}" class="btn btn-outline-secondary">
+  <i class="bx bx-download"></i> Exporter en PDF
+</a>
+
+    </div>
+  </div>
+</div>
+
+{% block javascripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('searchInput');
+      const table = document.getElementById('maintenanceTable');
+      const rows = table.querySelectorAll('.maintenance-row');
+
+      searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        rows.forEach(row => {
+          const equipment = row.cells[1].textContent.toLowerCase();
+          const description = row.cells[3].textContent.toLowerCase();
+          const status = row.cells[4].textContent.toLowerCase();
+
+          // Vérifie si le terme de recherche correspond à l'équipement, la description ou le statut
+          const matches = equipment.includes(searchTerm) || 
+                         description.includes(searchTerm) || 
+                         status.includes(searchTerm);
+
+          row.style.display = matches ? '' : 'none';
+        });
+      });
+    });
+  </script>
+{% endblock %}
+{% endblock %}

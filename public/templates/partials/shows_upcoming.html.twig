@@ -1,0 +1,136 @@
+<article id='tabs-1'>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="heading"><h2>Upcoming</h2></div>
+    </div>
+    <div class="col-lg-3">
+      <div class="sidebar">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="heading-sidebar">
+              <h4>Sort The Upcoming Shows & Events By:</h4>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="month">
+              <h6>Month</h6>
+              <ul>
+                <li><a href="#">July</a></li>
+                <li><a href="#">August</a></li>
+                <li><a href="#">September</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="category">
+              <h6>Category</h6>
+              <ul>
+                <li><a href="#">Pop Music</a></li>
+                <li><a href="#">Rock Music</a></li>
+                <li><a href="#">Hip Hop Music</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="venues">
+              <h6>Venues</h6>
+              <ul>
+                <li><a href="#">Radio City Musical Hall</a></li>
+                <li><a href="#">Madison Square Garden</a></li>
+                <li><a href="#">Royce Hall</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <div class="row">
+        {% for evenement in evenements %}
+          <div class="col-lg-12">
+            <div class="event-item">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="left-content">
+                    <h4>{{ evenement.titre }}</h4>
+                    <p>
+                      {{ evenement.description|slice(0, 100) ~ (evenement.description|length > 100 ? '...' : '') }}
+                    </p>
+                    <div class="main-dark-button">
+                      <a href="{{ path('app_reservation_new', {'eventId': evenement.id}) }}">Reserver</a>
+                    </div>
+                    <div class="main-dark-button">
+                      <a href="{{ path('app_evenement_pdf', {'id': evenement.id}) }}">
+                       Telecharger en PDF
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="thumb">
+                    {% if evenement.img %}
+                      <img src="{{ asset('images/events/' ~ evenement.img) }}" alt="{{ evenement.titre }}"
+                     class="rounded border shadow-sm" style="height: 200px; width: 200px; object-fit: cover; margin-top: 10px;">
+                    {% else %}
+                      <span class="text-muted fst-italic">No Image</span>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="right-content">
+                    <ul>
+                      <li>
+                        <i class="fa fa-clock-o"></i>
+                        <h6>{{ evenement.dateEvent ? evenement.dateEvent|date('M d, Y')}}</h6>
+                      </li>
+                      <li>
+                        <i class="fa fa-map-marker"></i>
+                        <span>{{ evenement.lieu }}</span>
+                      </li>
+                      <li>
+                        <i class="fa fa-users"></i>
+                        <span>{{ evenement.nbPlace }} Places</span>
+                      </li>
+                         <span style="font-size: 20px;">🎤</span>
+                           {% if evenement.eventspeakerId %}
+                        <span>{{ evenement.eventspeakerId.nom }}</span>
+                           {% else %}
+                        <span class="fa fa-users">Aucun speaker</span>
+                      {% endif %}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <div class="col-lg-12">
+            <div class="text-muted fst-italic">No events found.</div>
+          </div>
+        {% endfor %}
+        
+        {% if not is_single %}
+          <div class="mt-3 text-center">
+          </div>
+          <div class="mt-3">
+            {{ knp_pagination_render(pagination, null, {}, {'align': 'center'}) }}
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</article>
+{% block javascripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const paginationLinks = document.querySelectorAll('.pagination a');
+      paginationLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+          console.log('Lien de pagination cliqué :', this.href);
+        });
+      });
+    });
+  </script>
+{% endblock %}

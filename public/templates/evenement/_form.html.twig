@@ -1,0 +1,126 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+<div class="row">
+  <!-- Titre -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+    <div class="form-error">
+      {{ form_errors(form.titre) }}
+    </div>
+  </div>
+
+  <!-- Lieu -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.lieu, 'Lieu', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.lieu, {'attr': {'class': 'form-control'}}) }}
+    <div class="form-error">
+      {{ form_errors(form.lieu) }}
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="mb-3 col-md-12">
+    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
+    <div class="form-error">
+      {{ form_errors(form.description) }}
+    </div>
+  </div>
+
+  <!-- Date -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.dateEvent, 'Date de l\'événement', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.dateEvent, {'attr': {'class': 'form-control'}}) }}
+    <div class="form-error">
+      {{ form_errors(form.dateEvent) }}
+    </div>
+  </div>
+
+  <!-- Nombre de places -->
+  <div class="mb-3 col-md-3">
+    {{ form_label(form.nbPlace, 'Nombre de places', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.nbPlace, {'attr': {'class': 'form-control'}}) }}
+    <div class="form-error">
+      {{ form_errors(form.nbPlace) }}
+    </div>
+  </div>
+
+  <!-- Prix -->
+  <div class="mb-3 col-md-3">
+    {{ form_label(form.prix, 'Prix (TND)', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+    <div class="form-error">
+      {{ form_errors(form.prix) }}
+    </div>
+  </div>
+
+  <!-- Statut -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+    <div class="form-error">
+      {{ form_errors(form.status) }}
+    </div>
+  </div>
+
+  <!-- Event Speaker -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.eventspeakerId, 'Speaker', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.eventspeakerId, {'attr': {'class': 'form-select'}}) }}
+    <div class="form-error">
+      {{ form_errors(form.eventspeakerId) }}
+    </div>
+    {% if form.eventspeakerId.vars.choices|length == 0 %}
+      <small class="text-danger">Il n'y a pas de speaker disponible.</small>
+    {% else %}
+      <small class="text-muted">Sélectionnez un speaker disponible.</small>
+    {% endif %}
+  </div>
+
+  <!-- Image Path -->
+  <div class="mb-3 col-md-6">
+    {{ form_label(form.img, 'Image') }}
+    <div class="custom-file">
+      {{ form_widget(form.img, {'attr': {'class': 'form-control'}}) }}
+      <label class="custom-file-label" for="{{ form.img.vars.id }}"></label>
+    </div>
+    <div class="form-error">
+      {{ form_errors(form.img) }}
+    </div>
+  </div>
+</div>
+
+<!--checkbox-->
+
+<div class="mb-3 col-md-12">
+  {{ form_label(form.syncWithGoogle, 'Synchroniser avec Google Calendar', {'label_attr': {'class': 'form-label'}}) }}
+  {{ form_widget(form.syncWithGoogle, {'attr': {'class': 'form-check-input'}}) }}
+  <div class="form-error">
+    {{ form_errors(form.syncWithGoogle) }}
+  </div>
+</div>
+
+<!-- Bouton Submit -->
+<div class="mt-4">
+  <button type="submit" class="btn btn-primary">
+    <i class="bx bx-save me-1"></i> {{ button_label|default('Enregistrer') }}
+  </button>
+</div>
+
+<script>
+  // Update the file input label when a file is selected
+  document.querySelector('.custom-file-input').addEventListener('change', function(e) {
+    var fileName = e.target.files[0] ? e.target.files[0].name : 'Choisir une image';
+    e.target.nextElementSibling.textContent = fileName;
+  });
+</script>
+
+{{ form_end(form) }}
+
+<style>
+  .form-error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+</style>

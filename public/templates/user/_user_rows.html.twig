@@ -1,0 +1,30 @@
+{# templates/user/_user_rows.html.twig #}
+{% for user in users %}
+    <tr>
+        <td>{{ user.nom }}</td>
+        <td>{{ user.prenom }}</td>
+        <td>{{ user.email }}</td>
+        <td><span class="badge bg-primary">{{ user.role }}</span></td>
+        <td>
+            {% if user.state == 'active' %}
+                <span class="badge bg-success">Active</span>
+            {% else %}
+                <span class="badge bg-secondary">Inactive</span>
+            {% endif %}
+        </td>
+        <td>{{ user.phoneNumber }}</td>
+        <td class="d-flex justify-content-center">
+            <form method="post"
+                  action="{{ path('app_user_delete', {'id': user.id}) }}"
+                  onsubmit="return confirm('Are you sure?');">
+                <input type="hidden" name="_token"
+                       value="{{ csrf_token('delete' ~ user.id) }}">
+                <button class="btn btn-sm btn-warning mx-1">Deactivate</button>
+            </form>
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="7" class="text-center text-muted">No users found.</td>
+    </tr>
+{% endfor %}

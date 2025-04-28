@@ -1,0 +1,134 @@
+{% extends 'evenement/base-back.html.twig' %}
+
+{% block title %}Calendrier des événements{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .calendar-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+        .calendar-card h1 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        #calendar {
+            min-height: 400px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+        .alert {
+            margin-top: 10px;
+            border-radius: 6px;
+        }
+        .btn {
+            margin-top: 8px;
+            border-radius: 6px;
+            padding: 6px 12px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container my-4">
+        <div class="calendar-card">
+            <h1>Calendrier des événements</h1>
+            <div id="calendar"></div>
+
+            {% if is_google_connected %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Connecté à Google Calendar ✅
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <a href="{{ path('evenement_google_clear_token') }}" class="btn btn-danger">Déconnecter Google Calendar</a>
+            {% else %}
+                <a href="{{ google_auth_url }}" class="btn btn-primary">Connecter Google Calendar</a>
+            {% endif %}
+
+            {% if events is empty and is_google_connected %}
+                <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                    Aucun événement trouvé dans Google Calendar.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Script chargé');
+            var calendarEl = document.getElementById('calendar');
+            if (!calendarEl) {
+                console.error('Élément #calendar non trouvé');
+                return;
+            }
+
+            // Récupérer les événements passés par le contrôleur
+            var events = {{ events|json_encode|raw }};
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: events.map(event => ({
+                    id: event.id,
+                    title: event.summary,
+                    start: event.start,
+                    end: event.end,
+                    allDay: event.allDay,
+                    backgroundColor: event.allDay ? '#3788d8' : '#ff9f89',
+                    borderColor: '#333'
+                })),
+                eventClick: function(info) {
+                    if (confirm('Voulez-vous supprimer l\'événement "' + info.event.title + '" ?')) {
+                        // Envoyer une requête AJAX pour supprimer l'événement
+                        fetch('{{ path('app_evenement_delete_google_event', {'id': '__ID__'}) }}'.replace('__ID__', info.event.id), {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: '_token={{ csrf_token('delete_google_event') }}'
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                info.event.remove(); // Retirer l'événement du calendrier
+                                alert(data.message);
+                            } else {
+                                alert('Erreur : ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur AJAX : ', error);
+                            alert('Erreur lors de la suppression de l\'événement.');
+                        });
+                    }
+                },
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                locale: 'fr',
+                buttonText: {
+                    today: 'Aujourd\'hui',
+                    month: 'Mois',
+                    week: 'Semaine',
+                    day: 'Jour'
+                }
+            });
+            calendar.render();
+            console.log('Calendrier rendu');
+        });
+    </script>
+{% endblock %}

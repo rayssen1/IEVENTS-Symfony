@@ -1,0 +1,254 @@
+{% extends 'baya.html.twig' %}
+{% block title %}ArtXibition Template - Event Detail Page{% endblock %}
+
+{% block body %}
+
+{% include 'partials/pre_header.html.twig' %}
+{% include 'partials/header.html.twig' %}
+
+
+
+ <style>
+    /* Style pour le formulaire */
+#reclamation-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+#reclamation-form .form-row {
+    margin-bottom: 15px;
+}
+
+#reclamation-form .form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#reclamation-form .form-control {
+    border-radius: 5px;
+    padding: 12px 15px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+#reclamation-form .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+#reclamation-form .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#reclamation-form .btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 12px;
+}
+</style>
+
+
+<!-- ***** Page Heading ***** -->
+<div class="page-heading-rent-venue">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2>Event Details</h2>
+        <span>Check out our latest Shows & Events and be part of us.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+<!-- Reclamation Form -->
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="text-center">{{  'Reclamation' }}</h1>
+
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+            <!-- Email Field -->
+            <div class="mb-3">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'Enter your email',
+                        'oninput': 'validateEmail(this)'
+                    }
+                }) }}
+                <div class="text-danger">{{ form_errors(form.email) }}</div>
+            </div>
+
+            <!-- Event Field -->
+            <div class="mb-3">
+                {{ form_label(form.evenement) }}
+                {{ form_widget(form.evenement, {
+                    'attr': {
+                        'class': 'form-control'
+                    }
+                }) }}
+                <div class="text-danger">{{ form_errors(form.evenement) }}</div>
+            </div>
+
+<!-- Subject Field -->
+<div class="mb-3">
+    {{ form_label(form.subject) }}
+    {{ form_widget(form.subject, {
+        'attr': {
+            'class': 'form-control',
+            'placeholder': 'Describe your issue...',
+            'id': 'reclamation_subject',
+            'rows': 4
+        }
+    }) }}
+    <div class="text-danger">{{ form_errors(form.subject) }}</div>
+</div>
+
+
+
+
+            <!-- Rate Field -->
+            <div class="mb-3">
+                {{ form_label(form.rate) }}
+                {{ form_widget(form.rate, {
+                    'attr': {
+                        'class': 'form-control'
+                    }
+                }) }}
+                <div class="text-danger">{{ form_errors(form.rate) }}</div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-success btn-lg w-100">
+                    {{ reclamation is defined ? 'send' : 'Submit' }}
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+
+
+
+    <br>
+    <br>
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const subjectField = document.getElementById('reclamation_subject');
+    let timeout = null;
+
+    // List of offensive words (add more if needed)
+    const offensiveWords = [
+        'damn', 'crap', 'hell', 'shit', 'fuck', 'fucking',
+        'idiot', 'stupid', 'dumb', 'moron', 'jerk', 'loser',
+        'bitch', 'bastard', 'asshole', 'suck', 'trash',
+        'retard', 'retarded', 'nigger', 'negro', 'fag', 'faggot',
+        'slut', 'whore', 'cunt', 'dick', 'cock', 'pussy', 'boobs',
+        'bollocks', 'bugger', 'bloody', 'arse', 'wanker',
+        'motherfucker', 'son of a bitch', 'shithead', 'scumbag',
+        'twat', 'douche', 'dipshit', 'jackass', 'prick', 'numbnuts',
+        'tool', 'hoe', 'skank', 'tramp', 'scum', 'nutjob'
+    ];
+
+    // Build a single RegExp from the list
+    const offensiveRegex = new RegExp(`\\b(${offensiveWords.join('|')})\\b`, 'gi');
+
+    subjectField.addEventListener('input', function () {
+        clearTimeout(timeout);
+
+        timeout = setTimeout(() => {
+            let originalText = subjectField.value;
+
+            // Check if the original text ends with a space
+            const endsWithSpace = originalText.endsWith(' ');
+
+            // Remove offensive words and extra spaces
+            let cleanedText = originalText.replace(offensiveRegex, '').replace(/\s{2,}/g, ' ').trim();
+
+            // If the original text ended with a space, add the space back to the cleaned text
+            if (endsWithSpace) {
+                cleanedText += ' ';
+            }
+
+            // Update the input field with the cleaned text
+            if (cleanedText !== originalText) {
+                subjectField.value = cleanedText;
+            }
+        }, 600); // Delay to prevent spamming
+    });
+});
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const subjectInput = document.querySelector('#reclamation_subject');
+        form.addEventListener('submit', async function(event) {
+            const subjectText = subjectInput.value.trim();
+
+            //  API Detect Language
+            try {
+                const response = await fetch('https://ws.detectlanguage.com/0.2/detect', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer 7eb591ac417f6cde62adc8e842282ddf',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({ q: subjectText })
+                });
+
+                const data = await response.json();
+                const detectedLanguage = data.data.detections[0]?.language;
+
+                if (detectedLanguage !== 'en') {
+                    event.preventDefault();
+                    alert('The form can only be submitted in English.');
+                }
+
+            } catch (error) {
+                console.error('Language detection failed:', error);
+                // API
+            }
+        });
+    });
+</script>
+
+
+{% include 'partials/subscribe.html.twig' %}
+{% include 'partials/footer.html.twig' %}
+{% endblock %}
+
+
