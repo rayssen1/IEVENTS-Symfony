@@ -81,7 +81,9 @@ Cette application vise à optimiser chaque aspect de l’organisation, en offran
 - **Gestion des evenements :**  
   creation des evenements avec la synchronisation via google calendar - **Tableau de bord :**  
   Visualisez les statistiques (Chart.js) et les calendriers (FullCalendar.js).
-
+-** Authentification via Google OAuth et creation du compte avec vérification reCAPTCHA pour plus de sécurité. Envoi d’e-mails de confirmation et de notifications automatisées.
+  **Tableau de bord :**  
+  Visualisez les statistiques des utilisateur et des session (Chart.js)
 ---
 
 ## Technologies
@@ -117,6 +119,7 @@ Les contributions sont bienvenues ! Suivez ces étapes :
 Nous remercions tous ceux qui ont contribué à ce projet !  
 Les personnes suivantes ont contribué à ce projet en ajoutant des fonctionnalités, en corrigeant des bugs ou en améliorant la documentation :
 
+- [Kliche Alaeddine](https://github.com/rayssen1) – Développement de gestion Utilisateur 
 - [Draouil Rayssen](https://github.com/rayssen1) – Développement de gestion Evenements  
 
 
