@@ -31,8 +31,6 @@ Cette application vise à optimiser chaque aspect de l’organisation, en offran
   https://www.apachefriends.org/index.html  
 - **Composer** (pour les dépendances Symfony)  
   https://getcomposer.org  
-- **Node.js** (pour les assets)  
-  https://nodejs.org/fr  
 
 ### Étapes
 
