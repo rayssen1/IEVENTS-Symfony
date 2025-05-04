@@ -10,7 +10,7 @@ Cette application vise à optimiser chaque aspect de l’organisation, en offran
 
 **Fonctionnalités principales :**
 
-- ** Gestion des utilisateurs ** : 
+- ** Gestion des utilisateurs ** : CRUD, tri/recherche Ajax, statistiques (Chart.js), intégration Google OAUTH, re-captcha, Mailing, pagination. 
 - ** Gestion des evenements ** : CRUD, tri/recherche Ajax, statistiques (Chart.js), intégration Gemini IA, calendrier (FullCalendar.js), pagination.
 
 ## Table des Matières 📋
