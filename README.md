@@ -12,6 +12,7 @@ Cette application vise à optimiser chaque aspect de l’organisation, en offran
 
 - ** Gestion des utilisateurs ** : CRUD, tri/recherche Ajax, statistiques (Chart.js), intégration Google OAUTH, re-captcha, Mailing, pagination. 
 - ** Gestion des evenements ** : CRUD, tri/recherche Ajax, statistiques (Chart.js), intégration Gemini IA, calendrier (FullCalendar.js), pagination.
+- **Gestion des réclamations ** : CRUD, pagination, statistiques (Chart.js), intégration d’API (détection de langue, envoi d’e-mails, filtrage intelligent des messages en temps réel via IA), traitement automatisé.
 
 ## Table des Matières 📋
 
@@ -80,6 +81,9 @@ Cette application vise à optimiser chaque aspect de l’organisation, en offran
   creation des evenements avec la synchronisation via google calendar - **Tableau de bord :**  
   Visualisez les statistiques (Chart.js) et les calendriers (FullCalendar.js).
 -** Authentification via Google OAuth et creation du compte avec vérification reCAPTCHA pour plus de sécurité. Envoi d’e-mails de confirmation et de notifications automatisées.
+ - **Gestion des réclamations :**  
+Soumission et suivi des réclamations avec filtrage intelligent en temps réel via IA, validation automatique des messages rédigés en anglais grâce à une API de détection de langue, envoi de notifications par e-mail, traitement automatisé des contenus, et affichage des statistiques dynamiques (Chart.js).
+
   **Tableau de bord :**  
   Visualisez les statistiques des utilisateur et des session (Chart.js)
 ---
