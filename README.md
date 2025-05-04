@@ -1,4 +1,4 @@
-# **I-EVENTS - Gestion des évenements ⚽**
+# **I-EVENTS - Gestion des évenements **
 
 ## Description du Projet 🗒️
 
