@@ -118,7 +118,8 @@ Nous remercions tous ceux qui ont contribué à ce projet !
 Les personnes suivantes ont contribué à ce projet en ajoutant des fonctionnalités, en corrigeant des bugs ou en améliorant la documentation :
 
 - [Kliche Alaeddine](https://github.com/rayssen1) – Développement de gestion Utilisateur 
-- [Draouil Rayssen](https://github.com/rayssen1) – Développement de gestion Evenements  
+- [Draouil Rayssen](https://github.com/rayssen1) – Développement de gestion Evenements
+- [Mohamed Rabeh](https://github.com/rayssen1) – Développement de gestion Reclamation 
 
 
 ---
