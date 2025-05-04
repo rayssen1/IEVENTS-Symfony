@@ -119,7 +119,7 @@ Les personnes suivantes ont contribué à ce projet en ajoutant des fonctionnali
 
 - [Kliche Alaeddine](https://github.com/rayssen1) – Développement de gestion Utilisateur 
 - [Draouil Rayssen](https://github.com/rayssen1) – Développement de gestion Evenements
-- [Mohamed Rabeh](https://github.com/rayssen1) – Développement de la gestion des réclamations  
+- [Mohamed Rabeh](https://github.com/MohamedRabeh1) – Développement de la gestion des réclamations  
 
 
 ---
