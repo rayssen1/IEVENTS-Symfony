@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="9a1fd60b-c838-429c-9f5c-fe1ec0a65dae" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -10,21 +13,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "batta0102"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;batta0102&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/rayssen1/IEVENTS-Symfony.git",
-    "accountId": "2f1f9b23-ae5c-453d-8b79-0d5a051b5d90"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/rayssen1/IEVENTS-Symfony.git&quot;,
+    &quot;accountId&quot;: &quot;2f1f9b23-ae5c-453d-8b79-0d5a051b5d90&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2vp1endwxhEaXKfPZVfteUQnj79" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -36,6 +39,10 @@
     "com.codeium.enabled": "true",
     "git-widget-placeholder": "reservation",
     "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -57,6 +64,7 @@
       <option name="presentableId" value="Default" />
       <updated>1744827300482</updated>
       <workItem from="1744827304043" duration="27000" />
+      <workItem from="1744827745504" duration="324000" />
     </task>
     <servers />
   </component>
