@@ -1,6 +1,6 @@
 # **I-EVENTS - Gestion des évenements **
 
-## Description du Projet 🗒️
+## Description du Projet 🗒️ 
 
 **I-EVENTS** est une application web développée avec **Symfony 6.4** et **PHP 8.2**, conçue pour simplifier la gestion des evenements  pour les utilisateurs et organisateurs.
 
