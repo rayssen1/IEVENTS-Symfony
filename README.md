@@ -5,6 +5,7 @@
 **I-EVENTS** est une application web développée avec **Symfony 6.4** et **PHP 8.2**, conçue pour simplifier la gestion des evenements  pour les utilisateurs et organisateurs.
 
 **Contexte :**  ✨
+
 La création de l’application I-EVENTS est motivée par les défis actuels rencontrés dans l’organisation d’événements. Ce domaine, bien que central dans la vie sociale et professionnelle, souffre souvent d’un manque d’outils adaptés,
 Cette application vise à optimiser chaque aspect de l’organisation, en offrant une plateforme intuitive, collaborative et efficace. I-EVENTS ambitionne de transformer la manière dont les événements sont conçus et vécus, en simplifiant la coordination entre organisateurs, participants et prestataires.
 
