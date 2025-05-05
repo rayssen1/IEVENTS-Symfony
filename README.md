@@ -14,6 +14,8 @@ Cette application vise à optimiser chaque aspect de l’organisation, en offran
 - ** Gestion des utilisateurs ** : CRUD, tri/recherche Ajax, statistiques (Chart.js), intégration Google OAUTH, re-captcha, Mailing, pagination. 
 - ** Gestion des evenements ** : CRUD, tri/recherche Ajax, statistiques (Chart.js), intégration Gemini IA, calendrier (FullCalendar.js), pagination.
 - **Gestion des réclamations ** : CRUD, pagination, statistiques (Chart.js), intégration d’API (détection de langue, envoi d’e-mails, filtrage intelligent des messages en temps réel via IA), traitement automatisé.
+- **Gestion d'equipements ** : CRUD, pagination, statistiques (Chart.js), recherche Ajax, intégration d’API (envoi d’e-mails personalise ), code a barre , pdf (personalisé) 
+
 
 ## Table des Matières 📋
 
@@ -84,6 +86,9 @@ Cette application vise à optimiser chaque aspect de l’organisation, en offran
 -** Authentification via Google OAuth et creation du compte avec vérification reCAPTCHA pour plus de sécurité. Envoi d’e-mails de confirmation et de notifications automatisées.
  - **Gestion des réclamations :**  
 Soumission et suivi des réclamations avec filtrage intelligent en temps réel via IA, validation automatique des messages rédigés en anglais grâce à une API de détection de langue, envoi de notifications par e-mail, traitement automatisé des contenus, et affichage des statistiques dynamiques (Chart.js).
+-  **Gestion des équipements :**  
+Soumission et suivi des équipements avec envoi de notifications par e-mail du stock manquants , traitement automatisé des contenus, et affichage des statistiques dynamiques (Chart.js).
+
 
   **Tableau de bord :**  
   Visualisez les statistiques des utilisateur et des session (Chart.js)
@@ -125,7 +130,8 @@ Les personnes suivantes ont contribué à ce projet en ajoutant des fonctionnali
 - [Kliche Alaeddine](https://github.com/rayssen1) – Développement de gestion Utilisateur 
 - [Draouil Rayssen](https://github.com/rayssen1) – Développement de gestion Evenements
 - [Mohamed Rabeh](https://github.com/MohamedRabeh1) – Développement de la gestion des réclamations  
-
+- [Amal Trad](https://github.com/AmalTrad16) – Développement de la gestion des équipements
+- [Baya Khouini](https://github.com/Batta0102) – Développement de la gestion des réservations
 
 ---
 
