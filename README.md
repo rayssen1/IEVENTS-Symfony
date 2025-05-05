@@ -98,8 +98,8 @@ Suivi des réservations (confirmées, annulées, en attente), filtrage par statu
 
 ## Technologies
 
-- **Backend** : Symfony 6.4, PHP 8.2, API Trello/Brevo, Python OR-Tools  
-- **Frontend** : Twig, Ajax, Chart.js, FullCalendar.js  
+- **Backend** : Symfony 6.4, PHP 8.2,Ajax,API GoogleCalendar  
+- **Frontend** : Twig, Ajax, Chart.js,API Gemini
 - **Base de données** : MySQL  
 - **Outils** : XAMPP, Composer, WebSocket
 
