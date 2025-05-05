@@ -14,8 +14,8 @@ Cette application vise à optimiser chaque aspect de l’organisation, en offran
 - ** Gestion des utilisateurs ** : CRUD, tri/recherche Ajax, statistiques (Chart.js), intégration Google OAUTH, re-captcha, Mailing, pagination. 
 - ** Gestion des evenements ** : CRUD, tri/recherche Ajax, statistiques (Chart.js), intégration Gemini IA, calendrier (FullCalendar.js), pagination.
 - **Gestion des réclamations ** : CRUD, pagination, statistiques (Chart.js), intégration d’API (détection de langue, envoi d’e-mails, filtrage intelligent des messages en temps réel via IA), traitement automatisé.
-- **Gestion d'equipements ** : CRUD, pagination, statistiques (Chart.js), recherche Ajax, intégration d’API (envoi d’e-mails personalise ), code a barre , pdf (personalisé) 
-
+- **Gestion d'equipements ** : CRUD, pagination, statistiques (Chart.js), recherche Ajax, intégration d’API (envoi d’e-mails personalise ), code a barre , pdf (personalisé)
+- **Gestion de réservations ** : CRUD, pagination, affichage des statistiques dynamiques (Chart.js), calcul automatique du taux de confirmation, filtrage par statut, Impression du ticket personnalisé avec les données de réservation ,Paiement sécurisé via Stripe API.
 
 ## Table des Matières 📋
 
@@ -88,6 +88,8 @@ Cette application vise à optimiser chaque aspect de l’organisation, en offran
 Soumission et suivi des réclamations avec filtrage intelligent en temps réel via IA, validation automatique des messages rédigés en anglais grâce à une API de détection de langue, envoi de notifications par e-mail, traitement automatisé des contenus, et affichage des statistiques dynamiques (Chart.js).
 -  **Gestion des équipements :**  
 Soumission et suivi des équipements avec envoi de notifications par e-mail du stock manquants , traitement automatisé des contenus, et affichage des statistiques dynamiques (Chart.js).
+-  **Gestion des réservations :** 
+Suivi des réservations (confirmées, annulées, en attente), filtrage par statut, calcul du taux de confirmation, génération de tickets à imprimer, et intégration du paiement par Stripe.
 
 
   **Tableau de bord :**  
@@ -143,4 +145,4 @@ Ce projet est sous licence ROC. Pour plus de détails, consultez le fichier [LIC
 
 ## Topics GitHub
 
-#symfony #php #sport #webapp #ajax #chartjs #websocket #python #qrcode
+#symfony #php #sport #webapp #ajax #chartjs #websocket #python #qrcode #stripe 
